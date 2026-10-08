@@ -1,4 +1,4 @@
-import openpyxl, re, json, unicodedata, sys, os, time
+import openpyxl, re, json, unicodedata, sys, os, time, datetime
 from collections import Counter
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -457,6 +457,20 @@ def update_dataset_in_html(file_path):
         target_marker = f'window.RAW_DATASET = {json_dataset_str_p1};'
         insert_code = f'\n    window.RAW_DATASET_P2 = {json_dataset_str_p2};'
         html = html.replace(target_marker, target_marker + insert_code, 1)
+
+
+    # 3.5 Update Last Data Update Timestamp in HTML and JS
+    timestamp_str = datetime.datetime.now().strftime("%d/%m/%Y %I:%M %p")
+    html = re.sub(
+        r'<strong class="update-timestamp" id="last-update-timestamp">[^<]*</strong>',
+        f'<strong class="update-timestamp" id="last-update-timestamp">{timestamp_str}</strong>',
+        html
+    )
+    if 'window.LAST_DATA_UPDATE' in html:
+        html = re.sub(r'window\.LAST_DATA_UPDATE\s*=\s*"[^"]*";', f'window.LAST_DATA_UPDATE = "{timestamp_str}";', html)
+    else:
+        marker = f'window.RAW_DATASET = {json_dataset_str_p1};'
+        html = html.replace(marker, f'window.LAST_DATA_UPDATE = "{timestamp_str}";\n    ' + marker, 1)
 
     # 4. Official Targets Definition (Retail P1: 7,806 | Retail P2: 6,914)
     targets_code_block = """    // Service Targets System by Month & Project (Official Quotas)
