@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 const os = require('os');
+const { exec } = require('child_process');
 
 const DOCS_DIR = path.resolve('C:/Users/Lenovo/Documents/Mi dashboard');
 const PORT = 8080;
@@ -33,18 +34,98 @@ function getActiveTunnelUrl() {
   return 'https://preventing-ought-trading-yard.trycloudflare.com';
 }
 
-// Real-time Excel Status & Automatic Update Endpoints
+// ======================================================================
+// 1. SISTEMA DE DETECCIÓN Y ACTUALIZACIÓN AUTOMÁTICA INTELIGENTE
+// ======================================================================
 let isUpdating = false;
+let autoSyncTimeout = null;
+const WATCHED_FILES = [
+  'Dashboard HTML RETAIL .xlsx',
+  'Dashboard HTML PREPAGO.xlsx',
+  'RETAIL P2.xlsx'
+];
+let fileMtimes = {};
 
+function initFileWatcher() {
+  for (const f of WATCHED_FILES) {
+    const fullPath = path.join(DOCS_DIR, f);
+    try {
+      if (fs.existsSync(fullPath)) {
+        const stat = fs.statSync(fullPath);
+        fileMtimes[f] = stat.mtimeMs;
+      }
+    } catch(e) {}
+  }
+}
+
+function triggerAutoUpdate(reason) {
+  if (isUpdating) {
+    console.log(`[AUTO-SYNC] Ya hay una actualización en curso. Se pospone para el siguiente ciclo.`);
+    return;
+  }
+
+  isUpdating = true;
+  const timeStr = new Date().toLocaleTimeString();
+  console.log(`\n======================================================================`);
+  console.log(`[AUTO-SYNC ${timeStr}] ⚡ ${reason}`);
+  console.log(`[AUTO-SYNC] 🔄 Procesando archivos Excel y publicando en GitHub Pages...`);
+  console.log(`======================================================================`);
+
+  exec('python "actualizar_datos.py"', { cwd: DOCS_DIR, maxBuffer: 25 * 1024 * 1024 }, (err, stdout, stderr) => {
+    isUpdating = false;
+    const finishTime = new Date().toLocaleTimeString();
+    if (err) {
+      console.error(`[AUTO-SYNC ERROR ${finishTime}] Falló la actualización:`, err.message);
+    } else {
+      console.log(`\n======================================================================`);
+      console.log(`[AUTO-SYNC ${finishTime}] ✅ ¡DASHBOARD LOCAL Y GITHUB PAGES ACTUALIZADOS!`);
+      console.log(`======================================================================\n`);
+    }
+  });
+}
+
+// Inicializar tiempos de modificación
+initFileWatcher();
+
+// Comprobación periódica cada 4 segundos
+setInterval(() => {
+  if (isUpdating) return;
+  for (const f of WATCHED_FILES) {
+    const fullPath = path.join(DOCS_DIR, f);
+    try {
+      if (fs.existsSync(fullPath)) {
+        const stat = fs.statSync(fullPath);
+        const prevMtime = fileMtimes[f] || 0;
+        // Si el archivo fue modificado (diferencia mayor a 2 segundos)
+        if (prevMtime > 0 && stat.mtimeMs > prevMtime + 2000) {
+          fileMtimes[f] = stat.mtimeMs;
+          console.log(`[AUTO-SYNC] Detectado guardado en '${f}'. Esperando 6s a que Excel termine de escribir...`);
+          if (autoSyncTimeout) clearTimeout(autoSyncTimeout);
+          autoSyncTimeout = setTimeout(() => {
+            triggerAutoUpdate(`Detección de nuevo guardado en '${f}'`);
+          }, 6000);
+          break;
+        }
+        fileMtimes[f] = stat.mtimeMs;
+      }
+    } catch(e) {}
+  }
+}, 4000);
+
+// ======================================================================
+// 2. ENDPOINTS Y APIS
+// ======================================================================
 function handleExcelApis(req, res, reqPath) {
   if (reqPath === '/api/excel-status') {
     try {
       const retailFile = path.join(DOCS_DIR, 'Dashboard HTML RETAIL .xlsx');
       const prepagoFile = path.join(DOCS_DIR, 'Dashboard HTML PREPAGO.xlsx');
+      const p2File = path.join(DOCS_DIR, 'RETAIL P2.xlsx');
       const indexFile = path.join(DOCS_DIR, 'index.html');
 
       const retailStat = fs.existsSync(retailFile) ? fs.statSync(retailFile) : null;
       const prepagoStat = fs.existsSync(prepagoFile) ? fs.statSync(prepagoFile) : null;
+      const p2Stat = fs.existsSync(p2File) ? fs.statSync(p2File) : null;
       const indexStat = fs.existsSync(indexFile) ? fs.statSync(indexFile) : null;
 
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -52,6 +133,7 @@ function handleExcelApis(req, res, reqPath) {
         isUpdating,
         retail: retailStat ? { mtime: retailStat.mtime, size: retailStat.size } : null,
         prepago: prepagoStat ? { mtime: prepagoStat.mtime, size: prepagoStat.size } : null,
+        p2: p2Stat ? { mtime: p2Stat.mtime, size: p2Stat.size } : null,
         dashboard: indexStat ? { mtime: indexStat.mtime, size: indexStat.size } : null
       }));
       return true;
@@ -69,32 +151,13 @@ function handleExcelApis(req, res, reqPath) {
       return true;
     }
 
-    isUpdating = true;
-    console.log('[SERVER] Iniciando proceso de actualización de Excels vía API...');
-    
-    const { exec } = require('child_process');
-    exec('python "actualizar_datos.py"', { cwd: DOCS_DIR, maxBuffer: 15 * 1024 * 1024 }, (err, stdout, stderr) => {
-      isUpdating = false;
-      if (err) {
-        console.error('[SERVER ERROR] Error en actualizar_datos.py:', err.message);
-        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end(JSON.stringify({ success: false, error: err.message, stderr: String(stderr) }));
-        return;
-      }
-
-      console.log('[SERVER] Proceso de actualización finalizado con éxito.');
-      let count = 0;
-      const m = (stdout || '').match(/COMBINED TOTAL RECORDS:s*([0-9,]+)/i);
-      if (m) count = parseInt(m[1].replace(/,/g, ''), 10);
-
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({
-        success: true,
-        records: count,
-        message: '¡Dashboard actualizado exitosamente desde los Excels!',
-        timestamp: new Date().toISOString()
-      }));
-    });
+    triggerAutoUpdate('Solicitud manual desde interfaz web');
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({
+      success: true,
+      message: 'Actualización iniciada en segundo plano...',
+      timestamp: new Date().toISOString()
+    }));
     return true;
   }
 
@@ -128,7 +191,6 @@ const server = http.createServer((req, res) => {
     reqPath = '/index.html';
   }
 
-  // Real-time tunnel and network endpoint
   if (handleExcelApis(req, res, reqPath)) return;
 
   if (reqPath === '/api/tunnel' || reqPath === '/api/network-info') {
@@ -159,8 +221,6 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
     const acceptEncoding = req.headers['accept-encoding'] || '';
-
-    // Enable gzip compression for html, json, js, and css
     const compressible = ['.html', '.json', '.js', '.css'].includes(ext);
 
     if (compressible && acceptEncoding.includes('gzip')) {
@@ -185,8 +245,11 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, '0.0.0.0', () => {
   const ip = getLocalIp();
   const tunnel = getActiveTunnelUrl();
-  console.log(`[SALESLAND SERVER LIVE GZIP] Puerto: ${PORT} | Directorio: ${DOCS_DIR}`);
-  console.log(`-> Local:     http://localhost:${PORT}/index.html`);
-  console.log(`-> Red WiFi:  http://${ip}:${PORT}/index.html`);
-  console.log(`-> Enlace Web: ${tunnel}/index.html`);
+  console.log(`======================================================================`);
+  console.log(`[SALESLAND SERVER LIVE & AUTO-SYNC ACTIVO]`);
+  console.log(`-> Local:        http://localhost:${PORT}/index.html`);
+  console.log(`-> Red WiFi:     http://${ip}:${PORT}/index.html`);
+  console.log(`-> Enlace Web:   ${tunnel}/index.html`);
+  console.log(`-> Auto-Sync:    Vigilando 'Dashboard HTML RETAIL .xlsx', 'Dashboard HTML PREPAGO.xlsx' y 'RETAIL P2.xlsx'`);
+  console.log(`======================================================================`);
 });
