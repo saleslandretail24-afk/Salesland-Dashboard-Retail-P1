@@ -700,7 +700,10 @@ if os.path.exists(os.path.join(web_repo_dir, '.git')):
     try:
         print("\nSubiendo actualización de Metas a GitHub Pages...")
         import subprocess
-        msg = "Aplicar Metas oficiales por proyecto: Retail P1 (7,806) y Retail P2 (6,914)"
+        import datetime
+        ahora = datetime.datetime.now().strftime('%d/%m/%Y %H:%M')
+        p2_txt = f", P2: {len(combined_records_p2):,} reg" if combined_records_p2 else ""
+        msg = f"Actualización de datos (P1: {len(combined_records_p1):,} reg{p2_txt}) - {ahora}"
         subprocess.run(['git', 'add', 'index.html'], cwd=web_repo_dir, check=False)
         subprocess.run(['git', 'commit', '-m', msg], cwd=web_repo_dir, check=False)
         subprocess.run(['git', '-c', 'credential.helper=', '-c', 'credential.helper=manager', 'push', 'origin', 'main'], cwd=web_repo_dir, check=False)
