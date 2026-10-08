@@ -29,19 +29,18 @@ Los siguientes tres archivos **deben mantenerse en idéntico contenido y hash MD
 
 ---
 
-## 4. Estado de Metas y Parámetros Comerciales
-* **Metas de Octubre 2026 (Retail P1):** Total 7,806 instalaciones
-  * Prepago: 5,450
-  * Porta Prepago: 1,000
-  * Pospago: 1,296
-  * Gpon: 36
-  * DTH: 12
-  * IFI: 12
-* **Metas de Septiembre 2026 (Retail P1):**
-  * Conservadas intactas históricamente (DTH 24, IFI no aplica).
-* **Filtros:**
+## 4. Estado de Metas y Parámetros Comerciales Multi-Proyecto
+* **Proyecto Retail P1:**
+  * **Datos:** 104,406 registros consolidados (`POSPAGO P1` + `PREPAGO P1`).
+  * **Metas Octubre 2026:** Total 7,806 instalaciones (Prepago 5,450, Porta Prepago 1,000, Pospago 1,296, Gpon 36, DTH 12, IFI 12).
+  * **Metas Septiembre 2026:** Conservadas históricamente (DTH 24, IFI no aplica).
+* **Proyecto Retail P2:**
+  * **Datos:** 71,867 registros consolidados (`POSPAGO P2` + `PREPAGO P2` desde `RETAIL P2.xlsx`).
+  * **Metas P2:** Soportadas dinámicamente y configurables por mes desde el modal de Metas (`localStorage` con clave `salesland_service_targets_P2_{mes}`).
+* **Filtros y Selector de Proyecto:**
+  * Selector multi-proyecto en cabecera: `[ 🔷 Retail P1 ]` y `[ 🔶 Retail P2 ]` con conmutación en tiempo real.
   * Meses ordenados cronológicamente de Enero a Diciembre (Octubre por defecto).
-  * Supervisores ordenados alfabéticamente de la A a la Z.
+  * Supervisores ordenados alfabéticamente de la A a la Z según la data del proyecto activo.
 
 ---
 
@@ -49,3 +48,5 @@ Los siguientes tres archivos **deben mantenerse en idéntico contenido y hash MD
 * **Pestaña 1 (MoM & Servicios):** Comparativa Visual MoM compacta (~35%) y Desglose Analítico por Servicio amplio (~65%). Columna renombrada a `Meta`.
 * **Pestaña 2 (Top Vendedores):** Ranking visual con podio metálico, filtros por métrica (`Ventas`, `Facturación`, `Efectividad`) y vista de `Top 10 / 15 / 20`.
 * **Pestaña 3 (Supervisores & PDVs):** Gráficos de barras horizontales con ribbons de micro-KPIs ejecutivos, podio y selectores métricos (`Ventas`, `Efectividad %`, `Facturación`).
+* **Pestaña 4 (Provincias & Territorio):** Cobertura geográfica en 7 provincias y ranking por cantones.
+* **Pestaña 5 (Explorador de Transacciones):** Auditoría tabular detallada con paginación y búsqueda multi-campo.

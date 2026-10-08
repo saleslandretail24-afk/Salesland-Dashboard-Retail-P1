@@ -1,14 +1,16 @@
 @echo off
 chcp 65001 >nul
-title Actualizar Dashboard Salesland desde Excels
+title Actualizar Dashboard Salesland desde Excels (P1 y P2)
 cd /d "C:\Users\Lenovo\Documents\Mi dashboard"
 cls
 echo ======================================================================
-echo          SALESLAND ^| Retail - Actualizador Automático de Dashboard
+echo     SALESLAND ^| Retail - Actualizador Automatico Multi-Proyecto
 echo ======================================================================
 echo.
-echo [1/3] Leyendo "Dashboard HTML RETAIL .xlsx" y "Dashboard HTML PREPAGO.xlsx"...
-echo       Extrayendo ventas, calculando Pospago consolidado y metas...
+echo [1/3] Procesando Excels de Retail P1 y Retail P2...
+echo       - Dashboard HTML RETAIL .xlsx (P1 Pospago)
+echo       - Dashboard HTML PREPAGO.xlsx (P1 Prepago)
+echo       - RETAIL P2.xlsx (P2 Pospago y Prepago)
 echo.
 python actualizar_datos.py
 if %ERRORLEVEL% NEQ 0 (
