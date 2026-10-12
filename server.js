@@ -99,11 +99,11 @@ setInterval(() => {
         // Si el archivo fue modificado (diferencia mayor a 2 segundos)
         if (prevMtime > 0 && stat.mtimeMs > prevMtime + 2000) {
           fileMtimes[f] = stat.mtimeMs;
-          console.log(`[AUTO-SYNC] Detectado guardado en '${f}'. Esperando 6s a que Excel termine de escribir...`);
+          console.log(`[AUTO-SYNC] Detectado guardado en '${f}'. Esperando 50 segundos para procesar y actualizar todo...`);
           if (autoSyncTimeout) clearTimeout(autoSyncTimeout);
           autoSyncTimeout = setTimeout(() => {
-            triggerAutoUpdate(`Detección de nuevo guardado en '${f}'`);
-          }, 6000);
+            triggerAutoUpdate(`Detección de nuevo guardado en '${f}' (espera de 50s completada)`);
+          }, 50000);
           break;
         }
         fileMtimes[f] = stat.mtimeMs;
