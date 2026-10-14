@@ -3039,22 +3039,39 @@
         return false;
       },
 
+      checkExistingSession() {
+        if (sessionStorage.getItem(this.STORAGE_KEY_SESSION) === 'valid') return true;
+        if (localStorage.getItem(this.STORAGE_KEY_REMEMBER) === 'active') return true;
+        if (localStorage.getItem('salesland_supervisor_token') === 'valid') return true;
+        if (sessionStorage.getItem('salesland_supervisor_token') === 'valid') return true;
+        return false;
+      },
+
       unlockDashboard() {
         const overlay = document.getElementById('auth-gateway-overlay');
         const wrapper = document.querySelector('.dashboard-wrapper');
-        if (overlay) overlay.classList.add('hidden');
+        if (overlay) {
+          overlay.classList.add('hidden');
+          overlay.style.display = 'none';
+        }
         if (wrapper) wrapper.classList.remove('auth-locked');
       },
 
       lockDashboard() {
         sessionStorage.removeItem(this.STORAGE_KEY_SESSION);
         localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
+        localStorage.removeItem('salesland_supervisor_token');
+        sessionStorage.removeItem('salesland_supervisor_token');
+        localStorage.removeItem('salesland_user_role');
         const overlay = document.getElementById('auth-gateway-overlay');
         const wrapper = document.querySelector('.dashboard-wrapper');
         const input = document.getElementById('auth-password-input');
         const errBanner = document.getElementById('auth-error-banner');
         
-        if (overlay) overlay.classList.remove('hidden');
+        if (overlay) {
+          overlay.classList.remove('hidden');
+          overlay.style.display = 'flex';
+        }
         if (wrapper) wrapper.classList.add('auth-locked');
         if (input) {
           input.value = '';
@@ -3088,7 +3105,13 @@
           localStorage.setItem(window.SaleslandSecurity.STORAGE_KEY_REMEMBER, JSON.stringify(remData));
         }
 
+        if (window.App) {
+          window.App.userRole = 'admin';
+          window.App.supervisorName = '';
+        }
+        localStorage.setItem('salesland_user_role', 'admin');
         window.SaleslandSecurity.unlockDashboard();
+        if (typeof window.applyRolePermissions === 'function') window.applyRolePermissions();
         if (errBanner) errBanner.style.display = 'none';
       } else {
         // Auth Failure
@@ -3171,6 +3194,90 @@
       }
     };
 
+    window.setAuthMode = function(mode) {
+      const tabMaster = document.getElementById('auth-tab-master');
+      const tabUser = document.getElementById('auth-tab-user');
+      const formMaster = document.getElementById('auth-form-master');
+      const formUser = document.getElementById('auth-form-user');
+      const errBanner = document.getElementById('auth-error-banner');
+      if (errBanner) errBanner.style.display = 'none';
+
+      if (mode === 'master') {
+        if (tabMaster) { tabMaster.style.background = '#0284c7'; tabMaster.style.color = '#fff'; }
+        if (tabUser) { tabUser.style.background = 'transparent'; tabUser.style.color = '#94a3b8'; }
+        if (formMaster) formMaster.style.display = 'block';
+        if (formUser) formUser.style.display = 'none';
+        const input = document.getElementById('auth-password-input');
+        if (input) setTimeout(() => input.focus(), 50);
+      } else {
+        if (tabMaster) { tabMaster.style.background = 'transparent'; tabMaster.style.color = '#94a3b8'; }
+        if (tabUser) { tabUser.style.background = '#0284c7'; tabUser.style.color = '#fff'; }
+        if (formMaster) formMaster.style.display = 'none';
+        if (formUser) formUser.style.display = 'block';
+        const pinInput = document.getElementById('auth-supervisor-pin-input');
+        if (pinInput) setTimeout(() => pinInput.focus(), 50);
+      }
+    };
+
+    window.toggleSupervisorPinVisibility = function() {
+      const input = document.getElementById('auth-supervisor-pin-input');
+      if (!input) return;
+      input.type = (input.type === 'password') ? 'text' : 'password';
+    };
+
+    window.submitSupervisorAuth = function() {
+      const pinInput = document.getElementById('auth-supervisor-pin-input');
+      const errBanner = document.getElementById('auth-error-banner');
+      const errMsg = document.getElementById('auth-error-msg');
+      const card = document.getElementById('auth-main-card');
+      const remember = document.getElementById('auth-supervisor-remember-checkbox')?.checked;
+
+      const pin = pinInput ? pinInput.value.trim() : '';
+
+      let expectedPin = '1234';
+      try {
+        const raw = localStorage.getItem('salesland_rbac_v3_dual');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const sup = parsed.find(u => u.role === 'supervisor');
+          if (sup && sup.pin) expectedPin = sup.pin;
+        }
+      } catch (e) {}
+
+      if (pin && (pin === expectedPin || pin === '1234')) {
+        if (window.App) {
+          window.App.userRole = 'supervisor';
+          window.App.supervisorName = '';
+        }
+        if (remember) {
+          localStorage.setItem('salesland_user_role', 'supervisor');
+          localStorage.setItem('salesland_supervisor_token', 'valid');
+        } else {
+          sessionStorage.setItem('salesland_user_role', 'supervisor');
+          sessionStorage.setItem('salesland_supervisor_token', 'valid');
+        }
+
+        window.SaleslandSecurity.unlockDashboard();
+        if (typeof window.applyRolePermissions === 'function') window.applyRolePermissions();
+        if (errBanner) errBanner.style.display = 'none';
+        if (window.SaleslandRBAC && typeof window.SaleslandRBAC.showToast === 'function') {
+          window.SaleslandRBAC.showToast('¡Bienvenido! Sesión iniciada como Supervisores.', 'success');
+        }
+      } else {
+        if (errMsg) errMsg.textContent = 'PIN de Supervisores incorrecto. Por defecto: 1234';
+        if (errBanner) errBanner.style.display = 'flex';
+        if (card) {
+          card.classList.remove('auth-shake');
+          void card.offsetWidth;
+          card.classList.add('auth-shake');
+        }
+        if (pinInput) {
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      }
+    };
+
     // Auto-check on DOM ready / Startup
     (function initAuthSecurity() {
       const wrapper = document.querySelector('.dashboard-wrapper');
@@ -3192,13 +3299,13 @@
         <span id="auth-error-msg">Contraseña incorrecta. Acceso denegado.</span>
       </div>
 
-      <!-- Dual Mode Selector: Clave Maestra vs Supervisor/Equipo -->
+      <!-- Dual Mode Selector: Administrador vs Supervisores (Acceso Único) -->
       <div style="display:flex; background:rgba(255,255,255,0.06); border-radius:8px; padding:3px; margin-bottom:1.15rem; gap:4px;">
         <button type="button" id="auth-tab-master" class="auth-mode-tab active" onclick="window.setAuthMode('master')" style="flex:1; padding:0.45rem 0.5rem; border-radius:6px; border:none; background:#0284c7; color:#fff; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;">
           👑 Administrador
         </button>
         <button type="button" id="auth-tab-user" class="auth-mode-tab" onclick="window.setAuthMode('user')" style="flex:1; padding:0.45rem 0.5rem; border-radius:6px; border:none; background:transparent; color:#94a3b8; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;">
-          👔 Supervisor / Equipo
+          👔 Supervisores
         </button>
       </div>
 
@@ -3224,26 +3331,33 @@
         </button>
       </form>
 
-      <!-- Mode 2: Supervisor or Seller PIN Login -->
-      <form id="auth-form-user" onsubmit="event.preventDefault(); window.submitUserPinAuth();" style="display:none;">
-        <div class="auth-input-wrapper" style="margin-bottom:0.75rem;">
-          <span class="auth-input-icon">👔</span>
-          <select id="auth-user-select" class="auth-input" style="padding-left:2.5rem; font-weight:600; cursor:pointer;">
-            <!-- Populated from SaleslandRBAC -->
-          </select>
+      <!-- Mode 2: Supervisor Single Shared PIN Login -->
+      <form id="auth-form-user" onsubmit="event.preventDefault(); window.submitSupervisorAuth();" style="display:none;">
+        <div style="background:rgba(2, 132, 199, 0.08); border:1px solid rgba(2, 132, 199, 0.25); border-radius:8px; padding:0.6rem 0.8rem; margin-bottom:0.85rem; text-align:left;">
+          <div style="font-size:0.78rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+            <span>👔</span> Acceso Único para Supervisores
+          </div>
+          <div style="font-size:0.7rem; color:#94a3b8; margin-top:0.2rem; line-height:1.35;">
+            Ingresa el PIN compartido para todo el equipo de supervisión.
+          </div>
         </div>
 
         <div class="auth-input-wrapper">
           <span class="auth-input-icon">🔑</span>
-          <input type="password" id="auth-user-pin-input" class="auth-input" placeholder="PIN de acceso (ej. 1234)..." required>
+          <input type="password" id="auth-supervisor-pin-input" class="auth-input" placeholder="PIN de Supervisores (ej. 1234)..." autocomplete="current-password" required>
+          <button type="button" class="auth-eye-btn" onclick="window.toggleSupervisorPinVisibility()" title="Mostrar/ocultar PIN">👁️</button>
         </div>
 
         <div class="auth-options" style="margin-top:0.75rem;">
-          <span style="color:#64748b; font-size:0.72rem;">Acceso restringido a tu equipo</span>
+          <label class="auth-checkbox-label">
+            <input type="checkbox" id="auth-supervisor-remember-checkbox" checked>
+            <span>Recordar en este equipo</span>
+          </label>
+          <span style="color:#64748b; font-size:0.72rem;">PIN Compartido</span>
         </div>
 
-        <button type="submit" class="auth-btn-submit" id="btn-auth-user-submit" style="background:#0f172a; border:1px solid #334155;">
-          <span>Ingresar a mi Equipo</span>
+        <button type="submit" class="auth-btn-submit" id="btn-auth-user-submit" style="background:#0284c7; border:none;">
+          <span>Ingresar como Supervisor</span>
           <span style="font-size:1.1rem; line-height:1;">➔</span>
         </button>
       </form>
@@ -4529,38 +4643,23 @@
         <span id="role-current-badge" style="background:#10b981; color:#fff; font-size:0.72rem; font-weight:700; padding:0.25rem 0.6rem; border-radius:999px;">ACTIVO</span>
       </div>
 
-      <!-- Role Options Grid (3 Roles) -->
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:0.75rem; margin-bottom:1.25rem;">
+      <!-- Role Options Grid (2 Roles: Admin y Supervisores) -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.85rem; margin-bottom:1.25rem;">
         <!-- Option 1: Administrador -->
-        <div id="role-card-admin" class="role-selection-card" style="border:2px solid #0284c7; background:rgba(2, 132, 199, 0.04); border-radius:10px; padding:0.9rem; cursor:pointer;">
-          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.4rem;">
-            <span style="font-size:1.3rem;">👑</span>
-            <div style="font-weight:800; font-size:0.9rem; color:var(--text-brand);">Admin</div>
-          </div>
-          <p style="font-size:0.72rem; color:var(--text-muted); margin:0; line-height:1.3;">
-            Acceso total corporativo, edición de metas y administración de usuarios.
+        <div id="role-card-admin" class="role-selection-card" style="border:2px solid #0284c7; background:rgba(2, 132, 199, 0.04); border-radius:10px; padding:0.95rem; cursor:pointer; text-align:center;">
+          <div style="font-size:1.6rem; margin-bottom:0.25rem;">👑</div>
+          <div style="font-weight:800; font-size:0.95rem; color:var(--text-brand); margin-bottom:0.25rem;">Administrador</div>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin:0; line-height:1.35;">
+            Acceso total corporativo, edición de metas, sincronización de Excels y administración.
           </p>
         </div>
 
-        <!-- Option 2: Supervisor -->
-        <div id="role-card-supervisor" class="role-selection-card" style="border:1px solid var(--border-card); background:var(--bg-card); border-radius:10px; padding:0.9rem; cursor:pointer;">
-          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.4rem;">
-            <span style="font-size:1.3rem;">👔</span>
-            <div style="font-weight:800; font-size:0.9rem; color:var(--text-brand);">Supervisor</div>
-          </div>
-          <p style="font-size:0.72rem; color:var(--text-muted); margin:0; line-height:1.3;">
-            Restringido exclusivamente a su equipo, vendedores y PDVs asignados.
-          </p>
-        </div>
-
-        <!-- Option 3: Vendedor / Consulta -->
-        <div id="role-card-seller" class="role-selection-card" style="border:1px solid var(--border-card); background:var(--bg-card); border-radius:10px; padding:0.9rem; cursor:pointer;">
-          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.4rem;">
-            <span style="font-size:1.3rem;">👤</span>
-            <div style="font-weight:800; font-size:0.9rem; color:var(--text-brand);">Consulta</div>
-          </div>
-          <p style="font-size:0.72rem; color:var(--text-muted); margin:0; line-height:1.3;">
-            Modo solo lectura de indicadores generales sin edición ni carga.
+        <!-- Option 2: Supervisores (Acceso Único) -->
+        <div id="role-card-supervisor" class="role-selection-card" style="border:1px solid var(--border-card); background:var(--bg-card); border-radius:10px; padding:0.95rem; cursor:pointer; text-align:center;">
+          <div style="font-size:1.6rem; margin-bottom:0.25rem;">👔</div>
+          <div style="font-weight:800; font-size:0.95rem; color:var(--text-brand); margin-bottom:0.25rem;">Supervisores</div>
+          <p style="font-size:0.72rem; color:var(--text-muted); margin:0; line-height:1.35;">
+            Acceso compartido de consulta para seguimiento comercial de equipos y tiendas.
           </p>
         </div>
       </div>
@@ -4581,19 +4680,20 @@
         </div>
       </div>
 
-      <!-- Supervisor Selector Form -->
+      <!-- Supervisor Single PIN Form -->
       <div id="role-form-supervisor" style="background:var(--bg-card); border:1px solid var(--border-card); border-radius:8px; padding:1rem; margin-bottom:1rem; display:none;">
         <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.4rem;">
-          Selecciona tu Nombre de Supervisor:
+          PIN de Supervisores <span style="font-weight:400; color:var(--text-muted);">(Por defecto: 1234)</span>
         </label>
-        <div class="filter-select-wrapper" style="margin-bottom:0.75rem;">
-          <select id="role-select-supervisor" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); font-weight:600;">
-            <!-- Dynamically populated -->
-          </select>
+        <div style="display:flex; gap:0.5rem;">
+          <input type="password" id="role-supervisor-pin" placeholder="Ingresa PIN (1234)" style="flex:1; padding:0.5rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+          <button id="btn-submit-supervisor-role" style="background:#0284c7; color:#fff; border:none; padding:0.5rem 1rem; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:flex; align-items:center; gap:0.35rem;">
+            <span>👔</span> Entrar como Supervisor
+          </button>
         </div>
-        <button id="btn-submit-supervisor-role" style="width:100%; background:#0f172a; color:#fff; border:none; padding:0.6rem 1rem; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
-          <span>👔</span> Ingresar como Supervisor
-        </button>
+        <div id="role-supervisor-error" style="color:#ef4444; font-size:0.75rem; margin-top:0.4rem; display:none;">
+          ⚠️ PIN incorrecto para Supervisores. Intenta con: 1234
+        </div>
       </div>
 
       <!-- Modal Footer -->
@@ -4652,16 +4752,13 @@
       <!-- Filter Tabs -->
       <div class="user-mgmt-tabs-bar">
         <button class="user-mgmt-tab active" data-role="all" id="tab-users-all">
-          Todos <span class="tab-count-badge" id="count-users-all">20</span>
+          Todos <span class="tab-count-badge" id="count-users-all">2</span>
         </button>
         <button class="user-mgmt-tab" data-role="admin" id="tab-users-admin">
           👑 Administrador <span class="tab-count-badge" id="count-users-admin">1</span>
         </button>
         <button class="user-mgmt-tab" data-role="supervisor" id="tab-users-sup">
-          👔 Supervisores <span class="tab-count-badge" id="count-users-sup">18</span>
-        </button>
-        <button class="user-mgmt-tab" data-role="seller" id="tab-users-seller">
-          👤 Vendedor / Consulta <span class="tab-count-badge" id="count-users-seller">1</span>
+          👔 Supervisores <span class="tab-count-badge" id="count-users-sup">1</span>
         </button>
       </div>
 
@@ -4718,9 +4815,8 @@
               Rol de Acceso *
             </label>
             <select id="user-form-role" onchange="window.SaleslandRBAC.onRoleChanged()" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); font-weight:600;">
-              <option value="supervisor">👔 Supervisor</option>
-              <option value="admin">👑 Administrador</option>
-              <option value="seller">👤 Vendedor / Consulta</option>
+              <option value="supervisor">👔 Supervisores (Acceso Único)</option>
+              <option value="admin">👑 Administrador (Acceso Total)</option>
             </select>
           </div>
           <div>
@@ -5420,7 +5516,7 @@
 
     
     // RBAC System (Roles & Permissions)
-    App.userRole = localStorage.getItem('salesland_user_role') || 'admin';
+    App.userRole = localStorage.getItem('salesland_user_role') || sessionStorage.getItem('salesland_user_role') || 'admin';
     App.supervisorName = localStorage.getItem('salesland_supervisor_name') || '';
 
     
@@ -5629,9 +5725,9 @@
     }
 
     function applyRolePermissions() {
-      const isSupervisor = (App.userRole === 'supervisor' && App.supervisorName);
-      const isSeller = (App.userRole === 'seller');
-      const isAdmin = (App.userRole === 'admin' || (!isSupervisor && !isSeller));
+      window.applyRolePermissions = applyRolePermissions;
+      const isSupervisor = (App.userRole === 'supervisor');
+      const isAdmin = (App.userRole === 'admin' || !isSupervisor);
 
       const roleBtnText = document.getElementById('role-badge-text');
       const roleBtnIcon = document.getElementById('role-badge-icon');
@@ -5646,15 +5742,15 @@
       const supervisorCard = document.querySelector('.supervisor-card');
 
       if (isSupervisor) {
-        if (roleBtnText) roleBtnText.textContent = `Supervisor: ${App.supervisorName.split(' ')[0]}`;
+        if (roleBtnText) roleBtnText.textContent = 'Rol: Supervisores';
         if (roleBtnIcon) roleBtnIcon.textContent = '👔';
         
         if (banner) {
           banner.style.display = 'flex';
-          if (bannerName) bannerName.textContent = `${App.supervisorName} (Equipo Comercial)`;
+          if (bannerName) bannerName.textContent = 'Acceso Único para Supervisores (Solo Lectura)';
         }
 
-        // Hide admin utility buttons
+        // Hide administrative and data modification controls
         if (btnSync) btnSync.style.display = 'none';
         if (btnMeta) btnMeta.style.display = 'none';
         if (btnUpload) btnUpload.style.display = 'none';
@@ -5668,36 +5764,14 @@
           if (compBtn) compBtn.click();
         }
 
-        // Lock supervisor filter
-        App.filters.supervisor = App.supervisorName;
+        // Keep supervisor filter enabled so each supervisor can inspect their specific team
         if (supSelect) {
-          supSelect.disabled = true;
-          supSelect.title = 'Tu vista está fijada a tu propio equipo';
+          supSelect.disabled = false;
+          supSelect.title = 'Selecciona tu equipo de supervisión';
         }
         if (supervisorCard) {
           supervisorCard.style.borderColor = '#0284c7';
           supervisorCard.style.background = 'rgba(2, 132, 199, 0.08)';
-        }
-      } else if (isSeller) {
-        // Seller / Consulta Mode (Read-only)
-        if (roleBtnText) roleBtnText.textContent = 'Rol: Consulta / Vendedor';
-        if (roleBtnIcon) roleBtnIcon.textContent = '👤';
-
-        if (banner) banner.style.display = 'none';
-
-        if (btnSync) btnSync.style.display = 'none';
-        if (btnMeta) btnMeta.style.display = 'none';
-        if (btnUpload) btnUpload.style.display = 'none';
-        if (btnUserMgmt) btnUserMgmt.style.display = 'none';
-        if (tabSupervisores) tabSupervisores.style.display = 'none';
-
-        if (supSelect) {
-          supSelect.disabled = false;
-          supSelect.title = 'Modo Consulta';
-        }
-        if (supervisorCard) {
-          supervisorCard.style.borderColor = '';
-          supervisorCard.style.background = '';
         }
       } else {
         // Administrator mode
@@ -5808,9 +5882,9 @@
   // SALESLAND RBAC & USER MANAGEMENT ENGINE
   // ==========================================================
   window.SaleslandRBAC = (function() {
-    const STORAGE_KEY = 'salesland_rbac_users_v2';
+    const STORAGE_KEY = 'salesland_rbac_v3_dual';
 
-        function showToast(msg, type = 'success') {
+    function showToast(msg, type = 'success') {
       let toast = document.getElementById('salesland-toast');
       if (!toast) {
         toast = document.createElement('div');
@@ -5839,39 +5913,12 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
     }
-    
-    const OFFICIAL_SUPERVISORS = [
-      "Alejandro Augusto Fossi Colina",
-      "Angela Perez Cavallini",
-      "Carlos Solano Rodriguez",
-      "Eugenio Moraga Rodriguez",
-      "Fabian Guillermo Ramirez Roldan",
-      "Fabiana Garcia",
-      "Jimmy Avila Rosales",
-      "Lucia Rodriguez",
-      "Luis Matamoros Altamirano",
-      "Melissa Lizano Granados",
-      "Milton Esteban Hernández Alvarado",
-      "Rachel Nicole Araya Jiménez",
-      "Roger Danilo Chavarria Moya",
-      "Rony Marchena Rocha",
-      "Scarleth Dolores Guerrero Rodríguez",
-      "William Rojas",
-      "Yahaira Castro Solis",
-      "Yariel Jimenez Chacón"
-    ];
 
-    function makeUsername(name) {
-      let n = name.toLowerCase();
-      const map = { 'á':'a', 'é':'e', 'í':'i', 'ó':'o', 'ú':'u', 'ñ':'n' };
-      for (const [k, v] of Object.entries(map)) n = n.replaceAll(k, v);
-      const parts = n.split(/\s+/).filter(Boolean);
-      if (parts.length >= 2) return `${parts[0]}.${parts[1]}`;
-      return parts[0] || 'usuario';
-    }
+    let currentFilterRole = 'all';
+    let currentSearchQuery = '';
 
     function getDefaultUsers() {
-      const list = [
+      return [
         {
           id: 'usr_admin',
           username: 'admin',
@@ -5883,31 +5930,16 @@
           active: true
         },
         {
-          id: 'usr_consulta',
-          username: 'consulta',
-          name: 'Equipo Comercial (Vendedor / Consulta)',
-          role: 'seller',
+          id: 'usr_supervisores',
+          username: 'supervisores',
+          name: 'Equipo de Supervisores (Acceso Único)',
+          role: 'supervisor',
           supervisorName: '',
           pin: '1234',
           permissions: { viewTeam: true, viewRanking: false, editGoals: false, syncExcels: false, manageUsers: false },
           active: true
         }
       ];
-
-      OFFICIAL_SUPERVISORS.forEach((sup, idx) => {
-        list.push({
-          id: `usr_sup_${idx + 1}`,
-          username: makeUsername(sup),
-          name: sup,
-          role: 'supervisor',
-          supervisorName: sup,
-          pin: '1234',
-          permissions: { viewTeam: true, viewRanking: false, editGoals: false, syncExcels: false, manageUsers: false },
-          active: true
-        });
-      });
-
-      return list;
     }
 
     function getUsers() {
@@ -5915,7 +5947,7 @@
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length >= 2) return parsed;
         }
       } catch (e) {
         console.warn('Error reading RBAC users:', e);
@@ -5928,36 +5960,19 @@
     function saveUsers(users) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
       updateCountsAndBadges();
-      populateAuthUserSelect();
     }
-
-    let currentFilterRole = 'all';
-    let currentSearchQuery = '';
 
     function updateCountsAndBadges() {
       const users = getUsers();
       const allEl = document.getElementById('count-users-all');
       const admEl = document.getElementById('count-users-admin');
       const supEl = document.getElementById('count-users-sup');
-      const selEl = document.getElementById('count-users-seller');
       const totEl = document.getElementById('user-mgmt-total-status');
 
       if (allEl) allEl.textContent = users.length;
       if (admEl) admEl.textContent = users.filter(u => u.role === 'admin').length;
       if (supEl) supEl.textContent = users.filter(u => u.role === 'supervisor').length;
-      if (selEl) selEl.textContent = users.filter(u => u.role === 'seller').length;
-      if (totEl) totEl.textContent = `${users.filter(u => u.active).length} activos de ${users.length} usuarios registrados`;
-    }
-
-    function getUniqueSupervisorsForSelect() {
-      const sups = new Set(OFFICIAL_SUPERVISORS);
-      if (window.App && Array.isArray(App.data)) {
-        App.data.forEach(r => {
-          const s = r[12];
-          if (s && s !== 'Sin Supervisor') sups.add(s);
-        });
-      }
-      return Array.from(sups).sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+      if (totEl) totEl.textContent = `${users.filter(u => u.active).length} activos de ${users.length} cuentas configuradas`;
     }
 
     function renderUserList() {
@@ -5972,9 +5987,8 @@
         if (query) {
           const matchName = u.name.toLowerCase().includes(query);
           const matchUser = u.username.toLowerCase().includes(query);
-          const matchSup = (u.supervisorName || '').toLowerCase().includes(query);
           const matchRole = u.role.toLowerCase().includes(query);
-          if (!matchName && !matchUser && !matchSup && !matchRole) return false;
+          if (!matchName && !matchUser && !matchRole) return false;
         }
         return true;
       });
@@ -5984,35 +5998,20 @@
           <div style="text-align:center; padding:2.5rem 1rem; color:var(--text-muted);">
             <div style="font-size:2rem; margin-bottom:0.5rem;">🔍</div>
             <p style="font-weight:700; margin:0;">No se encontraron usuarios</p>
-            <p style="font-size:0.8rem; margin:0.3rem 0 0 0;">Intenta con otro término de búsqueda o cambia de filtro.</p>
           </div>
         `;
         return;
       }
 
       container.innerHTML = filtered.map(u => {
-        const initials = u.name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
-        let roleBadge = '';
-        let avatarClass = '';
-        let roleIcon = '';
-
-        if (u.role === 'admin') {
-          roleBadge = '<span class="user-role-badge badge-admin">👑 Admin</span>';
-          avatarClass = 'avatar-admin';
-          roleIcon = '👑';
-        } else if (u.role === 'supervisor') {
-          roleBadge = '<span class="user-role-badge badge-supervisor">👔 Supervisor</span>';
-          avatarClass = 'avatar-supervisor';
-          roleIcon = '👔';
-        } else {
-          roleBadge = '<span class="user-role-badge badge-seller">👤 Consulta</span>';
-          avatarClass = 'avatar-seller';
-          roleIcon = '👤';
-        }
+        const initials = (u.role === 'admin') ? 'AD' : 'SU';
+        const roleBadge = (u.role === 'admin') 
+          ? '<span class="user-role-badge badge-admin">👑 Administrador</span>'
+          : '<span class="user-role-badge badge-supervisor">👔 Supervisores (Único)</span>';
+        const avatarClass = (u.role === 'admin') ? 'avatar-admin' : 'avatar-supervisor';
 
         const activeRole = (window.App && window.App.userRole) ? window.App.userRole : (localStorage.getItem('salesland_user_role') || 'admin');
-        const activeSup = (window.App && window.App.supervisorName) ? window.App.supervisorName : (localStorage.getItem('salesland_supervisor_name') || '');
-        const isCurrentActive = (u.role === activeRole && (u.role !== 'supervisor' || u.supervisorName === activeSup));
+        const isCurrentActive = (u.role === activeRole);
 
         return `
           <div class="user-card-item" style="${!u.active ? 'opacity:0.6;' : ''}">
@@ -6026,35 +6025,30 @@
                 </div>
                 <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.15rem; display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap;">
                   <span>@${escapeHtml(u.username)}</span>
-                  ${u.supervisorName ? `<span>• 🏢 Equipo: <strong>${escapeHtml(u.supervisorName)}</strong></span>` : ''}
-                  <span>• PIN: <span class="user-pin-box">${escapeHtml(u.pin)}</span></span>
+                  <span>• PIN Actual: <span class="user-pin-box">${escapeHtml(u.pin)}</span></span>
+                  ${u.role === 'admin' ? '<span style="color:#64748b;">(o clave maestra)</span>' : '<span style="color:#38bdf8; font-weight:600;">(compartido por supervisores)</span>'}
                 </div>
                 <div style="display:flex; gap:0.35rem; margin-top:0.35rem; flex-wrap:wrap;">
-                  ${u.permissions?.viewTeam ? '<span class="perm-tag-pill">📊 Ver Equipo</span>' : ''}
-                  ${u.permissions?.viewRanking ? '<span class="perm-tag-pill" style="color:#0284c7; border-color:#0284c7;">🏆 Ranking</span>' : ''}
-                  ${u.permissions?.editGoals ? '<span class="perm-tag-pill" style="color:#10b981; border-color:#10b981;">🎯 Metas</span>' : ''}
-                  ${u.permissions?.syncExcels ? '<span class="perm-tag-pill" style="color:#8b5cf6; border-color:#8b5cf6;">🔄 Excels</span>' : ''}
-                  ${u.permissions?.manageUsers ? '<span class="perm-tag-pill" style="color:#ef4444; border-color:#ef4444;">👥 Gestión</span>' : ''}
+                  ${u.permissions?.viewTeam ? '<span class="perm-tag-pill">📊 Ver Equipos y PDVs</span>' : ''}
+                  ${u.permissions?.viewRanking ? '<span class="perm-tag-pill" style="color:#0284c7; border-color:#0284c7;">🏆 Ranking</span>' : '<span class="perm-tag-pill" style="color:#64748b; opacity:0.6;">🚫 Sin Ranking</span>'}
+                  ${u.permissions?.editGoals ? '<span class="perm-tag-pill" style="color:#10b981; border-color:#10b981;">🎯 Editar Metas</span>' : '<span class="perm-tag-pill" style="color:#64748b; opacity:0.6;">🔒 Metas Protegidas</span>'}
+                  ${u.permissions?.syncExcels ? '<span class="perm-tag-pill" style="color:#8b5cf6; border-color:#8b5cf6;">🔄 Sincronizar Excels</span>' : '<span class="perm-tag-pill" style="color:#64748b; opacity:0.6;">🔒 Sin Sincronización</span>'}
+                  ${u.permissions?.manageUsers ? '<span class="perm-tag-pill" style="color:#ef4444; border-color:#ef4444;">👥 Gestión Usuarios</span>' : ''}
                 </div>
               </div>
             </div>
 
             <!-- Actions -->
             <div class="user-card-actions" style="display:flex; align-items:center; gap:0.4rem; flex-shrink:0;">
-              <button onclick="window.SaleslandRBAC.openPinModal('${u.id}')" title="Cambiar PIN rápido" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+              <button onclick="window.SaleslandRBAC.openPinModal('${u.id}')" title="Modificar PIN" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
                 🔑 Clave
               </button>
-              <button onclick="window.SaleslandRBAC.openUserForm('${u.id}')" title="Editar datos y permisos" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+              <button onclick="window.SaleslandRBAC.openUserForm('${u.id}')" title="Editar detalles" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
                 ✏️ Editar
               </button>
-              <button onclick="window.SaleslandRBAC.fastLoginAsUser('${u.id}')" title="Probar vista como este usuario" style="background:#0284c7; border:none; color:#ffffff; padding:0.4rem 0.75rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+              <button onclick="window.SaleslandRBAC.fastLoginAsUser('${u.id}')" title="Probar vista con este rol" style="background:#0284c7; border:none; color:#ffffff; padding:0.4rem 0.75rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
                 🚀 Ingresar
               </button>
-              ${u.id !== 'usr_admin' ? `
-                <button onclick="window.SaleslandRBAC.deleteUser('${u.id}')" title="Eliminar usuario" style="background:rgba(239, 68, 68, 0.1); border:1px solid rgba(239, 68, 68, 0.3); color:#ef4444; padding:0.4rem 0.6rem; border-radius:6px; font-size:0.76rem; cursor:pointer;">
-                  🗑️
-                </button>
-              ` : ''}
             </div>
           </div>
         `;
@@ -6069,7 +6063,6 @@
       const sInput = document.getElementById('user-mgmt-search');
       if (sInput) sInput.value = '';
       
-      // Reset active tab button
       document.querySelectorAll('.user-mgmt-tab').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-role') === 'all');
       });
@@ -6090,14 +6083,8 @@
 
     function onRoleChanged() {
       const roleSel = document.getElementById('user-form-role');
-      const supWrap = document.getElementById('user-form-sup-wrapper');
       const r = roleSel ? roleSel.value : 'supervisor';
 
-      if (supWrap) {
-        supWrap.style.display = (r === 'supervisor') ? 'block' : 'none';
-      }
-
-      // Auto check/uncheck defaults based on role
       const pTeam = document.getElementById('user-perm-viewTeam');
       const pRank = document.getElementById('user-perm-viewRanking');
       const pGoals = document.getElementById('user-perm-editGoals');
@@ -6110,12 +6097,6 @@
         if (pGoals) pGoals.checked = true;
         if (pSync) pSync.checked = true;
         if (pUsers) pUsers.checked = true;
-      } else if (r === 'supervisor') {
-        if (pTeam) pTeam.checked = true;
-        if (pRank) pRank.checked = false;
-        if (pGoals) pGoals.checked = false;
-        if (pSync) pSync.checked = false;
-        if (pUsers) pUsers.checked = false;
       } else {
         if (pTeam) pTeam.checked = true;
         if (pRank) pRank.checked = false;
@@ -6128,13 +6109,6 @@
     function openUserForm(userId) {
       const modal = document.getElementById('user-form-modal');
       const title = document.getElementById('user-form-title');
-      const supSelect = document.getElementById('user-form-supervisor-select');
-      
-      // Populate supervisors dropdown
-      if (supSelect) {
-        const sups = getUniqueSupervisorsForSelect();
-        supSelect.innerHTML = sups.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-      }
 
       const idInput = document.getElementById('user-form-id');
       const nameInput = document.getElementById('user-form-name');
@@ -6150,16 +6124,14 @@
       const pUsers = document.getElementById('user-perm-manageUsers');
 
       if (userId) {
-        // Edit existing
         const user = getUsers().find(u => u.id === userId);
         if (!user) return;
-        if (title) title.innerHTML = `<span>✏️</span> Editar Usuario: ${escapeHtml(user.name)}`;
+        if (title) title.innerHTML = `<span>✏️</span> Editar Acceso: ${escapeHtml(user.name)}`;
         if (idInput) idInput.value = user.id;
         if (nameInput) nameInput.value = user.name;
         if (userInput) userInput.value = user.username;
         if (pinInput) pinInput.value = user.pin;
         if (roleInput) roleInput.value = user.role;
-        if (supSelect && user.supervisorName) supSelect.value = user.supervisorName;
         if (activeInput) activeInput.checked = (user.active !== false);
 
         if (pTeam) pTeam.checked = !!user.permissions?.viewTeam;
@@ -6167,12 +6139,8 @@
         if (pGoals) pGoals.checked = !!user.permissions?.editGoals;
         if (pSync) pSync.checked = !!user.permissions?.syncExcels;
         if (pUsers) pUsers.checked = !!user.permissions?.manageUsers;
-
-        const supWrap = document.getElementById('user-form-sup-wrapper');
-        if (supWrap) supWrap.style.display = (user.role === 'supervisor') ? 'block' : 'none';
       } else {
-        // Create new
-        if (title) title.innerHTML = `<span>➕</span> Crear Nuevo Usuario`;
+        if (title) title.innerHTML = `<span>➕</span> Configurar Acceso`;
         if (idInput) idInput.value = '';
         if (nameInput) nameInput.value = '';
         if (userInput) userInput.value = '';
@@ -6202,8 +6170,6 @@
       const username = document.getElementById('user-form-username')?.value.trim().toLowerCase();
       const pin = document.getElementById('user-form-pin')?.value.trim();
       const role = document.getElementById('user-form-role')?.value;
-      const supSelect = document.getElementById('user-form-supervisor-select');
-      const supervisorName = (role === 'supervisor' && supSelect) ? supSelect.value : '';
       const active = !!document.getElementById('user-form-active')?.checked;
 
       const permissions = {
@@ -6215,35 +6181,24 @@
       };
 
       if (!name || !username || !pin) {
-        showToast('Por favor completa todos los campos requeridos (*)', 'error');
+        showToast('Por favor completa los campos requeridos (*)', 'error');
         return;
       }
 
       const users = getUsers();
-
-      // Check unique username
-      const dup = users.find(u => u.username === username && u.id !== id);
-      if (dup) {
-        showToast(`El usuario "${username}" ya está registrado.`, 'error');
-        return;
-      }
-
       if (id) {
-        // Update
         const idx = users.findIndex(u => u.id === id);
         if (idx !== -1) {
-          users[idx] = { ...users[idx], name, username, pin, role, supervisorName, permissions, active };
+          users[idx] = { ...users[idx], name, username, pin, role, permissions, active };
         }
       } else {
-        // Create
-        const newId = `usr_${Date.now()}`;
-        users.push({ id: newId, name, username, pin, role, supervisorName, permissions, active });
+        users.push({ id: `usr_${Date.now()}`, name, username, pin, role, permissions, active });
       }
 
       saveUsers(users);
       closeUserForm();
       renderUserList();
-      showToast('¡Usuario guardado exitosamente!', 'success');
+      showToast('¡Configuración guardada exitosamente!', 'success');
     }
 
     function openPinModal(userId) {
@@ -6295,28 +6250,12 @@
       }
     }
 
-    function deleteUser(userId) {
-      if (userId === 'usr_admin') {
-        showToast('No es posible eliminar al Administrador principal.', 'error');
-        return;
-      }
-      const users = getUsers();
-      const user = users.find(u => u.id === userId);
-      if (!user) return;
-
-      if (confirm(`¿Estás seguro de eliminar el usuario "${user.name}" (@${user.username})?`)) {
-        const filtered = users.filter(u => u.id !== userId);
-        saveUsers(filtered);
-        renderUserList();
-      }
-    }
-
     function resetDefaultUsers() {
-      if (confirm('¿Restablecer la lista completa de usuarios a la configuración inicial de fábrica (18 supervisores, 1 admin, 1 vendedor con PIN 1234)?')) {
+      if (confirm('¿Deseas restablecer los accesos predeterminados (Admin y Supervisores)?')) {
         const def = getDefaultUsers();
         saveUsers(def);
         renderUserList();
-        showToast('¡Usuarios restablecidos a la configuración inicial!', 'success');
+        showToast('Accesos restablecidos a valores iniciales.', 'info');
       }
     }
 
@@ -6326,20 +6265,27 @@
       if (!modal || !tbody) return;
 
       const users = getUsers();
-      tbody.innerHTML = users.map(u => {
-        let roleText = 'Administrador';
-        if (u.role === 'supervisor') roleText = `Supervisor (${u.supervisorName || 'General'})`;
-        else if (u.role === 'seller') roleText = 'Vendedor / Consulta';
-
-        return `
-          <tr style="border-bottom:1px solid var(--border-card);">
-            <td style="padding:0.45rem 0.75rem; font-weight:700; color:var(--text-main);">${escapeHtml(u.name)}</td>
-            <td style="padding:0.45rem 0.75rem; color:var(--text-muted); font-family:monospace;">@${escapeHtml(u.username)}</td>
-            <td style="padding:0.45rem 0.75rem; color:var(--accent-navy);">${escapeHtml(roleText)}</td>
-            <td style="padding:0.45rem 0.75rem; font-family:monospace; font-weight:800; color:#0284c7;">${escapeHtml(u.pin)}</td>
-          </tr>
-        `;
-      }).join('');
+      tbody.innerHTML = users.map(u => `
+        <tr style="border-bottom:1px solid var(--border-card);">
+          <td style="padding:0.65rem 0.75rem; font-weight:700; color:var(--text-main);">
+            ${u.role === 'admin' ? '👑' : '👔'} ${escapeHtml(u.name)}
+          </td>
+          <td style="padding:0.65rem 0.75rem; color:var(--text-muted); font-family:monospace;">
+            @${escapeHtml(u.username)}
+          </td>
+          <td style="padding:0.65rem 0.75rem;">
+            <span class="user-role-badge ${u.role === 'admin' ? 'badge-admin' : 'badge-supervisor'}">
+              ${u.role === 'admin' ? 'Administrador' : 'Supervisores (Único)'}
+            </span>
+          </td>
+          <td style="padding:0.65rem 0.75rem; font-weight:700; color:#38bdf8; font-family:monospace; font-size:0.95rem;">
+            ${escapeHtml(u.pin)}
+          </td>
+          <td style="padding:0.65rem 0.75rem; font-size:0.75rem; color:var(--text-muted);">
+            ${u.role === 'admin' ? 'Acceso Total (Todas las facultades corporativas)' : 'Acceso Compartido de Supervisores (Solo Lectura de equipos y tiendas)'}
+          </td>
+        </tr>
+      `).join('');
 
       modal.classList.add('open');
       modal.style.display = 'flex';
@@ -6355,19 +6301,19 @@
 
     function copySummaryToClipboard() {
       const users = getUsers();
-      let text = "========================================\n";
-      text += "SALESLAND RETAIL - CREDENCIALES DE ACCESO\n";
-      text += "========================================\n\n";
+      let text = '=== CREDENCIALES DE ACCESO SALESLAND RETAIL ===\n\n';
       users.forEach(u => {
-        let rol = u.role.toUpperCase();
-        if (u.supervisorName) rol += ` [${u.supervisorName}]`;
-        text += `• ${u.name}\n  Usuario: @${u.username}\n  Rol: ${rol}\n  PIN: ${u.pin}\n\n`;
+        text += `• ${u.name.toUpperCase()}\n`;
+        text += `  Usuario: @${u.username}\n`;
+        text += `  PIN de Acceso: ${u.pin}\n`;
+        text += `  Perfil: ${u.role === 'admin' ? 'Administrador (Acceso Total Corporativo)' : 'Supervisores (Acceso Único para el equipo)'}\n\n`;
       });
-
+      text += 'URL Oficial: https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html\n';
+      
       navigator.clipboard.writeText(text).then(() => {
         showToast('¡Credenciales copiadas al portapapeles!', 'success');
-      }).catch(err => {
-        showToast('Por favor copia el texto de la tabla.', 'info');
+      }).catch(() => {
+        showToast('Credenciales listas. Puedes seleccionarlas de la tabla.', 'info');
       });
     }
 
@@ -6375,31 +6321,19 @@
       const user = getUsers().find(u => u.id === userId);
       if (!user) return;
 
-      if (window.App) {
-        App.userRole = user.role;
-        App.supervisorName = (user.role === 'supervisor') ? user.supervisorName : '';
-      }
+      App.userRole = user.role;
+      App.supervisorName = '';
       localStorage.setItem('salesland_user_role', user.role);
-      if (user.role === 'supervisor') localStorage.setItem('salesland_supervisor_name', user.supervisorName);
-      else localStorage.removeItem('salesland_supervisor_name');
 
       closeUserMgmtModal();
-      if (typeof applyRolePermissions === 'function') applyRolePermissions();
-      showToast(`Iniciaste sesión como: ${user.name}`, 'success');
-    }
-
-    function populateAuthUserSelect() {
-      const sel = document.getElementById('auth-user-select');
-      if (!sel) return;
-      const users = getUsers().filter(u => u.active && u.role !== 'admin');
-      sel.innerHTML = users.map(u => {
-        return `<option value="${u.id}">${escapeHtml(u.name)} (${u.role === 'supervisor' ? 'Supervisor' : 'Consulta'})</option>`;
-      }).join('');
+      applyRolePermissions();
+      showToast(`Vista cambiada a: ${user.name}`, 'info');
     }
 
     return {
       getUsers,
       saveUsers,
+      showToast,
       openUserMgmtModal,
       closeUserMgmtModal,
       openUserForm,
@@ -6409,15 +6343,12 @@
       openPinModal,
       closePinModal,
       savePinModal,
-      deleteUser,
       resetDefaultUsers,
       openSummaryModal,
       closeSummaryModal,
       copySummaryToClipboard,
       fastLoginAsUser,
-      populateAuthUserSelect,
       init: function() {
-        // Setup Search
         const sInput = document.getElementById('user-mgmt-search');
         const sClear = document.getElementById('btn-user-mgmt-search-clear');
         if (sInput) {
@@ -6436,7 +6367,6 @@
           });
         }
 
-        // Setup filter tabs
         document.querySelectorAll('.user-mgmt-tab').forEach(btn => {
           btn.addEventListener('click', () => {
             document.querySelectorAll('.user-mgmt-tab').forEach(b => b.classList.remove('active'));
@@ -6446,7 +6376,6 @@
           });
         });
 
-        // Setup Buttons
         document.getElementById('btn-open-user-mgmt')?.addEventListener('click', openUserMgmtModal);
         document.getElementById('btn-open-mgmt-from-role')?.addEventListener('click', () => {
           closeRoleModal();
@@ -6462,19 +6391,6 @@
         document.getElementById('btn-close-user-summary')?.addEventListener('click', closeSummaryModal);
         document.getElementById('btn-close-user-summary-bottom')?.addEventListener('click', closeSummaryModal);
         document.getElementById('btn-user-mgmt-reset')?.addEventListener('click', resetDefaultUsers);
-
-        // Role Card Seller in role-modal
-        document.getElementById('role-card-seller')?.addEventListener('click', () => {
-          App.userRole = 'seller';
-          App.supervisorName = '';
-          localStorage.setItem('salesland_user_role', 'seller');
-          localStorage.removeItem('salesland_supervisor_name');
-          applyRolePermissions();
-          closeRoleModal();
-          showToast('Modo Consulta / Vendedor activado (Solo lectura)', 'info');
-        });
-
-        populateAuthUserSelect();
       }
     };
   })();
@@ -6500,38 +6416,44 @@
       if (tabUser) { tabUser.style.background = '#0284c7'; tabUser.style.color = '#fff'; }
       if (formMaster) formMaster.style.display = 'none';
       if (formUser) formUser.style.display = 'block';
-      window.SaleslandRBAC.populateAuthUserSelect();
-      const pinInput = document.getElementById('auth-user-pin-input');
+      const pinInput = document.getElementById('auth-supervisor-pin-input');
       if (pinInput) setTimeout(() => pinInput.focus(), 50);
     }
   };
 
-  window.submitUserPinAuth = function() {
-    const sel = document.getElementById('auth-user-select');
-    const pinInput = document.getElementById('auth-user-pin-input');
+  window.toggleSupervisorPinVisibility = function() {
+    const input = document.getElementById('auth-supervisor-pin-input');
+    if (!input) return;
+    input.type = (input.type === 'password') ? 'text' : 'password';
+  };
+
+  // Submit Supervisor shared PIN auth from login gateway
+  window.submitSupervisorAuth = function() {
+    const pinInput = document.getElementById('auth-supervisor-pin-input');
     const errBanner = document.getElementById('auth-error-banner');
     const errMsg = document.getElementById('auth-error-msg');
     const card = document.getElementById('auth-main-card');
+    const remember = document.getElementById('auth-supervisor-remember-checkbox')?.checked;
 
-    const userId = sel ? sel.value : '';
     const pin = pinInput ? pinInput.value.trim() : '';
-
     const users = window.SaleslandRBAC.getUsers();
-    const user = users.find(u => u.id === userId);
+    const supUser = users.find(u => u.role === 'supervisor') || { pin: '1234' };
 
-    if (user && user.pin === pin) {
-      // Success!
-      App.userRole = user.role;
-      App.supervisorName = (user.role === 'supervisor') ? user.supervisorName : '';
-      localStorage.setItem('salesland_user_role', user.role);
-      if (App.supervisorName) localStorage.setItem('salesland_supervisor_name', user.supervisorName);
-      else localStorage.removeItem('salesland_supervisor_name');
+    if (pin && (pin === supUser.pin || pin === '1234')) {
+      App.userRole = 'supervisor';
+      App.supervisorName = '';
+      if (remember) {
+        localStorage.setItem('salesland_user_role', 'supervisor');
+      } else {
+        sessionStorage.setItem('salesland_user_role', 'supervisor');
+      }
 
       window.SaleslandSecurity.unlockDashboard();
       applyRolePermissions();
       if (errBanner) errBanner.style.display = 'none';
+      window.SaleslandRBAC.showToast('¡Bienvenido! Sesión iniciada como Supervisores.', 'success');
     } else {
-      if (errMsg) errMsg.textContent = 'PIN incorrecto para el usuario seleccionado.';
+      if (errMsg) errMsg.textContent = 'PIN de Supervisores incorrecto. Por defecto: 1234';
       if (errBanner) errBanner.style.display = 'flex';
       if (card) {
         card.classList.remove('auth-shake');
@@ -6545,117 +6467,135 @@
     }
   };
 
+  function setupRoleEvents() {
+    if (window.SaleslandRBAC) window.SaleslandRBAC.init();
+    const btnOpen = document.getElementById('btn-role-switch');
+    const btnClose = document.getElementById('btn-close-role');
+    const btnCloseBottom = document.getElementById('btn-close-role-bottom');
+    const modal = document.getElementById('role-modal');
+    const cardAdmin = document.getElementById('role-card-admin');
+    const cardSup = document.getElementById('role-card-supervisor');
+    const formAdmin = document.getElementById('role-form-admin');
+    const formSup = document.getElementById('role-form-supervisor');
+    const btnSubmitAdmin = document.getElementById('btn-submit-admin-role');
+    const btnSubmitSup = document.getElementById('btn-submit-supervisor-role');
+    const inputPin = document.getElementById('role-admin-pin');
+    const inputSupPin = document.getElementById('role-supervisor-pin');
+    const errPin = document.getElementById('role-admin-error');
+    const errSupPin = document.getElementById('role-supervisor-error');
+    const btnExitSupBanner = document.getElementById('btn-exit-supervisor-mode');
 
-    function setupRoleEvents() {
-      if (window.SaleslandRBAC) window.SaleslandRBAC.init();
-      const btnOpen = document.getElementById('btn-role-switch');
-      const btnClose = document.getElementById('btn-close-role');
-      const btnCloseBottom = document.getElementById('btn-close-role-bottom');
-      const modal = document.getElementById('role-modal');
-      const cardAdmin = document.getElementById('role-card-admin');
-      const cardSup = document.getElementById('role-card-supervisor');
-      const formAdmin = document.getElementById('role-form-admin');
-      const formSup = document.getElementById('role-form-supervisor');
-      const btnSubmitAdmin = document.getElementById('btn-submit-admin-role');
-      const btnSubmitSup = document.getElementById('btn-submit-supervisor-role');
-      const inputPin = document.getElementById('role-admin-pin');
-      const errPin = document.getElementById('role-admin-error');
-      const btnExitSupBanner = document.getElementById('btn-exit-supervisor-mode');
-
-      if (btnOpen) btnOpen.addEventListener('click', openRoleModal);
-      if (btnClose) btnClose.addEventListener('click', closeRoleModal);
-      if (btnCloseBottom) btnCloseBottom.addEventListener('click', closeRoleModal);
-      if (modal) {
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) closeRoleModal();
-        });
-      }
-
-      if (btnExitSupBanner) {
-        btnExitSupBanner.addEventListener('click', () => {
-          openRoleModal();
-          if (formAdmin) formAdmin.style.display = 'block';
-          if (formSup) formSup.style.display = 'none';
-          if (inputPin) {
-            inputPin.value = '';
-            inputPin.focus();
-          }
-        });
-      }
-
-      if (cardAdmin) {
-        cardAdmin.addEventListener('click', () => {
-          if (formAdmin) formAdmin.style.display = 'block';
-          if (formSup) formSup.style.display = 'none';
-          cardAdmin.classList.add('active-role-card');
-          cardAdmin.style.borderColor = '#0284c7';
-          cardAdmin.style.background = 'rgba(2, 132, 199, 0.08)';
-          if (cardSup) {
-            cardSup.classList.remove('active-role-card');
-            cardSup.style.borderColor = 'var(--border-card)';
-            cardSup.style.background = 'var(--bg-card)';
-          }
-          if (inputPin) {
-            inputPin.value = '';
-            inputPin.focus();
-          }
-        });
-      }
-
-      if (cardSup) {
-        cardSup.addEventListener('click', () => {
-          if (formSup) formSup.style.display = 'block';
-          if (formAdmin) formAdmin.style.display = 'none';
-          cardSup.classList.add('active-role-card');
-          cardSup.style.borderColor = '#0284c7';
-          cardSup.style.background = 'rgba(2, 132, 199, 0.08)';
-          if (cardAdmin) {
-            cardAdmin.classList.remove('active-role-card');
-            cardAdmin.style.borderColor = 'var(--border-card)';
-            cardAdmin.style.background = 'var(--bg-card)';
-          }
-        });
-      }
-
-      if (btnSubmitAdmin) {
-        btnSubmitAdmin.addEventListener('click', () => {
-          const pin = inputPin ? inputPin.value.trim() : '';
-          if (pin === 'admin123' || pin === '1234' || pin === '') {
-            App.userRole = 'admin';
-            App.supervisorName = '';
-            localStorage.setItem('salesland_user_role', 'admin');
-            localStorage.removeItem('salesland_supervisor_name');
-            applyRolePermissions();
-            closeRoleModal();
-          } else {
-            if (errPin) errPin.style.display = 'block';
-          }
-        });
-      }
-
-      if (inputPin) {
-        inputPin.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' && btnSubmitAdmin) btnSubmitAdmin.click();
-        });
-      }
-
-      if (btnSubmitSup) {
-        btnSubmitSup.addEventListener('click', () => {
-          const selectSup = document.getElementById('role-select-supervisor');
-          const chosenSup = selectSup ? selectSup.value : '';
-          if (chosenSup) {
-            App.userRole = 'supervisor';
-            App.supervisorName = chosenSup;
-            localStorage.setItem('salesland_user_role', 'supervisor');
-            localStorage.setItem('salesland_supervisor_name', chosenSup);
-            applyRolePermissions();
-            closeRoleModal();
-          }
-        });
-      }
+    if (btnOpen) btnOpen.addEventListener('click', openRoleModal);
+    if (btnClose) btnClose.addEventListener('click', closeRoleModal);
+    if (btnCloseBottom) btnCloseBottom.addEventListener('click', closeRoleModal);
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeRoleModal();
+      });
     }
 
-    function updateSupervisorFilterDropdown() {
+    if (btnExitSupBanner) {
+      btnExitSupBanner.addEventListener('click', () => {
+        openRoleModal();
+        if (formAdmin) formAdmin.style.display = 'block';
+        if (formSup) formSup.style.display = 'none';
+        if (inputPin) {
+          inputPin.value = '';
+          inputPin.focus();
+        }
+      });
+    }
+
+    if (cardAdmin) {
+      cardAdmin.addEventListener('click', () => {
+        if (formAdmin) formAdmin.style.display = 'block';
+        if (formSup) formSup.style.display = 'none';
+        cardAdmin.classList.add('active-role-card');
+        cardAdmin.style.borderColor = '#0284c7';
+        cardAdmin.style.background = 'rgba(2, 132, 199, 0.08)';
+        if (cardSup) {
+          cardSup.classList.remove('active-role-card');
+          cardSup.style.borderColor = 'var(--border-card)';
+          cardSup.style.background = 'var(--bg-card)';
+        }
+        if (inputPin) {
+          inputPin.value = '';
+          inputPin.focus();
+        }
+      });
+    }
+
+    if (cardSup) {
+      cardSup.addEventListener('click', () => {
+        if (formSup) formSup.style.display = 'block';
+        if (formAdmin) formAdmin.style.display = 'none';
+        cardSup.classList.add('active-role-card');
+        cardSup.style.borderColor = '#0284c7';
+        cardSup.style.background = 'rgba(2, 132, 199, 0.08)';
+        if (cardAdmin) {
+          cardAdmin.classList.remove('active-role-card');
+          cardAdmin.style.borderColor = 'var(--border-card)';
+          cardAdmin.style.background = 'var(--bg-card)';
+        }
+        if (inputSupPin) {
+          inputSupPin.value = '';
+          inputSupPin.focus();
+        }
+      });
+    }
+
+    if (btnSubmitAdmin) {
+      btnSubmitAdmin.addEventListener('click', () => {
+        const pin = inputPin ? inputPin.value.trim() : '';
+        const users = window.SaleslandRBAC.getUsers();
+        const adminUser = users.find(u => u.role === 'admin') || { pin: 'admin123' };
+
+        if (pin === adminUser.pin || pin === 'admin123' || pin === 'Salesland2026*' || pin === '') {
+          App.userRole = 'admin';
+          App.supervisorName = '';
+          localStorage.setItem('salesland_user_role', 'admin');
+          applyRolePermissions();
+          closeRoleModal();
+          window.SaleslandRBAC.showToast('Sesión de Administrador activada', 'success');
+        } else {
+          if (errPin) errPin.style.display = 'block';
+        }
+      });
+    }
+
+    if (inputPin) {
+      inputPin.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && btnSubmitAdmin) btnSubmitAdmin.click();
+      });
+    }
+
+    if (btnSubmitSup) {
+      btnSubmitSup.addEventListener('click', () => {
+        const pin = inputSupPin ? inputSupPin.value.trim() : '';
+        const users = window.SaleslandRBAC.getUsers();
+        const supUser = users.find(u => u.role === 'supervisor') || { pin: '1234' };
+
+        if (pin === supUser.pin || pin === '1234' || pin === '') {
+          App.userRole = 'supervisor';
+          App.supervisorName = '';
+          localStorage.setItem('salesland_user_role', 'supervisor');
+          applyRolePermissions();
+          closeRoleModal();
+          window.SaleslandRBAC.showToast('Sesión de Supervisores activada', 'success');
+        } else {
+          if (errSupPin) errSupPin.style.display = 'block';
+        }
+      });
+    }
+
+    if (inputSupPin) {
+      inputSupPin.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && btnSubmitSup) btnSubmitSup.click();
+      });
+    }
+  }
+
+  function updateSupervisorFilterDropdown() {
       const selAnio = App.filters.anio;
       const selMes = App.filters.mes;
       const supSelect = document.getElementById('filter-supervisor');
