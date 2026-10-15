@@ -1934,6 +1934,7 @@
       body.role-supervisor #btn-edit-target,
       body.role-supervisor #btn-upload,
       body.role-supervisor #btn-open-user-mgmt,
+    body.role-supervisor #btn-open-mgmt-from-role,
       body.role-supervisor .tab-item-btn[data-tab="tab-supervisores"],
       body.role-supervisor .col-facturacion,
       body.role-supervisor .facturacion-stat,
@@ -2761,6 +2762,7 @@
     body.role-supervisor #btn-edit-target,
     body.role-supervisor #btn-upload,
     body.role-supervisor #btn-open-user-mgmt,
+    body.role-supervisor #btn-open-mgmt-from-role,
     body.role-supervisor .tab-item-btn[data-tab="tab-supervisores"],
     body.role-supervisor .chip-rev,
     body.role-supervisor .seller-card-facturacion,
@@ -5089,10 +5091,10 @@
 
       <!-- Modal Footer -->
       <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:1rem; border-top:1px solid var(--border-card); padding-top:0.85rem;">
-        <button class="btn-action" id="btn-open-mgmt-from-role" style="background:#0284c7; color:#fff; border:none; padding:0.45rem 0.95rem; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem;">
+        <button class="btn-action" id="btn-open-mgmt-from-role" style="background:#0284c7; color:#fff; border:none; padding:0.45rem 0.95rem; border-radius:6px; font-weight:700; font-size:0.8rem; cursor:pointer; display:none; align-items:center; gap:0.4rem;">
           <span>👥</span> Gestión de Usuarios y Permisos
         </button>
-        <button class="btn-action" id="btn-close-role-bottom" style="background:var(--bg-card); color:var(--text-muted); border:1px solid var(--border-card); padding:0.45rem 0.95rem; border-radius:6px; font-weight:600; font-size:0.8rem; cursor:pointer;">
+        <button class="btn-action" id="btn-close-role-bottom" style="background:var(--bg-card); color:var(--text-muted); border:1px solid var(--border-card); padding:0.45rem 0.95rem; border-radius:6px; font-weight:600; font-size:0.8rem; cursor:pointer; margin-left:auto;">
           Cerrar
         </button>
       </div>
@@ -6161,6 +6163,8 @@
         if (btnMeta) btnMeta.style.display = 'none';
         if (btnUpload) btnUpload.style.display = 'none';
         if (btnUserMgmt) btnUserMgmt.style.display = 'none';
+        const btnMgmtFromRole = document.getElementById('btn-open-mgmt-from-role');
+        if (btnMgmtFromRole) btnMgmtFromRole.style.display = 'none';
         if (btnSecurity) btnSecurity.style.display = 'none'; // Clave oculta en modo supervisor
         if (btnMobileQr) btnMobileQr.style.display = 'none'; // Celular QR oculto para supervisores
 
@@ -6240,9 +6244,14 @@
         selectSup.innerHTML = sups.map(s => `<option value="${escapeHtml(s)}" ${s === App.supervisorName ? 'selected' : ''}>${escapeHtml(s)}</option>`).join('');
       }
 
-      const isSupervisor = App.userRole === 'supervisor' && App.supervisorName;
+      const isSupervisor = (App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor');
+      const btnMgmtFromRole = document.getElementById('btn-open-mgmt-from-role');
+      if (btnMgmtFromRole) {
+        btnMgmtFromRole.style.display = isSupervisor ? 'none' : 'inline-flex';
+      }
+
       if (isSupervisor) {
-        if (curDisplay) curDisplay.innerHTML = `👔 Supervisor: <strong>${escapeHtml(App.supervisorName)}</strong>`;
+        if (curDisplay) curDisplay.innerHTML = '👔 Supervisores (Solo Lectura)';
         if (curBadge) {
           curBadge.style.background = '#0284c7';
           curBadge.textContent = 'SUPERVISOR';
@@ -6257,8 +6266,8 @@
           cardSup.style.borderColor = '#0284c7';
           cardSup.style.background = 'rgba(2, 132, 199, 0.08)';
         }
-        if (formAdmin) formAdmin.style.display = 'none';
-        if (formSup) formSup.style.display = 'block';
+        if (formAdmin) formAdmin.style.display = 'block';
+        if (formSup) formSup.style.display = 'none';
       } else {
         if (curDisplay) curDisplay.innerHTML = '👑 Administrador (Acceso Total)';
         if (curBadge) {
@@ -6466,6 +6475,12 @@
     }
 
     function openUserMgmtModal() {
+      if (App.userRole === 'supervisor' || document.body.classList.contains('role-supervisor')) {
+        if (typeof showToast === 'function') {
+          showToast('Acceso denegado: solo los administradores pueden gestionar usuarios y permisos', 'warning');
+        }
+        return;
+      }
       const modal = document.getElementById('user-mgmt-modal');
       if (!modal) return;
       currentFilterRole = 'all';
