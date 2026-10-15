@@ -2816,37 +2816,58 @@
     }
     .cr-pin-badge {
       cursor: pointer;
-      transition: transform 0.2s ease, filter 0.2s ease;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+      filter: drop-shadow(0 6px 16px rgba(0,0,0,0.45));
     }
     .cr-pin-badge:hover {
-      transform: scale(1.1) !important;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5));
+      transform: scale(1.12) !important;
+      filter: drop-shadow(0 10px 24px rgba(6, 182, 212, 0.6)) !important;
     }
     .cr-pin-bg {
-      fill: rgba(15, 23, 42, 0.93);
-      stroke: rgba(255, 255, 255, 0.35);
-      stroke-width: 1.3;
-      backdrop-filter: blur(8px);
+      fill: rgba(13, 23, 44, 0.94);
+      stroke: rgba(56, 189, 248, 0.45);
+      stroke-width: 1.5;
+      backdrop-filter: blur(12px);
       pointer-events: none;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
+    }
+    [data-theme="light"] .cr-pin-badge {
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,0.12));
+    }
+    [data-theme="light"] .cr-pin-badge:hover {
+      filter: drop-shadow(0 8px 22px rgba(2, 132, 199, 0.35)) !important;
     }
     [data-theme="light"] .cr-pin-bg {
-      fill: rgba(255, 255, 255, 0.96);
-      stroke: rgba(0, 0, 0, 0.22);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      fill: rgba(255, 255, 255, 0.97);
+      stroke: rgba(2, 132, 199, 0.35);
+      stroke-width: 1.5;
+    }
+    .cr-pin-badge.is-leader .cr-pin-bg {
+      stroke: #00d2ff !important;
+      stroke-width: 2.2 !important;
+    }
+    [data-theme="light"] .cr-pin-badge.is-leader .cr-pin-bg {
+      stroke: #f59e0b !important;
+      stroke-width: 2.2 !important;
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
     }
     .cr-pin-name {
+      font-family: var(--font-brand), system-ui, sans-serif;
       font-size: 8.8px;
       font-weight: 800;
-      fill: #94a3b8;
+      fill: #38bdf8;
       text-anchor: middle;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       pointer-events: none;
     }
     [data-theme="light"] .cr-pin-name {
-      fill: #64748b;
+      fill: #0284c7;
+    }
+    .cr-pin-badge.is-leader .cr-pin-name {
+      fill: #f59e0b !important;
     }
     .cr-pin-val {
+      font-family: var(--font-body), system-ui, sans-serif;
       font-size: 10.5px;
       font-weight: 900;
       fill: #ffffff;
@@ -2855,6 +2876,15 @@
     }
     [data-theme="light"] .cr-pin-val {
       fill: #0f172a;
+    }
+    #wrapper-prov-map-canvas {
+      background: radial-gradient(ellipse at 48% 48%, rgba(6, 182, 212, 0.10) 0%, rgba(2, 132, 199, 0.04) 50%, rgba(10, 17, 34, 0.98) 100%) !important;
+      border: 1px solid var(--border-card) !important;
+      box-shadow: inset 0 0 35px rgba(6, 182, 212, 0.06);
+    }
+    [data-theme="light"] #wrapper-prov-map-canvas {
+      background: radial-gradient(ellipse at 48% 48%, rgba(224, 242, 254, 0.6) 0%, rgba(240, 249, 255, 0.35) 55%, #ffffff 100%) !important;
+      box-shadow: inset 0 0 25px rgba(2, 132, 199, 0.04) !important;
     }
     .cr-sidebar-prov-item {
       display: flex;
@@ -3376,6 +3406,12 @@
     };
 
     window.openSecurityModal = function() {
+      if (App.userRole === 'supervisor') {
+        if (typeof showToast === 'function') {
+          showToast('Solo el administrador puede gestionar o cambiar contraseñas', 'warning');
+        }
+        return;
+      }
       const modal = document.getElementById('security-pwd-modal');
       const err = document.getElementById('sec-modal-error');
       if (err) err.style.display = 'none';
@@ -4675,7 +4711,7 @@
               <!-- Heatmap Gradient Legend Bar (Bottom Left) -->
               <div style="position:absolute; bottom:12px; left:14px; background:rgba(15,23,42,0.85); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:6px 12px; font-size:0.72rem; display:flex; align-items:center; gap:8px;">
                 <span style="color:#94a3b8; font-weight:700;">Menor Venta</span>
-                <div style="width:75px; height:8px; border-radius:4px; background:linear-gradient(90deg, #1e293b 0%, #0e7490 35%, #06b6d4 70%, #0284c7 100%);"></div>
+                <div id="cr-map-legend-grad" style="width:90px; height:9px; border-radius:5px; background:linear-gradient(90deg, #152c48 0%, #0c4a6e 25%, #0284c7 50%, #00b4d8 75%, #00d2ff 100%); border:1px solid rgba(255,255,255,0.25);"></div>
                 <span style="color:#06b6d4; font-weight:800;">Líder Comercial</span>
               </div>
             </div>
@@ -6039,6 +6075,7 @@
       const btnMeta = document.getElementById('btn-edit-target');
       const btnUpload = document.getElementById('btn-upload');
       const btnUserMgmt = document.getElementById('btn-open-user-mgmt');
+      const btnSecurity = document.getElementById('btn-security-settings');
       const tabSupervisores = document.querySelector('.tab-item-btn[data-tab="tab-supervisores"]');
       const supSelect = document.getElementById('filter-supervisor');
       const supervisorCard = document.querySelector('.supervisor-card');
@@ -6057,6 +6094,7 @@
         if (btnMeta) btnMeta.style.display = 'none';
         if (btnUpload) btnUpload.style.display = 'none';
         if (btnUserMgmt) btnUserMgmt.style.display = 'none';
+        if (btnSecurity) btnSecurity.style.display = 'none'; // Clave oculta en modo supervisor
 
         // Hide supervisor ranking tab from peer view
         if (tabSupervisores) tabSupervisores.style.display = 'none';
@@ -6087,6 +6125,7 @@
         if (btnMeta) btnMeta.style.display = '';
         if (btnUpload) btnUpload.style.display = '';
         if (btnUserMgmt) btnUserMgmt.style.display = '';
+        if (btnSecurity) btnSecurity.style.display = ''; // Clave visible solo para administrador
         if (tabSupervisores) tabSupervisores.style.display = '';
 
         if (supSelect) {
@@ -9845,17 +9884,28 @@
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
         function getChoroplethColor(val, minVal, maxVal, dark) {
-          const ratio = maxVal > minVal ? (val - minVal) / (maxVal - minVal) : 0.5;
+          if (!val || val <= 0) {
+            return dark ? '#13233a' : '#f1f5f9';
+          }
+          const ratio = maxVal > minVal ? Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal))) : 0.5;
           if (dark) {
-            if (ratio > 0.75) return '#0284c7'; // Top leader: Radiant Sky
-            if (ratio > 0.45) return '#0e7490'; // Strong cyan
-            if (ratio > 0.20) return '#155e75'; // Medium ocean
-            return '#1e293b';                  // Deep slate
+            // Paleta tecnológica Twilight-Cyan de 7 niveles con brillo para líder
+            if (ratio > 0.88) return '#00d2ff'; // Líder comercial: Neón Cyan brillante
+            if (ratio > 0.70) return '#00b4d8'; // Turquesa radiante
+            if (ratio > 0.50) return '#0284c7'; // Zafiro cielo
+            if (ratio > 0.35) return '#0369a1'; // Océano profundo
+            if (ratio > 0.20) return '#085f85'; // Azul petróleo
+            if (ratio > 0.10) return '#0c4a6e'; // Azul petróleo oscuro
+            return '#152c48';                  // Noche marina profunda
           } else {
-            if (ratio > 0.75) return '#0284c7'; // Top leader: Royal Blue
-            if (ratio > 0.45) return '#38bdf8'; // Sky cyan
-            if (ratio > 0.20) return '#7dd3fc'; // Soft cyan
-            return '#bae6fd';                  // Light ice blue
+            // Paleta ejecutiva Royal Cobalt de 7 niveles (máximo contraste y elegancia)
+            if (ratio > 0.88) return '#1e40af'; // Líder comercial: Cobalto Real profundo
+            if (ratio > 0.70) return '#1d4ed8'; // Azul Real intenso
+            if (ratio > 0.50) return '#0284c7'; // Azul empresarial
+            if (ratio > 0.35) return '#38bdf8'; // Cyan cielo vibrante
+            if (ratio > 0.20) return '#7dd3fc'; // Celeste suave
+            if (ratio > 0.10) return '#93c5fd'; // Hielo azul
+            return '#e0f2fe';                  // Bruma celeste clara
           }
         }
 
@@ -10210,6 +10260,14 @@
 
         if (svgEl) svgEl.setAttribute('viewBox', '30 35 730 610');
 
+        // Sincronizar barra de leyenda con el tema
+        const legendGrad = document.getElementById('cr-map-legend-grad');
+        if (legendGrad) {
+          legendGrad.style.background = isDark
+            ? 'linear-gradient(90deg, #152c48 0%, #0c4a6e 25%, #0284c7 50%, #00b4d8 75%, #00d2ff 100%)'
+            : 'linear-gradient(90deg, #e0f2fe 0%, #93c5fd 25%, #38bdf8 50%, #0284c7 75%, #1e40af 100%)';
+        }
+
         // Reset Breadcrumbs
         const crumbSep = document.getElementById('cr-crumb-sep');
         const crumbProv = document.getElementById('cr-crumb-prov');
@@ -10249,13 +10307,23 @@
           el.style.strokeWidth = '1.4px';
 
           // Actualizar pin badge
+          const pinBadgeEl = document.getElementById(`cr-pin-${pSlug}`);
           const pinValEl = document.getElementById(`cr-pin-val-${pSlug}`);
+          const isLeader = (pVal === maxV && maxV > 0);
+          if (pinBadgeEl) {
+            if (isLeader) {
+              pinBadgeEl.classList.add('is-leader');
+            } else {
+              pinBadgeEl.classList.remove('is-leader');
+            }
+          }
           if (pinValEl) {
             const share = totalProvSales > 0 ? ((pObj.ventas / totalProvSales) * 100).toFixed(0) : '0';
+            const crown = isLeader ? '👑 ' : '';
             if (provMode === 'facturacion') {
-              pinValEl.textContent = `${formatCurrency(pObj.facturacion)} (${share}%)`;
+              pinValEl.textContent = `${crown}${formatCurrency(pObj.facturacion)} (${share}%)`;
             } else {
-              pinValEl.textContent = `${pObj.ventas.toLocaleString()} vts • ${share}%`;
+              pinValEl.textContent = `${crown}${pObj.ventas.toLocaleString()} vts • ${share}%`;
             }
           }
 
