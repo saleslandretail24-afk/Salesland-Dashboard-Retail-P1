@@ -3,6 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script>
+    // Auto cache-buster and mobile role sanitizer
+    (function() {
+      const LATEST_RELEASE = "20261015_r3";
+      const currentVer = localStorage.getItem("salesland_release");
+      if (currentVer !== LATEST_RELEASE) {
+        localStorage.setItem("salesland_release", LATEST_RELEASE);
+        if (localStorage.getItem("salesland_user_role") === "admin" && !localStorage.getItem("salesland_auth_remember_token")) {
+          localStorage.removeItem("salesland_user_role");
+        }
+      }
+    })();
+  </script>
   <title>Salesland Retail P1 - Panel Gerencial de Rendimiento Retail</title>
   <meta name="description" content="Dashboard Ejecutivo Salesland para Control de Ventas Pospago y Servicios Telecomunicaciones">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1911,6 +1927,21 @@
       .seller-modal-footer .btn-action {
         width: 100% !important;
       }
+      /* Explicit Mobile Screen (<=768px) Supervisor Overrides */
+      body.role-supervisor #btn-mobile-qr,
+      body.role-supervisor #btn-security-settings,
+      body.role-supervisor #btn-sync-excels,
+      body.role-supervisor #btn-edit-target,
+      body.role-supervisor #btn-upload,
+      body.role-supervisor #btn-open-user-mgmt,
+      body.role-supervisor .tab-item-btn[data-tab="tab-supervisores"],
+      body.role-supervisor .col-facturacion,
+      body.role-supervisor .facturacion-stat,
+      body.role-supervisor [data-mode="facturacion"],
+      body.role-supervisor .seller-card-facturacion,
+      body.role-supervisor #modal-seller-facturacion-box {
+        display: none !important;
+      }
 
       /* QR Modal */
       .qr-modal-box {
@@ -2720,11 +2751,17 @@
       box-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
     }
 
-    /* Hide all facturacion and financial elements in Supervisor mode */
+    /* Hide all facturacion, QR, and admin controls in Supervisor mode across ALL devices */
     body.role-supervisor .col-facturacion,
     body.role-supervisor .facturacion-stat,
     body.role-supervisor [data-mode="facturacion"],
     body.role-supervisor #btn-mobile-qr,
+    body.role-supervisor #btn-security-settings,
+    body.role-supervisor #btn-sync-excels,
+    body.role-supervisor #btn-edit-target,
+    body.role-supervisor #btn-upload,
+    body.role-supervisor #btn-open-user-mgmt,
+    body.role-supervisor .tab-item-btn[data-tab="tab-supervisores"],
     body.role-supervisor .chip-rev,
     body.role-supervisor .seller-card-facturacion,
     body.role-supervisor #modal-seller-facturacion-box,
@@ -3272,7 +3309,7 @@
 
 </style>
 </head>
-<body>
+<body class="role-supervisor">
 
   <!-- ====================================================================== -->
   <!-- 🛡️ PORTAL DE SEGURIDAD & AUTENTICACIÓN CORPORATIVA (AES-256 / SHA-256) -->
@@ -3852,8 +3889,8 @@
       <div class="header-utility-actions">
         <!-- Role / Profile Switcher -->
         <button class="btn-action" id="btn-role-switch" style="background:#0f172a; color:#f8fafc; border:1px solid #334155; font-weight:700; box-shadow:0 2px 5px rgba(0,0,0,0.15); display:inline-flex; align-items:center; gap:0.4rem; padding:0.45rem 0.85rem;" title="Gestionar Rol y Permisos de Acceso">
-          <span id="role-badge-icon" style="font-size:1.05rem; line-height:1;">👑</span>
-          <span id="role-badge-text">Rol: Administrador</span>
+          <span id="role-badge-icon" style="font-size:1.05rem; line-height:1;">👔</span>
+          <span id="role-badge-text">Rol: Supervisores</span>
           <svg style="width:8px; height:6px; fill:currentColor; opacity:0.75;" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
         </button>
         <!-- User & Roles Management Button -->
@@ -5377,7 +5414,7 @@
 
       <!-- QR Code Display Box -->
       <div style="background:#ffffff; padding:1.1rem; border-radius:12px; display:inline-block; box-shadow:0 4px 16px rgba(0,0,0,0.08); margin-bottom:1rem; border:1px solid #e2e8f0;">
-        <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html" alt="QR Code Dashboard" width="200" height="200" style="display:block; border-radius:6px;">
+        <img id="qr-code-img" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html?v=20261015b" alt="QR Code Dashboard" width="200" height="200" style="display:block; border-radius:6px;">
       </div>
 
       <!-- Link Box -->
@@ -5871,7 +5908,12 @@
 
     
     // RBAC System (Roles & Permissions)
-    App.userRole = localStorage.getItem('salesland_user_role') || sessionStorage.getItem('salesland_user_role') || 'admin';
+    const _urlRole = new URLSearchParams(window.location.search).get('role');
+    if (_urlRole === 'supervisor') {
+      localStorage.setItem('salesland_user_role', 'supervisor');
+      sessionStorage.setItem('salesland_user_role', 'supervisor');
+    }
+    App.userRole = localStorage.getItem('salesland_user_role') || sessionStorage.getItem('salesland_user_role') || 'supervisor';
     App.supervisorName = localStorage.getItem('salesland_supervisor_name') || '';
 
     
@@ -6378,7 +6420,7 @@
           : '<span class="user-role-badge badge-supervisor">👔 Supervisores (Único)</span>';
         const avatarClass = (u.role === 'admin') ? 'avatar-admin' : 'avatar-supervisor';
 
-        const activeRole = (window.App && window.App.userRole) ? window.App.userRole : (localStorage.getItem('salesland_user_role') || 'admin');
+        const activeRole = (window.App && window.App.userRole) ? window.App.userRole : (localStorage.getItem('salesland_user_role') || 'supervisor');
         const isCurrentActive = (u.role === activeRole);
 
         return `
@@ -9670,7 +9712,7 @@
                 afterBody: (items) => {
                   const p = topPdvs[items[0].dataIndex];
                   const sharePct = totalAllPdvSales > 0 ? ((p.ventas / totalAllPdvSales) * 100).toFixed(1) : 0;
-                  return `\n🏬 Canal: ${p.canal}\n⚡ Ventas Concretadas: ${p.ventas.toLocaleString()} u.\n📊 Participación: ${sharePct}% del total\n💰 Facturación Total: ${formatCurrency(p.facturacion)}`;
+                  return `\n🏬 Canal: ${p.canal}\n⚡ Ventas Concretadas: ${p.ventas.toLocaleString()} u.\n📊 Participación: ${sharePct}% del total\n${((typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor')) ? '' : '\n💰 Facturación Total: ' + formatCurrency(p.facturacion)}`;
                 }
               }
             }
@@ -10726,7 +10768,7 @@
                 afterBody: (items) => {
                   const c = topCant[items[0].dataIndex];
                   const sharePct = totalAllCantSales > 0 ? ((c.ventas / totalAllCantSales) * 100).toFixed(1) : 0;
-                  return `\n⚡ Ventas Concretadas: ${c.ventas.toLocaleString()} u.\n📊 Participación: ${sharePct}% del total\n💰 Facturación: ${formatCurrency(c.facturacion)}`;
+                  return `\n⚡ Ventas Concretadas: ${c.ventas.toLocaleString()} u.\n📊 Participación: ${sharePct}% del total\n${((typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor')) ? '' : '\n💰 Facturación: ' + formatCurrency(c.facturacion)}`;
                 }
               }
             }
@@ -11383,7 +11425,7 @@
       const qrInstructions = document.getElementById('qr-instructions');
 
       let currentMode = 'internet'; // 'internet' or 'wifi'
-      let activeInternetUrl = 'https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html';
+      let activeInternetUrl = 'https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html?v=20261015b';
       let activeWifiUrl = 'http://192.168.1.82:8080/index.html';
 
       async function syncTunnelInfo() {
