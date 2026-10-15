@@ -819,7 +819,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.65rem;
-      max-height: 490px;
+      max-height: 660px;
       overflow-y: auto;
       padding-right: 4px;
     }
@@ -1093,9 +1093,9 @@
       background: var(--bg-card-elevated);
       color: var(--text-secondary);
       font-weight: 700;
-      padding: 0.55rem 0.45rem;
+      padding: 0.68rem 0.45rem;
       border-bottom: 1px solid var(--border-card);
-      font-size: 0.71rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.02em;
       white-space: nowrap;
@@ -1111,7 +1111,7 @@
     }
 
     .services-table tbody td {
-      padding: 0.52rem 0.45rem;
+      padding: 0.68rem 0.45rem;
       color: var(--text-primary);
       vertical-align: middle;
     }
@@ -4071,6 +4071,21 @@
               </tbody>
               <tfoot id="services-mom-tfoot" style="background:var(--bg-canvas); font-weight:800; border-top:2px solid var(--border-card);"></tfoot>
             </table>
+          </div>
+
+          <!-- Executive Performance Summary & Service Distribution Footer -->
+          <div id="services-table-bottom-summary" style="margin-top:0.75rem; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.55rem 0.85rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; font-size:0.76rem;">
+            <div style="display:flex; align-items:center; gap:0.4rem;">
+              <span style="font-size:0.95rem;">⚡</span>
+              <span style="color:var(--text-muted);">Proyección Cierre:</span>
+              <strong id="tbl-bottom-proy" style="color:#d97706; font-weight:800;">-</strong>
+            </div>
+            <div id="tbl-bottom-mix-strip" style="display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap;">
+              <span style="color:var(--text-muted);">Mix:</span>
+              <span style="background:rgba(2,132,199,0.12); color:#0284c7; padding:2px 7px; border-radius:6px; font-weight:700; font-size:0.71rem;">Prepago 68.8%</span>
+              <span style="background:rgba(16,185,129,0.12); color:#10b981; padding:2px 7px; border-radius:6px; font-weight:700; font-size:0.71rem;">Pospago 22.8%</span>
+              <span style="background:rgba(139,92,246,0.12); color:#8b5cf6; padding:2px 7px; border-radius:6px; font-weight:700; font-size:0.71rem;">Porta 8.0%</span>
+            </div>
           </div>
         </div>
       </div>
@@ -7305,7 +7320,7 @@
 
         tableHtml += `
           <tr>
-            <td style="vertical-align:middle; padding:0.52rem 0.55rem;">${servTitleHtml}</td>
+            <td style="vertical-align:middle; padding:0.68rem 0.55rem;">${servTitleHtml}</td>
             <td style="text-align:center; color:var(--text-secondary); white-space:nowrap; padding:0.52rem 0.35rem;">${prevCount.toLocaleString()}</td>
             <td style="text-align:center; font-weight:800; color:var(--text-brand); font-size:0.88rem; white-space:nowrap; padding:0.52rem 0.35rem;">${curCount.toLocaleString()}</td>
             <td style="text-align:center; font-weight:800; color:#0284c7; font-size:0.88rem; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); white-space:nowrap; padding:0.52rem 0.35rem;">${hasMeta ? sMeta.toLocaleString() : '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>'}</td>
@@ -7356,7 +7371,7 @@
 
             tableHtml += `
               <tr class="pospago-subrow" style="display:none; background:rgba(2, 132, 199, 0.035); font-size:0.79rem;">
-                <td style="padding:0.42rem 0.45rem 0.42rem 1.15rem; color:var(--text-secondary);">
+                <td style="padding:0.52rem 0.45rem 0.52rem 1.25rem; color:var(--text-secondary);">
                   <span style="color:#0284c7; font-weight:700; margin-right:3px;">↳</span> ${escapeHtml(sub.name)}
                 </td>
                 <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sub.prev.toLocaleString()}</td>
@@ -7407,7 +7422,7 @@
 
         tfootEl.innerHTML = `
           <tr style="background:var(--bg-card-elevated, #f8fafc); border-top:2px solid var(--border-card, #e2e8f0); font-weight:800;">
-            <td style="padding:0.58rem 0.55rem; color:var(--text-brand); font-size:0.86rem;">TOTAL (${allServiceNames.length} Servicios)</td>
+            <td style="padding:0.75rem 0.55rem; color:var(--text-brand); font-size:0.86rem;">TOTAL (${allServiceNames.length} Servicios)</td>
             <td style="text-align:center; color:var(--text-secondary); white-space:nowrap; padding:0.58rem 0.35rem;">${sumPrev.toLocaleString()}</td>
             <td style="text-align:center; color:var(--text-brand); font-size:0.95rem; font-weight:800; white-space:nowrap; padding:0.58rem 0.35rem;">${sumCur.toLocaleString()}</td>
             <td style="text-align:center; color:#0284c7; font-size:0.88rem; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap; padding:0.58rem 0.35rem;">${totalTargetNum.toLocaleString()}</td>
@@ -7450,6 +7465,8 @@
       if (tblRibbonCump) tblRibbonCump.innerText = totalCumpPct + '%';
       if (tblRibbonProy) tblRibbonProy.innerText = sumProy.toLocaleString();
       if (tblRibbonRev) tblRibbonRev.innerText = formatCurrency(sumRev);
+      const tblBottomProy = document.getElementById('tbl-bottom-proy');
+      if (tblBottomProy) tblBottomProy.innerText = sumProy.toLocaleString() + ' ventas estimadas';
 
       // Opción 3: Render Executive SaaS Metric Rows or Chart.js according to selected mode
       const momMode = App.momChartMode || 'saas';
