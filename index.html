@@ -2930,7 +2930,7 @@
       width: 100%;
       background: var(--bg-card, #0f172a);
       border: 1px solid var(--border-card, rgba(255,255,255,0.12));
-      color: var(--text-main, #f8fafc);
+      color: var(--text-primary, #f8fafc);
       border-radius: 8px;
       padding: 5px 10px 5px 28px;
       font-size: 0.75rem;
@@ -4430,7 +4430,7 @@
             <!-- View Mode Switcher [ 🏢 7 Provincias ] | [ 📍 84 Cantones ] -->
             <div style="display:flex; align-items:center; gap:0.4rem;">
               <div class="cr-map-mode-toggle-group" style="display:inline-flex; background:rgba(15,23,42,0.08); border:1px solid var(--border-card, rgba(255,255,255,0.15)); border-radius:8px; padding:2px; gap:2px;">
-                <button type="button" id="btn-toggle-view-provs" class="btn-map-mode active" onclick="if(window.setMapViewMode)window.setMapViewMode('provincias');" style="border:none; background:var(--bg-card, #1e293b); color:var(--text-main, #f8fafc); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+                <button type="button" id="btn-toggle-view-provs" class="btn-map-mode active" onclick="if(window.setMapViewMode)window.setMapViewMode('provincias');" style="border:none; background:var(--bg-card, #1e293b); color:var(--text-primary, #f8fafc); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
                   🏢 7 Provincias
                 </button>
                 <button type="button" id="btn-toggle-view-cantones" class="btn-map-mode" onclick="if(window.setMapViewMode)window.setMapViewMode('cantones');" style="border:none; background:transparent; color:var(--text-muted, #94a3b8); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
@@ -4669,8 +4669,8 @@
             <div class="cr-map-ranking-sidebar" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:12px; padding:0.95rem; display:flex; flex-direction:column; gap:0.6rem; max-height:600px; overflow-y:auto;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-card, rgba(0,0,0,0.08)); padding-bottom:0.5rem;">
                 <div>
-                  <div style="font-weight:800; font-size:0.88rem; color:var(--text-main, #0f172a);">📍 Desglose de Zonas</div>
-                  <div style="font-size:0.72rem; color:var(--text-muted, #64748b);">7 Provincias de Costa Rica</div>
+                  <div style="font-weight:800; font-size:0.88rem; color:var(--text-primary, #0f172a);">📍 Desglose de Zonas</div>
+                  <div id="cr-sidebar-subtitle" style="font-size:0.72rem; color:var(--text-muted, #64748b);">7 Provincias de Costa Rica</div>
                 </div>
                 <button type="button" id="btn-sidebar-reset-filter" style="display:none; background:transparent; border:1px solid #ef4444; color:#ef4444; border-radius:5px; font-size:0.7rem; font-weight:700; padding:2px 8px; cursor:pointer;">
                   ✕ Reset
@@ -9871,7 +9871,7 @@
 
           if (btnToggleProvs) {
             btnToggleProvs.style.background = 'var(--bg-card, #1e293b)';
-            btnToggleProvs.style.color = 'var(--text-main, #f8fafc)';
+            btnToggleProvs.style.color = 'var(--text-primary, #f8fafc)';
           }
           if (btnToggleCantones) {
             btnToggleCantones.style.background = 'transparent';
@@ -10015,7 +10015,7 @@
           }
 
           // Actualizar Sidebar con los Cantones de esta Provincia
-          const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
+          { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = cantListThisProv.length + ' Cantones de ' + selProv; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
           if (sidebarContainer) {
             sidebarContainer.innerHTML = cantListThisProv.map((c, idx) => {
               const barPct = maxCV > 0 ? Math.min(100, Math.round((c.val / maxCV) * 100)) : 10;
@@ -10027,7 +10027,7 @@
                   <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap:0.4rem;">
                       <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#10b981' : (idx === 1 ? '#06b6d4' : '#94a3b8')};">${medal}</span>
-                      <strong style="font-size:0.86rem; color:var(--text-main, #0f172a);">${c.name}</strong>
+                      <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${c.name}</strong>
                     </div>
                     <span style="font-size:0.75rem; font-weight:800; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 7px; border-radius:12px;">${primaryVal}</span>
                   </div>
@@ -10051,7 +10051,7 @@
         if (isCantonesAllLevel) {
           if (btnToggleCantones) {
             btnToggleCantones.style.background = 'var(--bg-card, #1e293b)';
-            btnToggleCantones.style.color = 'var(--text-main, #f8fafc)';
+            btnToggleCantones.style.color = 'var(--text-primary, #f8fafc)';
           }
           if (btnToggleProvs) {
             btnToggleProvs.style.background = 'transparent';
@@ -10154,7 +10154,7 @@
             val: provMode === 'facturacion' ? cantDataAll[name].facturacion : cantDataAll[name].ventas
           })).sort((a, b) => b.val - a.val);
 
-          const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
+          { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = 'Top ' + Math.min(15, cantNationalList.length) + ' de ' + cantNationalList.length + ' cantones con ventas'; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
           if (sidebarContainer) {
             sidebarContainer.innerHTML = cantNationalList.slice(0, 15).map((c, idx) => {
               const barPct = maxAllCV > 0 ? Math.min(100, Math.round((c.val / maxAllCV) * 100)) : 10;
@@ -10166,7 +10166,7 @@
                   <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap:0.4rem;">
                       <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#10b981' : (idx === 1 ? '#06b6d4' : '#94a3b8')};">${medal}</span>
-                      <strong style="font-size:0.86rem; color:var(--text-main, #0f172a);">${c.name}</strong>
+                      <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${c.name}</strong>
                       <span style="font-size:0.68rem; color:var(--text-muted, #64748b);">(${c.prov})</span>
                     </div>
                     <span style="font-size:0.75rem; font-weight:800; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 7px; border-radius:12px;">${primaryVal}</span>
@@ -10186,7 +10186,7 @@
         // -------------------------------------------------------------
         if (btnToggleProvs) {
           btnToggleProvs.style.background = 'var(--bg-card, #1e293b)';
-          btnToggleProvs.style.color = 'var(--text-main, #f8fafc)';
+          btnToggleProvs.style.color = 'var(--text-primary, #f8fafc)';
         }
         if (btnToggleCantones) {
           btnToggleCantones.style.background = 'transparent';
@@ -10296,7 +10296,7 @@
         });
 
         // Actualizar Sidebar Ejecutivo de 7 Provincias
-        const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
+        { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = '7 Provincias de Costa Rica'; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
         if (sidebarContainer) {
           const provRegions = {
             'San José': 'GAM Central & Sur',
@@ -10322,7 +10322,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <div style="display:flex; align-items:center; gap:0.4rem;">
                     <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#f59e0b' : (idx === 1 ? '#0284c7' : '#94a3b8')};">${rankBadges[idx] || ('#' + (idx+1))}</span>
-                    <strong style="font-size:0.86rem; color:var(--text-main, #0f172a);">${p.nombre}</strong>
+                    <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${p.nombre}</strong>
                     <span style="font-size:0.68rem; color:var(--text-muted, #64748b);">(${regionTag})</span>
                   </div>
                   <span style="font-size:0.75rem; font-weight:800; background:rgba(6,182,212,0.15); color:#06b6d4; padding:2px 7px; border-radius:12px;">${sharePct}% cuota</span>
