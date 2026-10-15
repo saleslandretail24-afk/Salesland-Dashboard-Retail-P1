@@ -691,25 +691,25 @@
     }
 
     /* SECTION PANELS */
-    /* SERVICES MoM 2-COLUMN GRID (COMPACT CHART ~35%, EXPANDED TABLE ~65%) */
+    /* SERVICES MoM 2-COLUMN GRID (HARMONIZED RATIO: 37.5% VISUAL / 62.5% TABLE) */
     .panel-grid-services-mom {
       display: grid !important;
-      grid-template-columns: minmax(320px, 35%) minmax(0, 65%) !important;
+      grid-template-columns: minmax(360px, 37.5%) minmax(0, 62.5%) !important;
       gap: 1.25rem !important;
       margin-bottom: 1.75rem;
-      align-items: stretch;
+      align-items: stretch !important;
     }
 
     @media (max-width: 1240px) {
       .panel-grid-services-mom {
-        grid-template-columns: minmax(280px, 38%) minmax(0, 62%) !important;
+        grid-template-columns: minmax(320px, 40%) minmax(0, 60%) !important;
       }
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1080px) {
       .panel-grid-services-mom {
         grid-template-columns: minmax(0, 1fr) !important;
-        gap: 1rem !important;
+        gap: 1.25rem !important;
       }
     }
 
@@ -1070,20 +1070,22 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
     }
 
-    /* SERVICES MoM TABLE STYLES */
+    /* SERVICES MoM TABLE STYLES - PERFECT MARGIN FIT */
     .services-table-wrapper {
       width: 100%;
       max-width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border-radius: var(--radius-sm);
+      border-radius: 10px;
       border: 1px solid var(--border-card);
+      background: var(--bg-card);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
 
     .services-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
+      font-size: 0.81rem;
       text-align: left;
     }
 
@@ -1091,16 +1093,17 @@
       background: var(--bg-card-elevated);
       color: var(--text-secondary);
       font-weight: 700;
-      padding: 0.75rem 0.85rem;
+      padding: 0.55rem 0.45rem;
       border-bottom: 1px solid var(--border-card);
-      font-size: 0.75rem;
+      font-size: 0.71rem;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
     }
 
     .services-table tbody tr {
       border-bottom: 1px solid var(--border-card);
-      transition: background 0.15s;
+      transition: background 0.15s ease;
     }
 
     .services-table tbody tr:hover {
@@ -1108,8 +1111,9 @@
     }
 
     .services-table tbody td {
-      padding: 0.75rem 0.85rem;
+      padding: 0.52rem 0.45rem;
       color: var(--text-primary);
+      vertical-align: middle;
     }
 
     .tag-diff {
@@ -4005,26 +4009,61 @@
         </div>
 
         <!-- Analytical MoM Services Table -->
-        <div class="content-card">
-          <div class="content-card-header">
-            <div class="content-card-title">
-              <span>Desglose Analítico por Servicio Vendido</span>
+        <div class="content-card content-card-services-table">
+          <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
+            <div>
+              <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:0.95rem;">
+                <span>📑</span> <span>Desglose Analítico por Servicio Vendido</span>
+              </div>
+              <div id="lbl-services-table-period" style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
+                Auditoría Detallada de Metas, Cumplimiento y Variaciones MoM
+              </div>
             </div>
-            <span class="badge-pill" id="lbl-services-table-badge">Variación y Facturación MoM</span>
+            <div style="display:flex; align-items:center; gap:0.45rem;">
+              <span class="badge-pill" id="lbl-services-table-badge">Variación y Facturación MoM</span>
+              <button type="button" class="btn-sm-action" onclick="toggleAllPospagoDetails(event)" id="btn-toggle-all-pospago" title="Alternar subdesglose de servicios" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:6px; padding:3px 9px; font-size:0.72rem; font-weight:700; color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; gap:3px; transition:all 0.15s;">
+                <span>👁️</span> <span id="lbl-toggle-all-text">Desglose</span>
+              </button>
+            </div>
           </div>
+
+          <!-- Micro-KPI Summary Ribbon for Financial & Targets (Matching Left Card Margins) -->
+          <div id="services-table-micro-ribbon" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.45rem 0.75rem; margin-bottom:0.75rem; font-size:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#0284c7;"></span>
+              <span style="color:var(--text-muted);">Meta Global:</span>
+              <strong id="tbl-ribbon-meta" style="color:#0284c7; font-weight:800;">-</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#059669;"></span>
+              <span style="color:var(--text-muted);">Cumplimiento:</span>
+              <strong id="tbl-ribbon-cump" style="color:#059669; font-weight:800;">-</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#d97706;"></span>
+              <span style="color:var(--text-muted);">Proyección:</span>
+              <strong id="tbl-ribbon-proy" style="color:#d97706; font-weight:800;">-</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+              <span style="color:var(--text-muted);">Facturación:</span>
+              <strong id="tbl-ribbon-rev" style="color:var(--accent-emerald-text, #10b981); font-weight:800;">-</strong>
+            </div>
+          </div>
+
           <div class="services-table-wrapper">
             <table class="services-table">
               <thead>
                 <tr>
-                  <th style="min-width:170px;">Servicio Vendido</th>
-                  <th style="text-align:center; white-space:nowrap;">Mes Anterior</th>
-                  <th style="text-align:center; font-weight:800; color:var(--text-brand); white-space:nowrap;">Mes Actual</th>
-                  <th style="text-align:center; color:#0284c7; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap;">Meta</th>
-                  <th style="text-align:center; color:#059669; font-weight:800; background:rgba(5, 150, 105, 0.07); white-space:nowrap;">% Cump.</th>
-                  <th style="text-align:center; color:#d97706; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap;">⚡ Proyección</th>
-                  <th style="text-align:center; font-weight:800; color:var(--text-brand); white-space:nowrap;">Variación MoM</th>
-                  <th style="text-align:center; font-weight:800; color:var(--text-brand); white-space:nowrap;">% MoM</th>
-                  <th style="text-align:center; white-space:nowrap;">Facturación ₡</th>
+                  <th style="min-width:145px; width:25%;">Servicio Vendido</th>
+                  <th style="text-align:center; width:9%; white-space:nowrap;">Anterior</th>
+                  <th style="text-align:center; width:9%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Actual</th>
+                  <th style="text-align:center; width:8%; color:#0284c7; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap;">Meta</th>
+                  <th style="text-align:center; width:9%; color:#059669; font-weight:800; background:rgba(5, 150, 105, 0.07); white-space:nowrap;">% Cump.</th>
+                  <th style="text-align:center; width:9%; color:#d97706; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap;">⚡ Proy.</th>
+                  <th style="text-align:center; width:10%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Var. MoM</th>
+                  <th style="text-align:center; width:8%; font-weight:800; color:var(--text-brand); white-space:nowrap;">% MoM</th>
+                  <th style="text-align:center; width:13%; white-space:nowrap;">Facturación ₡</th>
                 </tr>
               </thead>
               <tbody id="services-mom-tbody">
@@ -7266,15 +7305,15 @@
 
         tableHtml += `
           <tr>
-            <td style="vertical-align:middle; padding:0.75rem 0.85rem;">${servTitleHtml}</td>
-            <td style="text-align:center; color:var(--text-secondary); white-space:nowrap;">${prevCount.toLocaleString()}</td>
-            <td style="text-align:center; font-weight:800; color:var(--text-brand); font-size:0.92rem; white-space:nowrap;">${curCount.toLocaleString()}</td>
-            <td style="text-align:center; font-weight:800; color:#0284c7; font-size:0.92rem; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); white-space:nowrap;">${hasMeta ? sMeta.toLocaleString() : '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>'}</td>
-            <td style="text-align:center; background:rgba(5, 150, 105, 0.03); white-space:nowrap;">${cumpBadge}</td>
-            <td style="text-align:center; font-weight:800; color:#d97706; font-size:0.92rem; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); white-space:nowrap;">${proyVal.toLocaleString()}</td>
-            <td style="text-align:center; white-space:nowrap;"><span class="${diffClass}" style="padding:4px 9px; font-weight:800; font-size:0.8rem; box-shadow:0 1px 3px rgba(0,0,0,0.05);">${diffIcon}</span></td>
-            <td style="text-align:center; font-weight:800; font-size:0.86rem; color:${diff > 0 ? '#16a34a' : (diff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap;">${pct.includes('+') || diff > 0 ? '+' : ''}${pct}%</td>
-            <td style="text-align:center; font-weight:700; color:var(--accent-emerald-text); white-space:nowrap;">${formatCurrency(rev)}</td>
+            <td style="vertical-align:middle; padding:0.52rem 0.55rem;">${servTitleHtml}</td>
+            <td style="text-align:center; color:var(--text-secondary); white-space:nowrap; padding:0.52rem 0.35rem;">${prevCount.toLocaleString()}</td>
+            <td style="text-align:center; font-weight:800; color:var(--text-brand); font-size:0.88rem; white-space:nowrap; padding:0.52rem 0.35rem;">${curCount.toLocaleString()}</td>
+            <td style="text-align:center; font-weight:800; color:#0284c7; font-size:0.88rem; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); white-space:nowrap; padding:0.52rem 0.35rem;">${hasMeta ? sMeta.toLocaleString() : '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>'}</td>
+            <td style="text-align:center; background:rgba(5, 150, 105, 0.03); white-space:nowrap; padding:0.52rem 0.35rem;">${cumpBadge}</td>
+            <td style="text-align:center; font-weight:800; color:#d97706; font-size:0.88rem; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); white-space:nowrap; padding:0.52rem 0.35rem;">${proyVal.toLocaleString()}</td>
+            <td style="text-align:center; white-space:nowrap; padding:0.52rem 0.35rem;"><span class="${diffClass}" style="padding:2px 6px; font-weight:800; font-size:0.75rem; box-shadow:0 1px 2px rgba(0,0,0,0.04);">${diffIcon}</span></td>
+            <td style="text-align:center; font-weight:800; font-size:0.82rem; color:${diff > 0 ? '#16a34a' : (diff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.52rem 0.35rem;">${pct.includes('+') || diff > 0 ? '+' : ''}${pct}%</td>
+            <td style="text-align:center; font-weight:700; color:var(--accent-emerald-text); white-space:nowrap; padding:0.52rem 0.45rem; font-size:0.82rem;">${formatCurrency(rev)}</td>
           </tr>
         `;
 
@@ -7316,18 +7355,18 @@
             }
 
             tableHtml += `
-              <tr class="pospago-subrow" style="display:none; background:rgba(2, 132, 199, 0.035); font-size:0.83rem;">
-                <td style="padding-left:1.5rem; color:var(--text-secondary);">
-                  <span style="color:#0284c7; font-weight:700; margin-right:4px;">↳</span> ${escapeHtml(sub.name)}
+              <tr class="pospago-subrow" style="display:none; background:rgba(2, 132, 199, 0.035); font-size:0.79rem;">
+                <td style="padding:0.42rem 0.45rem 0.42rem 1.15rem; color:var(--text-secondary);">
+                  <span style="color:#0284c7; font-weight:700; margin-right:3px;">↳</span> ${escapeHtml(sub.name)}
                 </td>
-                <td style="text-align:center; color:var(--text-muted);">${sub.prev.toLocaleString()}</td>
-                <td style="text-align:center; font-weight:600; color:var(--text-primary);">${sub.cur.toLocaleString()}</td>
-                <td style="text-align:center; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12);">${sMetaHtml}</td>
-                <td style="text-align:center; background:rgba(5, 150, 105, 0.03);">${sCumpHtml}</td>
-                <td style="text-align:center; color:var(--text-muted);">${sProy.toLocaleString()}</td>
-                <td style="text-align:center;"><span class="${sDiffClass}" style="font-size:0.73rem;">${sDiffIcon}</span></td>
-                <td style="text-align:center; color:var(--text-muted);">${sPct.includes('+') || sDiff > 0 ? '+' : ''}${sPct}%</td>
-                <td style="text-align:center; color:var(--text-muted);">${formatCurrency(sub.rev)}</td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sub.prev.toLocaleString()}</td>
+                <td style="text-align:center; font-weight:600; color:var(--text-primary); padding:0.42rem 0.35rem;">${sub.cur.toLocaleString()}</td>
+                <td style="text-align:center; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); padding:0.42rem 0.35rem;">${sMetaHtml}</td>
+                <td style="text-align:center; background:rgba(5, 150, 105, 0.03); padding:0.42rem 0.35rem;">${sCumpHtml}</td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sProy.toLocaleString()}</td>
+                <td style="text-align:center; padding:0.42rem 0.35rem;"><span class="${sDiffClass}" style="font-size:0.71rem; padding:1px 5px;">${sDiffIcon}</span></td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem; font-size:0.78rem;">${sPct.includes('+') || sDiff > 0 ? '+' : ''}${sPct}%</td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.45rem; font-size:0.79rem;">${formatCurrency(sub.rev)}</td>
               </tr>
             `;
           });
@@ -7368,20 +7407,20 @@
 
         tfootEl.innerHTML = `
           <tr style="background:var(--bg-card-elevated, #f8fafc); border-top:2px solid var(--border-card, #e2e8f0); font-weight:800;">
-            <td style="padding:0.75rem 0.85rem; color:var(--text-brand); font-size:0.9rem;">TOTAL GENERAL (${allServiceNames.length} Servicios)</td>
-            <td style="text-align:center; color:var(--text-secondary); white-space:nowrap;">${sumPrev.toLocaleString()}</td>
-            <td style="text-align:center; color:var(--text-brand); font-size:1.05rem; font-weight:800; white-space:nowrap;">${sumCur.toLocaleString()}</td>
-            <td style="text-align:center; color:#0284c7; font-size:0.95rem; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap;">${totalTargetNum.toLocaleString()}</td>
-            <td style="text-align:center; background:rgba(5, 150, 105, 0.07); white-space:nowrap;"><span class="tag-diff" style="${footBadgeStyle} font-weight:800; font-size:0.84rem; padding:4px 10px;">${totalCumpPct}%</span></td>
-            <td style="text-align:center; color:#d97706; font-size:0.95rem; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap;">${sumProy.toLocaleString()}</td>
-            <td style="text-align:center; white-space:nowrap;"><span class="${footDiffClass}" style="padding:4px 9px; font-weight:800; font-size:0.82rem;">${footDiffIcon}</span></td>
-            <td style="text-align:center; font-size:0.88rem; font-weight:800; color:${totalDiff > 0 ? '#16a34a' : (totalDiff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap;">${totalPctMoM.includes('+') || totalDiff > 0 ? '+' : ''}${totalPctMoM}%</td>
-            <td style="text-align:center; font-weight:800; color:var(--accent-emerald-text); white-space:nowrap;">${formatCurrency(sumRev)}</td>
+            <td style="padding:0.58rem 0.55rem; color:var(--text-brand); font-size:0.86rem;">TOTAL (${allServiceNames.length} Servicios)</td>
+            <td style="text-align:center; color:var(--text-secondary); white-space:nowrap; padding:0.58rem 0.35rem;">${sumPrev.toLocaleString()}</td>
+            <td style="text-align:center; color:var(--text-brand); font-size:0.95rem; font-weight:800; white-space:nowrap; padding:0.58rem 0.35rem;">${sumCur.toLocaleString()}</td>
+            <td style="text-align:center; color:#0284c7; font-size:0.88rem; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap; padding:0.58rem 0.35rem;">${totalTargetNum.toLocaleString()}</td>
+            <td style="text-align:center; background:rgba(5, 150, 105, 0.07); white-space:nowrap; padding:0.58rem 0.35rem;"><span class="tag-diff" style="${footBadgeStyle} font-weight:800; font-size:0.78rem; padding:3px 7px;">${totalCumpPct}%</span></td>
+            <td style="text-align:center; color:#d97706; font-size:0.88rem; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap; padding:0.58rem 0.35rem;">${sumProy.toLocaleString()}</td>
+            <td style="text-align:center; white-space:nowrap; padding:0.58rem 0.35rem;"><span class="${footDiffClass}" style="padding:2px 6px; font-weight:800; font-size:0.76rem;">${footDiffIcon}</span></td>
+            <td style="text-align:center; font-size:0.82rem; font-weight:800; color:${totalDiff > 0 ? '#16a34a' : (totalDiff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.58rem 0.35rem;">${totalPctMoM.includes('+') || totalDiff > 0 ? '+' : ''}${totalPctMoM}%</td>
+            <td style="text-align:center; font-weight:800; color:var(--accent-emerald-text); white-space:nowrap; padding:0.58rem 0.45rem; font-size:0.84rem;">${formatCurrency(sumRev)}</td>
           </tr>
         `;
       }
 
-      // Update Micro-KPI Ribbon metrics
+      // Update Micro-KPI Ribbon metrics (Left Card)
       const ribbonCur = document.getElementById('mom-ribbon-cur');
       const ribbonPrev = document.getElementById('mom-ribbon-prev');
       const ribbonDiff = document.getElementById('mom-ribbon-diff');
@@ -7401,6 +7440,16 @@
           ribbonDiff.innerText = '= 0 (0%)';
         }
       }
+
+      // Update Financial & Targets Ribbon metrics (Right Card - Harmonized with Left Card)
+      const tblRibbonMeta = document.getElementById('tbl-ribbon-meta');
+      const tblRibbonCump = document.getElementById('tbl-ribbon-cump');
+      const tblRibbonProy = document.getElementById('tbl-ribbon-proy');
+      const tblRibbonRev = document.getElementById('tbl-ribbon-rev');
+      if (tblRibbonMeta) tblRibbonMeta.innerText = totalTargetNum.toLocaleString();
+      if (tblRibbonCump) tblRibbonCump.innerText = totalCumpPct + '%';
+      if (tblRibbonProy) tblRibbonProy.innerText = sumProy.toLocaleString();
+      if (tblRibbonRev) tblRibbonRev.innerText = formatCurrency(sumRev);
 
       // Opción 3: Render Executive SaaS Metric Rows or Chart.js according to selected mode
       const momMode = App.momChartMode || 'saas';
@@ -7826,15 +7875,18 @@
     }
 
     // Toggle function for Pospago breakdown subrows
-    window.togglePospagoBreakdown = function(e) {
+    window.toggleAllPospagoDetails = function(e) {
       if (e) { e.preventDefault(); e.stopPropagation(); }
       const rows = document.querySelectorAll('.pospago-subrow');
       const icon = document.getElementById('pospago-toggle-icon');
+      const lbl = document.getElementById('lbl-toggle-all-text');
       if (!rows || rows.length === 0) return;
       const isHidden = (rows[0].style.display === 'none' || !rows[0].style.display);
       rows.forEach(r => r.style.display = isHidden ? 'table-row' : 'none');
       if (icon) icon.innerText = isHidden ? '▲ Ocultar' : '▼ Desglose';
+      if (lbl) lbl.innerText = isHidden ? 'Ocultar' : 'Desglose';
     };
+    window.togglePospagoBreakdown = window.toggleAllPospagoDetails;
 
     function renderHistoricalTrend(theme) {
       const f = App.filters;
