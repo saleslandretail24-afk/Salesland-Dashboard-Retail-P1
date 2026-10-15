@@ -1454,6 +1454,16 @@
       display: flex;
     }
 
+    .modal-box {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
     .upload-modal-box {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
@@ -2424,8 +2434,8 @@
       border: 1px solid var(--border-card);
       border-radius: 8px;
       font-size: 0.84rem;
-      background: var(--bg-main);
-      color: var(--text-main);
+      background: var(--bg-card-elevated);
+      color: var(--text-primary);
       outline: none;
       transition: all 0.2s ease;
     }
@@ -2512,7 +2522,7 @@
     }
     .user-mgmt-tab:hover {
       border-color: #0284c7;
-      color: var(--text-main);
+      color: var(--text-primary);
     }
     .user-mgmt-tab.active {
       background: #0284c7;
@@ -2590,7 +2600,7 @@
       font-family: monospace;
       font-size: 0.8rem;
       font-weight: 700;
-      background: var(--bg-main);
+      background: var(--bg-card-elevated);
       border: 1px solid var(--border-card);
       padding: 0.2rem 0.5rem;
       border-radius: 5px;
@@ -2601,7 +2611,7 @@
       font-size: 0.68rem;
       padding: 0.15rem 0.45rem;
       border-radius: 4px;
-      background: var(--bg-main);
+      background: var(--bg-card-elevated);
       border: 1px solid var(--border-card);
       color: var(--text-muted);
     }
@@ -2708,6 +2718,11 @@
     [data-theme="dark"] #btn-theme-toggle:hover {
       border-color: #fbbf24;
       box-shadow: 0 0 14px rgba(251, 191, 36, 0.35);
+    }
+
+    /* Modal labels in dark theme: --accent-navy es casi negro en dark */
+    [data-theme="dark"] .modal-box [style*="color:var(--accent-navy)"] {
+      color: var(--text-brand) !important;
     }
 
     /* Modal surfaces in dark theme */
@@ -4419,7 +4434,7 @@
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.45rem 0.85rem; margin-bottom:0.75rem;">
             <!-- Breadcrumbs -->
             <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.82rem;">
-              <span id="cr-crumb-country" style="font-weight:800; color:var(--text-main); cursor:pointer;" onclick="if(window.resetToCountryView)window.resetToCountryView();" title="Volver a Costa Rica">🇨🇷 Costa Rica</span>
+              <span id="cr-crumb-country" style="font-weight:800; color:var(--text-primary); cursor:pointer;" onclick="if(window.resetToCountryView)window.resetToCountryView();" title="Volver a Costa Rica">🇨🇷 Costa Rica</span>
               <span id="cr-crumb-sep" style="display:none; color:var(--text-muted); opacity:0.6;">›</span>
               <span id="cr-crumb-prov" style="display:none; font-weight:800; color:#06b6d4; align-items:center; gap:0.35rem;">
                 <span id="cr-crumb-prov-name">Provincia</span>
@@ -4956,7 +4971,7 @@
           PIN o Clave de Administrador <span style="font-weight:400; color:var(--text-muted);">(Por defecto: admin123)</span>
         </label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="password" id="role-admin-pin" placeholder="Ingresa PIN (admin123)" style="flex:1; padding:0.5rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+          <input type="password" id="role-admin-pin" placeholder="Ingresa PIN (admin123)" style="flex:1; padding:0.5rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary);">
           <button id="btn-submit-admin-role" style="background:#0284c7; color:#fff; border:none; padding:0.5rem 1rem; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer;">
             Entrar como Admin
           </button>
@@ -4972,7 +4987,7 @@
           PIN de Supervisores <span style="font-weight:400; color:var(--text-muted);">(Por defecto: 1234)</span>
         </label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="password" id="role-supervisor-pin" placeholder="Ingresa PIN (1234)" style="flex:1; padding:0.5rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+          <input type="password" id="role-supervisor-pin" placeholder="Ingresa PIN (1234)" style="flex:1; padding:0.5rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary);">
           <button id="btn-submit-supervisor-role" style="background:#0284c7; color:#fff; border:none; padding:0.5rem 1rem; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:flex; align-items:center; gap:0.35rem;">
             <span>👔</span> Entrar como Supervisor
           </button>
@@ -5060,7 +5075,7 @@
           <span>•</span>
           <span id="user-mgmt-total-status">20 usuarios registrados</span>
         </div>
-        <button class="btn-action" id="btn-close-user-mgmt-bottom" style="background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-card); padding:0.45rem 1.1rem; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer;">
+        <button class="btn-action" id="btn-close-user-mgmt-bottom" style="background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-card); padding:0.45rem 1.1rem; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer;">
           Cerrar
         </button>
       </div>
@@ -5085,13 +5100,13 @@
             <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.35rem;">
               Nombre Completo *
             </label>
-            <input type="text" id="user-form-name" required placeholder="Ej. Carlos Solano Rodriguez" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+            <input type="text" id="user-form-name" required placeholder="Ej. Carlos Solano Rodriguez" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary);">
           </div>
           <div>
             <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.35rem;">
               Usuario / Login *
             </label>
-            <input type="text" id="user-form-username" required placeholder="Ej. carlos.solano" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+            <input type="text" id="user-form-username" required placeholder="Ej. carlos.solano" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary);">
           </div>
         </div>
 
@@ -5100,7 +5115,7 @@
             <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.35rem;">
               Rol de Acceso *
             </label>
-            <select id="user-form-role" onchange="window.SaleslandRBAC.onRoleChanged()" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); font-weight:600;">
+            <select id="user-form-role" onchange="window.SaleslandRBAC.onRoleChanged()" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary); font-weight:600;">
               <option value="supervisor">👔 Supervisores (Acceso Único)</option>
               <option value="admin">👑 Administrador (Acceso Total)</option>
             </select>
@@ -5109,7 +5124,7 @@
             <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.35rem;">
               Contraseña o PIN *
             </label>
-            <input type="text" id="user-form-pin" required placeholder="Ej. 1234 o clave" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); font-weight:700; letter-spacing:1px;">
+            <input type="text" id="user-form-pin" required placeholder="Ej. 1234 o clave" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary); font-weight:700; letter-spacing:1px;">
           </div>
         </div>
 
@@ -5118,7 +5133,7 @@
           <label style="display:block; font-size:0.78rem; font-weight:700; color:var(--accent-navy); margin-bottom:0.35rem;">
             Vincular a Supervisor del Dataset *
           </label>
-          <select id="user-form-supervisor-select" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-main); color:var(--text-main);">
+          <select id="user-form-supervisor-select" style="width:100%; padding:0.55rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.85rem; background:var(--bg-card-elevated); color:var(--text-primary);">
             <!-- Dynamically populated -->
           </select>
           <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-top:0.25rem;">
@@ -5188,7 +5203,7 @@
       </p>
       <input type="hidden" id="user-pin-modal-id" value="">
       <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-        <input type="text" id="user-pin-modal-input" placeholder="Nuevo PIN (mín. 4 caracteres)" style="flex:1; padding:0.6rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.95rem; font-weight:700; letter-spacing:1px; background:var(--bg-main); color:var(--text-main);">
+        <input type="text" id="user-pin-modal-input" placeholder="Nuevo PIN (mín. 4 caracteres)" style="flex:1; padding:0.6rem 0.75rem; border:1px solid var(--border-card); border-radius:6px; font-size:0.95rem; font-weight:700; letter-spacing:1px; background:var(--bg-card-elevated); color:var(--text-primary);">
         <button id="btn-save-user-pin" onclick="window.SaleslandRBAC.savePinModal()" style="background:#0284c7; color:#fff; border:none; padding:0.6rem 1.1rem; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer;">
           Guardar
         </button>
@@ -5208,7 +5223,7 @@
       <p style="font-size:0.82rem; color:var(--text-muted); margin:0 0 1rem 0;">
         Lista completa de usuarios, roles y PINs configurados. Puedes copiar esta lista para distribuirla a los supervisores:
       </p>
-      <div style="flex:1; overflow-y:auto; background:var(--bg-main); border:1px solid var(--border-card); border-radius:8px; padding:0.5rem; margin-bottom:1rem;">
+      <div style="flex:1; overflow-y:auto; background:var(--bg-card-elevated); border:1px solid var(--border-card); border-radius:8px; padding:0.5rem; margin-bottom:1rem;">
         <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
           <thead>
             <tr style="border-bottom:1px solid var(--border-card); text-align:left; color:var(--text-muted); font-size:0.72rem; text-transform:uppercase;">
@@ -5227,7 +5242,7 @@
         <button id="btn-copy-summary-text" onclick="window.SaleslandRBAC.copySummaryToClipboard()" style="background:#0f172a; color:#fff; border:none; padding:0.55rem 1.15rem; border-radius:6px; font-weight:700; font-size:0.82rem; cursor:pointer; display:flex; align-items:center; gap:0.4rem;">
           <span>📋</span> Copiar al Portapapeles
         </button>
-        <button id="btn-close-user-summary-bottom" style="background:var(--bg-card); color:var(--text-main); border:1px solid var(--border-card); padding:0.5rem 1rem; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer;">
+        <button id="btn-close-user-summary-bottom" style="background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-card); padding:0.5rem 1rem; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer;">
           Cerrar
         </button>
       </div>
@@ -6306,7 +6321,7 @@
               <div class="user-avatar-circle ${avatarClass}">${initials}</div>
               <div>
                 <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-                  <strong style="color:var(--text-main); font-size:0.92rem;">${escapeHtml(u.name)}</strong>
+                  <strong style="color:var(--text-primary); font-size:0.92rem;">${escapeHtml(u.name)}</strong>
                   ${roleBadge}
                   ${isCurrentActive ? '<span style="background:#10b981; color:#fff; font-size:0.65rem; font-weight:800; padding:0.1rem 0.45rem; border-radius:999px;">EN SESIÓN</span>' : ''}
                 </div>
@@ -6327,10 +6342,10 @@
 
             <!-- Actions -->
             <div class="user-card-actions" style="display:flex; align-items:center; gap:0.4rem; flex-shrink:0;">
-              <button onclick="window.SaleslandRBAC.openPinModal('${u.id}')" title="Modificar PIN" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+              <button onclick="window.SaleslandRBAC.openPinModal('${u.id}')" title="Modificar PIN" style="background:var(--bg-card-elevated); border:1px solid var(--border-card); color:var(--text-primary); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
                 🔑 Clave
               </button>
-              <button onclick="window.SaleslandRBAC.openUserForm('${u.id}')" title="Editar detalles" style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
+              <button onclick="window.SaleslandRBAC.openUserForm('${u.id}')" title="Editar detalles" style="background:var(--bg-card-elevated); border:1px solid var(--border-card); color:var(--text-primary); padding:0.4rem 0.65rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
                 ✏️ Editar
               </button>
               <button onclick="window.SaleslandRBAC.fastLoginAsUser('${u.id}')" title="Probar vista con este rol" style="background:#0284c7; border:none; color:#ffffff; padding:0.4rem 0.75rem; border-radius:6px; font-size:0.76rem; font-weight:700; cursor:pointer;">
@@ -6554,7 +6569,7 @@
       const users = getUsers();
       tbody.innerHTML = users.map(u => `
         <tr style="border-bottom:1px solid var(--border-card);">
-          <td style="padding:0.65rem 0.75rem; font-weight:700; color:var(--text-main);">
+          <td style="padding:0.65rem 0.75rem; font-weight:700; color:var(--text-primary);">
             ${u.role === 'admin' ? '👑' : '👔'} ${escapeHtml(u.name)}
           </td>
           <td style="padding:0.65rem 0.75rem; color:var(--text-muted); font-family:monospace;">
