@@ -2724,8 +2724,17 @@
     body.role-supervisor .col-facturacion,
     body.role-supervisor .facturacion-stat,
     body.role-supervisor [data-mode="facturacion"],
-    body.role-supervisor #btn-mobile-qr {
+    body.role-supervisor #btn-mobile-qr,
+    body.role-supervisor .chip-rev,
+    body.role-supervisor .seller-card-facturacion,
+    body.role-supervisor #modal-seller-facturacion-box,
+    body.role-supervisor [id*="modal-seller-facturacion"],
+    body.role-supervisor .seller-kpi-pill-box:has(#modal-seller-facturacion) {
       display: none !important;
+    }
+    body.role-supervisor .seller-efectividad-item {
+      grid-column: span 3 !important;
+      text-align: center;
     }
 
     /* Modal labels in dark theme: --accent-navy es casi negro en dark */
@@ -4093,7 +4102,7 @@
               </div>
             </div>
             <div style="display:flex; align-items:center; gap:0.45rem;">
-              <span class="badge-pill" id="lbl-services-table-badge">Variación y Facturación MoM</span>
+              <span class="badge-pill" id="lbl-services-table-badge">Variación y Rendimiento MoM</span>
               <button type="button" class="btn-sm-action" onclick="toggleAllPospagoDetails(event)" id="btn-toggle-all-pospago" title="Alternar subdesglose de servicios" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:6px; padding:3px 9px; font-size:0.72rem; font-weight:700; color:var(--text-secondary); cursor:pointer; display:inline-flex; align-items:center; gap:3px; transition:all 0.15s;">
                 <span>👁️</span> <span id="lbl-toggle-all-text">Desglose</span>
               </button>
@@ -4912,7 +4921,7 @@
           <span class="seller-kpi-pill-lbl">Efectividad %</span>
           <span class="seller-kpi-pill-val" id="modal-seller-efectividad" style="color:#10b981;">0.0%</span>
         </div>
-        <div class="seller-kpi-pill-box">
+        <div class="seller-kpi-pill-box facturacion-stat" id="modal-seller-facturacion-box">
           <span class="seller-kpi-pill-lbl">Facturación Estimada</span>
           <span class="seller-kpi-pill-val" id="modal-seller-facturacion" style="color:#0f1d4a;">₡0</span>
         </div>
@@ -4943,7 +4952,7 @@
               <th>Teléfono</th>
               <th>Cliente</th>
               <th>Plan</th>
-              <th>Precio</th>
+              <th class="col-facturacion">Precio</th>
               <th>Estado</th>
               <th>Cédula</th>
               <th>Punto de Venta</th>
@@ -7430,7 +7439,7 @@
             <td style="text-align:center; font-weight:800; color:#d97706; font-size:0.92rem; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${proyVal.toLocaleString()}</td>
             <td style="text-align:center; white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;"><span class="${diffClass}" style="padding:4px 8px; font-weight:800; font-size:0.78rem; box-shadow:0 1px 2px rgba(0,0,0,0.04);">${diffIcon}</span></td>
             <td style="text-align:center; font-weight:800; font-size:0.85rem; color:${diff > 0 ? '#16a34a' : (diff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${pct.includes('+') || diff > 0 ? '+' : ''}${pct}%</td>
-            <td style="text-align:center; font-weight:700; color:var(--accent-emerald-text); white-space:nowrap; padding:0.92rem 0.5rem; font-size:0.85rem; vertical-align:middle;">${formatCurrency(rev)}</td>
+            <td class="col-facturacion" style="text-align:center; font-weight:700; color:var(--accent-emerald-text); white-space:nowrap; padding:0.92rem 0.5rem; font-size:0.85rem; vertical-align:middle;">${formatCurrency(rev)}</td>
           </tr>
         `;
 
@@ -7532,7 +7541,7 @@
             <td style="text-align:center; color:#d97706; font-size:0.95rem; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${sumProy.toLocaleString()}</td>
             <td style="text-align:center; white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;"><span class="${footDiffClass}" style="padding:4px 8px; font-weight:800; font-size:0.78rem;">${footDiffIcon}</span></td>
             <td style="text-align:center; font-size:0.88rem; font-weight:800; color:${totalDiff > 0 ? '#16a34a' : (totalDiff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${totalPctMoM.includes('+') || totalDiff > 0 ? '+' : ''}${totalPctMoM}%</td>
-            <td style="text-align:center; font-weight:800; color:var(--accent-emerald-text); white-space:nowrap; padding:0.95rem 0.5rem; font-size:0.9rem; vertical-align:middle;">${formatCurrency(sumRev)}</td>
+            <td class="col-facturacion" style="text-align:center; font-weight:800; color:var(--accent-emerald-text); white-space:nowrap; padding:0.95rem 0.5rem; font-size:0.9rem; vertical-align:middle;">${formatCurrency(sumRev)}</td>
           </tr>
         `;
       }
@@ -8748,7 +8757,7 @@
                 afterBody: (items) => {
                   const s = topRanked[items[0].dataIndex];
                   const ef = s.tramitesTotales > 0 ? ((s.ventas / s.tramitesTotales) * 100).toFixed(1) : 0;
-                  return `\n👥 Supervisor: ${s.supervisor}\n⚡ Ventas: ${s.ventas.toLocaleString()} unidades\n🎯 Meta Asignada: ${(s.meta || 173).toLocaleString()} unidades\n📈 Cumplimiento de Meta: ${(s.cumplimientoMeta || 0).toFixed(1)}%\n⚡ Brecha Restante: ${Math.max(0, (s.meta || 173) - s.ventas)} u.\n💰 Facturación: ${formatCurrency(s.facturacion)}\n⚡ Efectividad: ${ef}%`;
+                  return `\n👥 Supervisor: ${s.supervisor}\n⚡ Ventas: ${s.ventas.toLocaleString()} unidades\n🎯 Meta Asignada: ${(s.meta || 173).toLocaleString()} unidades\n📈 Cumplimiento de Meta: ${(s.cumplimientoMeta || 0).toFixed(1)}%\n⚡ Brecha Restante: ${Math.max(0, (s.meta || 173) - s.ventas)} u.${((typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor')) ? '' : '\n💰 Facturación: ' + formatCurrency(s.facturacion)}\n⚡ Efectividad: ${ef}%`;
                 }
               }
             }
@@ -8841,10 +8850,10 @@
                 <span class="mini-kpi-lbl">% Cump.</span>
                 <span class="mini-kpi-val" style="font-weight:800; color:${cumpMeta >= 60 ? '#10b981' : (cumpMeta >= 40 ? '#f59e0b' : '#ef4444')};">${cumpMeta.toFixed(1)}%</span>
               </div>
-              <div class="mini-kpi-item" style="grid-column: span 2;">
+              <div class="mini-kpi-item facturacion-stat seller-card-facturacion" style="grid-column: span 2;">
                 <span class="mini-kpi-lbl">Facturación: <strong style="color:var(--accent-emerald-text);">${formatCurrency(s.facturacion)}</strong></span>
               </div>
-              <div class="mini-kpi-item">
+              <div class="mini-kpi-item seller-efectividad-item">
                 <span class="mini-kpi-lbl">Efectividad: <strong>${efectividad}%</strong></span>
               </div>
             </div>
@@ -9851,7 +9860,7 @@
                     const idx = ctx.dataIndex;
                     const p = provList[idx];
                     const sharePct = totalProvSales > 0 ? ((p.ventas / totalProvSales) * 100).toFixed(1) : 0;
-                    return `Ventas: ${p.ventas.toLocaleString()} u. (${sharePct}% cuota) | Facturación: ${formatCurrency(p.facturacion)}`;
+                    return `Ventas: ${p.ventas.toLocaleString()} u. (${sharePct}% cuota)${isSupervisor ? '' : ' | Facturación: ' + formatCurrency(p.facturacion)}`;
                   }
                 }
               }
@@ -9896,6 +9905,7 @@
 
       // --- ACTUALIZACIÓN DEL MAPA DE COSTA RICA & SIDEBAR ---
       function updateCostaRicaMapUI() {
+        const isSupervisor = (typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor');
         const vals = provList.map(p => provMode === 'facturacion' ? p.facturacion : p.ventas);
         const maxV = vals.length > 0 ? Math.max(...vals) : 1;
         const minV = vals.length > 0 ? Math.min(...vals) : 0;
@@ -10339,7 +10349,7 @@
             const share = totalProvSales > 0 ? ((pObj.ventas / totalProvSales) * 100).toFixed(0) : '0';
             const crown = isLeader ? '👑 ' : '';
             if (provMode === 'facturacion') {
-              pinValEl.textContent = `${crown}${formatCurrency(pObj.facturacion)} (${share}%)`;
+              pinValEl.textContent = isSupervisor ? `${crown}${pObj.ventas.toLocaleString()} u. (${share}%)` : `${crown}${formatCurrency(pObj.facturacion)} (${share}%)`;
             } else {
               pinValEl.textContent = `${crown}${pObj.ventas.toLocaleString()} vts • ${share}%`;
             }
