@@ -414,210 +414,365 @@
     }
 
     /* 5 EXECUTIVE KPI CARDS ROW (Exact Layout of Screenshot) */
-    .kpi-row-salesland {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.75rem;
-    }
+    /* ==========================================================================
+   PREMIUM EXECUTIVE KPI CARDS SYSTEM
+   ========================================================================== */
+.kpi-row-salesland {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.1rem;
+  margin-bottom: 1.75rem;
+}
 
-    @media (max-width: 1280px) {
-      .kpi-row-salesland {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
+@media (max-width: 1280px) {
+  .kpi-row-salesland {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
-    .salesland-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 16px;
-      box-shadow: var(--shadow-card);
-      padding: 1rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 112px;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
+.salesland-card {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.90) 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  padding: 1rem 1.15rem 0.95rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 130px;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
 
-    [data-theme="dark"] .salesland-card {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
+[data-theme="dark"] .salesland-card {
+  background: linear-gradient(155deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px -3px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
 
-    .salesland-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: #0284c7;
-      opacity: 0.95;
-    }
+/* Radiant top accent bar with rounded pill shape */
+.salesland-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  background: #0284c7;
+  opacity: 0.95;
+}
 
-    .salesland-card:nth-child(1)::before { background: linear-gradient(90deg, #0284c7, #38bdf8); }
-    .salesland-card:nth-child(2)::before { background: linear-gradient(90deg, #059669, #10b981); }
-    .salesland-card:nth-child(3)::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
-    .salesland-card:nth-child(4)::before { background: linear-gradient(90deg, #4f46e5, #6366f1); }
-    .salesland-card:nth-child(5)::before { background: linear-gradient(90deg, #0f172a, #475569); }
+/* Subtle corner ambient wash */
+.salesland-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: blur(30px);
+  transition: opacity 0.3s ease;
+}
 
-    [data-theme="dark"] .salesland-card::before {
-      box-shadow: 0 0 12px #38bdf8;
-    }
-    [data-theme="dark"] .salesland-card:nth-child(1)::before { background: linear-gradient(90deg, #38bdf8, #06b6d4); box-shadow: 0 0 14px rgba(56, 189, 248, 0.6); }
-    [data-theme="dark"] .salesland-card:nth-child(2)::before { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 14px rgba(52, 211, 153, 0.6); }
-    [data-theme="dark"] .salesland-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 14px rgba(251, 191, 36, 0.6); }
-    [data-theme="dark"] .salesland-card:nth-child(4)::before { background: linear-gradient(90deg, #6366f1, #818cf8); box-shadow: 0 0 14px rgba(129, 140, 248, 0.6); }
-    [data-theme="dark"] .salesland-card:nth-child(5)::before { background: linear-gradient(90deg, #38bdf8, #818cf8); box-shadow: 0 0 14px rgba(56, 189, 248, 0.6); }
+/* Individual card accents */
+.kpi-card-meta::before { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+.kpi-card-meta::after { background: rgba(56, 189, 248, 0.16); }
 
-    .salesland-card:hover {
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-4px);
-      border-color: rgba(2, 132, 199, 0.35);
-    }
+.kpi-card-cump::before { background: linear-gradient(90deg, #059669, #10b981); }
+.kpi-card-cump::after { background: rgba(16, 185, 129, 0.16); }
 
-    [data-theme="dark"] .salesland-card:hover {
-      border-color: rgba(56, 189, 248, 0.55);
-    }
+.kpi-card-proy::before { background: linear-gradient(90deg, #ea580c, #f59e0b); }
+.kpi-card-proy::after { background: rgba(245, 158, 11, 0.16); }
 
-    .sl-card-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      text-align: center;
-      margin-bottom: 0.35rem;
-    }
+.kpi-card-yoy::before { background: linear-gradient(90deg, #4f46e5, #818cf8); }
+.kpi-card-yoy::after { background: rgba(99, 102, 241, 0.16); }
 
-    .sl-card-body {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      gap: 0.75rem;
-      margin: auto 0;
-    }
+.kpi-card-mom::before { background: linear-gradient(90deg, #7c3aed, #c084fc); }
+.kpi-card-mom::after { background: rgba(139, 92, 246, 0.16); }
 
-    .sl-card-val-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+/* Dark mode glowing bars */
+[data-theme="dark"] .salesland-card::after {
+  opacity: 0.28;
+}
+[data-theme="dark"] .kpi-card-meta::before { background: linear-gradient(90deg, #38bdf8, #06b6d4); box-shadow: 0 0 14px rgba(56, 189, 248, 0.7); }
+[data-theme="dark"] .kpi-card-cump::before { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 14px rgba(52, 211, 153, 0.7); }
+[data-theme="dark"] .kpi-card-proy::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 14px rgba(251, 191, 36, 0.7); }
+[data-theme="dark"] .kpi-card-yoy::before { background: linear-gradient(90deg, #818cf8, #a5b4fc); box-shadow: 0 0 14px rgba(129, 140, 248, 0.7); }
+[data-theme="dark"] .kpi-card-mom::before { background: linear-gradient(90deg, #c084fc, #e879f9); box-shadow: 0 0 14px rgba(192, 132, 252, 0.7); }
 
-    .sl-card-big-num {
-      font-family: var(--font-brand);
-      font-size: 2.15rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-brand);
-      line-height: 1;
-    }
+/* Hover effects */
+.salesland-card:hover {
+  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+  transform: translateY(-4px);
+  border-color: rgba(2, 132, 199, 0.35);
+}
+.salesland-card:hover::after {
+  opacity: 0.85;
+}
 
-    [data-theme="dark"] .sl-card-big-num {
-      color: #ffffff;
-      text-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
-    }
+[data-theme="dark"] .salesland-card:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.15);
+}
 
-    .sl-card-subtext {
-      font-size: 0.74rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-      margin-top: 0.25rem;
-    }
+/* Card Header */
+.sl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+}
 
-    [data-theme="dark"] .sl-card-subtext {
-      color: #94a3b8;
-    }
+.sl-card-title {
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-    .sl-card-icon {
-      width: 46px;
-      height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border-radius: 14px;
-      background: rgba(2, 132, 199, 0.07);
-      border: 1px solid rgba(2, 132, 199, 0.12);
-    }
+/* Icon Container */
+.sl-card-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 11px;
+  transition: transform 0.25s ease;
+}
+.salesland-card:hover .sl-card-icon {
+  transform: scale(1.08) rotate(3deg);
+}
 
-    .salesland-card:nth-child(2) .sl-card-icon {
-      background: rgba(16, 185, 129, 0.08);
-      border-color: rgba(16, 185, 129, 0.18);
-    }
-    .salesland-card:nth-child(3) .sl-card-icon {
-      background: rgba(245, 158, 11, 0.08);
-      border-color: rgba(245, 158, 11, 0.18);
-    }
-    .salesland-card:nth-child(4) .sl-card-icon,
-    .salesland-card:nth-child(5) .sl-card-icon {
-      background: rgba(99, 102, 241, 0.08);
-      border-color: rgba(99, 102, 241, 0.18);
-    }
+.kpi-card-meta .sl-card-icon {
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  color: #0284c7;
+}
+.kpi-card-cump .sl-card-icon {
+  background: rgba(16, 185, 129, 0.09);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #059669;
+}
+.kpi-card-proy .sl-card-icon {
+  background: rgba(245, 158, 11, 0.09);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: #d97706;
+}
+.kpi-card-yoy .sl-card-icon {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  color: #4f46e5;
+}
+.kpi-card-mom .sl-card-icon {
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  color: #7c3aed;
+}
 
-    [data-theme="dark"] .sl-card-icon {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
-    }
+[data-theme="dark"] .kpi-card-meta .sl-card-icon {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+[data-theme="dark"] .kpi-card-cump .sl-card-icon {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(52, 211, 153, 0.28);
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
+}
+[data-theme="dark"] .kpi-card-proy .sl-card-icon {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(251, 191, 36, 0.28);
+  color: #fbbf24;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
+}
+[data-theme="dark"] .kpi-card-yoy .sl-card-icon {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(129, 140, 248, 0.28);
+  color: #a5b4fc;
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.15);
+}
+[data-theme="dark"] .kpi-card-mom .sl-card-icon {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(192, 132, 252, 0.28);
+  color: #c084fc;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.15);
+}
 
-    [data-theme="dark"] .salesland-card:nth-child(2) .sl-card-icon {
-      background: rgba(16, 185, 129, 0.12);
-      border-color: rgba(52, 211, 153, 0.25);
-      box-shadow: 0 0 15px rgba(52, 211, 153, 0.15);
-    }
-    [data-theme="dark"] .salesland-card:nth-child(3) .sl-card-icon {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(251, 191, 36, 0.25);
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
-    }
-    [data-theme="dark"] .salesland-card:nth-child(4) .sl-card-icon,
-    [data-theme="dark"] .salesland-card:nth-child(5) .sl-card-icon {
-      background: rgba(99, 102, 241, 0.12);
-      border-color: rgba(129, 140, 248, 0.25);
-      box-shadow: 0 0 15px rgba(129, 140, 248, 0.15);
-    }
+/* Card Body & Value */
+.sl-card-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 0.55rem;
+}
 
-    /* Comparison Variation Card Layout (Cards 4 & 5) */
-    .sl-variation-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
+.sl-card-val-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-    .sl-variation-badge {
-      background: var(--badge-gray-bg);
-      border: 1px solid var(--badge-gray-border);
-      border-radius: var(--radius-sm);
-      padding: 0.25rem 0.65rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      width: 100%;
-      margin-top: 0.4rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
+.sl-card-big-num {
+  font-family: var(--font-brand);
+  font-size: 2.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-brand);
+  line-height: 1;
+}
 
-    .sl-variation-badge.positive strong {
-      color: #10b981;
-    }
+[data-theme="dark"] .sl-card-big-num {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
 
-    .sl-variation-badge.negative strong {
-      color: #f43f5e;
-    }
+.sl-card-subtext {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
 
-    .sl-variation-badge.neutral strong {
-      color: #94a3b8;
-    }
+[data-theme="dark"] .sl-card-subtext {
+  color: #94a3b8;
+}
 
-    /* TABS NAVIGATION */
+/* Card Footer */
+.sl-card-footer {
+  margin-top: auto;
+  width: 100%;
+}
+
+.sl-card-mini-tag {
+  font-size: 0.69rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(148, 163, 184, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="dark"] .sl-card-mini-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+}
+
+/* Slim Animated Progress Track */
+.sl-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+[data-theme="dark"] .sl-progress-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sl-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Variation Badges (Cards 4 & 5) */
+.sl-variation-badge {
+  background: var(--badge-gray-bg);
+  border: 1px solid var(--badge-gray-border);
+  border-radius: 8px;
+  padding: 0.28rem 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.sl-variation-badge .sl-badge-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.sl-variation-badge.positive {
+  background: rgba(16, 185, 129, 0.09);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #065f46;
+}
+.sl-variation-badge.positive strong {
+  color: #059669;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .sl-variation-badge.positive {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(52, 211, 153, 0.3);
+  color: #a7f3d0;
+}
+[data-theme="dark"] .sl-variation-badge.positive strong {
+  color: #34d399;
+}
+
+.sl-variation-badge.negative {
+  background: rgba(244, 63, 94, 0.09);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  color: #9f1239;
+}
+.sl-variation-badge.negative strong {
+  color: #e11d48;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .sl-variation-badge.negative {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(251, 113, 133, 0.3);
+  color: #fecdd3;
+}
+[data-theme="dark"] .sl-variation-badge.negative strong {
+  color: #fb7185;
+}
+
+.sl-variation-badge.neutral {
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #64748b;
+}
+.sl-variation-badge.neutral strong {
+  color: #94a3b8;
+}
+
+/* TABS NAVIGATION */
     .nav-tabs-wrapper {
       display: flex;
       gap: 0.5rem;
@@ -1627,37 +1782,45 @@
       .kpi-row-salesland {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 0.45rem !important;
-        margin-bottom: 0.85rem !important;
+        gap: 0.55rem !important;
+        margin-bottom: 0.95rem !important;
       }
       .salesland-card {
-        padding: 0.65rem 0.6rem !important;
-        min-height: 88px !important;
+        padding: 0.75rem 0.7rem 0.65rem !important;
+        min-height: 105px !important;
         min-width: 0 !important;
       }
       .salesland-card:nth-child(5) {
         grid-column: 1 / -1 !important;
       }
+      .sl-card-header {
+        margin-bottom: 0.35rem !important;
+      }
       .sl-card-title {
         font-size: 0.68rem !important;
-        line-height: 1.15 !important;
-        min-height: 1.8em !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-        white-space: normal !important;
       }
-      .sl-card-big-num {
-        font-size: 1.45rem !important;
+      .sl-card-icon {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 8px !important;
       }
       .sl-card-icon svg {
-        width: 26px !important;
-        height: 26px !important;
+        width: 15px !important;
+        height: 15px !important;
+      }
+      .sl-card-big-num {
+        font-size: 1.48rem !important;
+      }
+      .sl-card-subtext {
+        font-size: 0.68rem !important;
       }
       .sl-variation-badge {
         font-size: 0.68rem !important;
-        padding: 0.15rem 0.35rem !important;
+        padding: 0.2rem 0.45rem !important;
+      }
+      .sl-card-mini-tag {
+        font-size: 0.64rem !important;
+        padding: 0.15rem 0.4rem !important;
       }
 
       /* Horizontal Native Touch Scrolling for Navigation Tabs */
@@ -3965,83 +4128,124 @@
       <div id="p2-upload-feedback" style="margin-top:0.85rem; font-size:0.85rem; display:none; font-weight:600;"></div>
     </div>
 
-    <!-- 5 EXECUTIVE KPI CARDS (Exact Replica of User Reference Screenshot) -->
+    <!-- 5 EXECUTIVE KPI CARDS (Premium Executive Redesign) -->
     <div class="kpi-row-salesland">
       <!-- Card 1: Meta -->
-      <div class="salesland-card">
-        <div class="sl-card-title">Meta</div>
+      <div class="salesland-card kpi-card-meta">
+        <div class="sl-card-header">
+          <span class="sl-card-title">Meta Mensual</span>
+          <div class="sl-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="2"/>
+            </svg>
+          </div>
+        </div>
         <div class="sl-card-body">
           <div class="sl-card-val-group">
             <div class="sl-card-big-num" id="kpi-meta-num">7,806</div>
             <div class="sl-card-subtext" id="kpi-meta-subtext">Instalaciones</div>
           </div>
-          <div class="sl-card-icon">
-            <!-- Target / Bullseye icon in blue navy -->
-            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#0f4c81" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <circle cx="12" cy="12" r="6"/>
-              <circle cx="12" cy="12" r="2"/>
-              <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
-              <path d="M19 5l-4 4"/>
-            </svg>
-          </div>
+        </div>
+        <div class="sl-card-footer">
+          <span class="sl-card-mini-tag">🎯 Cuota Base</span>
         </div>
       </div>
 
       <!-- Card 2: Cump. De meta -->
-      <div class="salesland-card">
-        <div class="sl-card-title">Cump. De meta</div>
+      <div class="salesland-card kpi-card-cump">
+        <div class="sl-card-header">
+          <span class="sl-card-title">Cumplimiento</span>
+          <div class="sl-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+        </div>
         <div class="sl-card-body">
           <div class="sl-card-val-group">
             <div class="sl-card-big-num" id="kpi-cump-num">67.9 %</div>
             <div class="sl-card-subtext" id="kpi-cump-subtext">del objetivo</div>
           </div>
-          <div class="sl-card-icon">
-            <!-- Green checkmark icon with circle -->
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10" fill="#ecfdf5"/>
-              <path d="M8 12.5l2.5 2.5 5.5-5.5"/>
-            </svg>
+        </div>
+        <div class="sl-card-footer">
+          <div class="sl-progress-track" title="Progreso de Cumplimiento">
+            <div class="sl-progress-bar" id="kpi-cump-bar" style="width: 67.9%;"></div>
           </div>
         </div>
       </div>
 
       <!-- Card 3: Proyección -->
-      <div class="salesland-card">
-        <div class="sl-card-title">Proyección</div>
+      <div class="salesland-card kpi-card-proy">
+        <div class="sl-card-header">
+          <span class="sl-card-title">Proyección Cierre</span>
+          <div class="sl-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+          </div>
+        </div>
         <div class="sl-card-body">
           <div class="sl-card-val-group">
             <div class="sl-card-big-num" id="kpi-proy-num">5,302</div>
             <div class="sl-card-subtext" id="kpi-proy-subtext">69.9% de meta</div>
           </div>
-          <div class="sl-card-icon">
-            <!-- Upward rising trend arrow like screenshot -->
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
-              <path d="M4 18l8-8 4 4 6-6" stroke="#fb7185" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M17 8h5v5" stroke="#fb7185" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+        </div>
+        <div class="sl-card-footer">
+          <span class="sl-card-mini-tag">⚡ Estimación Run-Rate</span>
         </div>
       </div>
 
       <!-- Card 4: Variación Vs año anterior -->
-      <div class="salesland-card">
-        <div class="sl-card-title">Variación Vs año anterior</div>
-        <div class="sl-variation-group">
-          <div class="sl-card-big-num" id="kpi-yoy-val">932</div>
+      <div class="salesland-card kpi-card-yoy">
+        <div class="sl-card-header">
+          <span class="sl-card-title">Vs Año Ant. (YoY)</span>
+          <div class="sl-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+        </div>
+        <div class="sl-card-body">
+          <div class="sl-card-val-group">
+            <div class="sl-card-big-num" id="kpi-yoy-val">932</div>
+            <div class="sl-card-subtext">Ventas Mismo Período</div>
+          </div>
+        </div>
+        <div class="sl-card-footer">
           <div class="sl-variation-badge positive" id="kpi-yoy-badge">
-            % Año Q <strong id="kpi-yoy-pct">+4.4% ↑</strong>
+            <span class="sl-badge-label">% Año Q</span> <strong id="kpi-yoy-pct">+4.4% ↑</strong>
           </div>
         </div>
       </div>
 
       <!-- Card 5: Variación Vs Mes anterior -->
-      <div class="salesland-card">
-        <div class="sl-card-title">Variación Vs Mes anterior</div>
-        <div class="sl-variation-group">
-          <div class="sl-card-big-num" id="kpi-mom-val">1,082</div>
+      <div class="salesland-card kpi-card-mom">
+        <div class="sl-card-header">
+          <span class="sl-card-title">Vs Mes Ant. (MoM)</span>
+          <div class="sl-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+          </div>
+        </div>
+        <div class="sl-card-body">
+          <div class="sl-card-val-group">
+            <div class="sl-card-big-num" id="kpi-mom-val">1,082</div>
+            <div class="sl-card-subtext">Ventas Mes Previo</div>
+          </div>
+        </div>
+        <div class="sl-card-footer">
           <div class="sl-variation-badge negative" id="kpi-mom-badge">
-            % Mes Q <strong id="kpi-mom-pct">-10.1% ↓</strong>
+            <span class="sl-badge-label">% Mes Q</span> <strong id="kpi-mom-pct">-10.1% ↓</strong>
           </div>
         </div>
       </div>
@@ -7186,6 +7390,19 @@
           kpiCump.style.color = '#e11d48';
         } else {
           kpiCump.style.color = '';
+        }
+      }
+
+      const kpiCumpBar = document.getElementById('kpi-cump-bar');
+      if (kpiCumpBar) {
+        const pctClamped = Math.min(100, Math.max(0, parseFloat(cumpPct) || 0));
+        kpiCumpBar.style.width = pctClamped + '%';
+        if (pctClamped >= 60) {
+          kpiCumpBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
+        } else if (pctClamped >= 40) {
+          kpiCumpBar.style.background = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
+        } else {
+          kpiCumpBar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
         }
       }
 
