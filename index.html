@@ -2971,21 +2971,23 @@
     /* ====================================================================== */
     .map-grand-layout {
       display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 1.25rem;
+      grid-template-columns: 1fr 340px;
+      gap: 0.85rem;
       align-items: stretch;
-      margin-top: 0.6rem;
+      margin-top: 0.5rem;
     }
     @media (max-width: 1060px) {
       .map-grand-layout {
         grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
       }
       #wrapper-prov-map-canvas {
-        min-height: 480px !important;
-        height: 480px !important;
+        min-height: 420px !important;
+        height: 420px !important;
       }
       .cr-map-ranking-sidebar {
-        max-height: 420px !important;
+        max-height: 380px !important;
+        height: auto !important;
       }
     }
     .btn-prov-view-mode {
@@ -3123,17 +3125,17 @@
     .mini-kpis-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.85rem;
-      margin-bottom: 1rem;
+      gap: 0.65rem;
+      margin-bottom: 0.65rem;
     }
     .mini-kpi-card {
       background: var(--bg-card-elevated, #f8fafc);
       border: 1px solid var(--border-card, #e2e8f0);
-      border-radius: 14px;
-      padding: 0.85rem 1.05rem;
+      border-radius: 12px;
+      padding: 0.65rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.2rem;
       position: relative;
       overflow: hidden;
       transition: all 0.25s ease;
@@ -3273,44 +3275,45 @@
       .mini-kpis-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 0.5rem !important;
-        margin-bottom: 0.85rem !important;
+        margin-bottom: 0.65rem !important;
       }
       .mini-kpi-card {
-        padding: 0.7rem 0.8rem !important;
-        border-radius: 11px !important;
+        padding: 0.55rem 0.7rem !important;
+        border-radius: 10px !important;
       }
       .mini-kpi-val {
-        font-size: 1.1rem !important;
+        font-size: 1.05rem !important;
       }
       .mini-kpi-header {
-        font-size: 0.66rem !important;
+        font-size: 0.65rem !important;
       }
       .mini-kpi-sub {
-        font-size: 0.66rem !important;
+        font-size: 0.65rem !important;
       }
       .map-grand-layout {
         grid-template-columns: 1fr !important;
-        gap: 0.85rem !important;
+        gap: 0.65rem !important;
       }
       #wrapper-prov-map-canvas {
-        min-height: 410px !important;
-        height: 410px !important;
-        border-radius: 12px !important;
+        min-height: 350px !important;
+        height: 350px !important;
+        border-radius: 10px !important;
       }
       .cr-map-ranking-sidebar {
-        max-height: 380px !important;
-        border-radius: 12px !important;
-        padding: 0.75rem !important;
+        max-height: 340px !important;
+        height: auto !important;
+        border-radius: 10px !important;
+        padding: 0.65rem !important;
         -webkit-overflow-scrolling: touch !important;
       }
       .cr-sidebar-prov-item {
-        padding: 0.6rem 0.75rem !important;
-        min-height: 52px !important;
+        padding: 0.5rem 0.65rem !important;
+        min-height: 48px !important;
         touch-action: manipulation !important;
       }
       .map-live-tag {
-        font-size: 0.64rem !important;
-        padding: 3px 8px !important;
+        font-size: 0.62rem !important;
+        padding: 3px 7px !important;
       }
     }
     @media (max-width: 440px) {
@@ -3318,8 +3321,11 @@
         grid-template-columns: 1fr !important;
       }
       #wrapper-prov-map-canvas {
-        min-height: 360px !important;
-        height: 360px !important;
+        min-height: 310px !important;
+        height: 310px !important;
+      }
+      .cr-map-ranking-sidebar {
+        max-height: 290px !important;
       }
     }
 
@@ -4861,8 +4867,8 @@
 
     <!-- TAB 4: TERRITORIO & PROVINCIAS -->
     <div id="tab-territorio" class="tab-pane-content">
-      <div class="panel-grid-2">
-                        <div class="content-card" style="width: 100%;">
+      <div style="display: flex; flex-direction: column; gap: 1.25rem; width: 100%;">
+        <div class="content-card" style="width: 100%;">
           <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
             <div>
               <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:1.1rem;">
@@ -4947,8 +4953,6 @@
               </div>
             </div>
           </div>
-          </div>
-          </div>
 
           <!-- Active Filter Banner (When a province is clicked) -->
           <div id="prov-map-filter-banner" style="display:none; align-items:center; justify-content:space-between; background:linear-gradient(90deg, rgba(6,182,212,0.15) 0%, rgba(2,132,199,0.08) 100%); border:1px solid rgba(6,182,212,0.4); border-radius:8px; padding:0.5rem 0.9rem; margin-bottom:0.75rem; font-size:0.8rem;">
@@ -4964,7 +4968,7 @@
           <!-- SPLIT LAYOUT: MAP ON LEFT (EXPANDED), PROVINCE RANKING SIDEBAR ON RIGHT -->
           
           <!-- Super-SVG Toolbar: Breadcrumbs + Live Canton Search -->
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.45rem 0.85rem; margin-bottom:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.35rem 0.75rem; margin-bottom:0.5rem;">
             <!-- Breadcrumbs -->
             <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.82rem;">
               <span id="cr-crumb-country" style="font-weight:800; color:var(--text-primary); cursor:pointer;" onclick="if(window.resetToCountryView)window.resetToCountryView();" title="Volver a Costa Rica">🇨🇷 Costa Rica</span>
@@ -5002,7 +5006,7 @@
 
           <div id="wrapper-prov-map" class="map-grand-layout">
             <!-- LEFT: EXPANDED MAP CANVAS -->
-            <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:600px; height:600px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:12px; background:radial-gradient(circle at center, rgba(6,182,212,0.06) 0%, rgba(2,132,199,0.02) 65%, transparent 100%); border:1px solid var(--border-card, rgba(255,255,255,0.08)); overflow:hidden;">
+            <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:480px; height:480px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:12px; background:radial-gradient(circle at center, rgba(6,182,212,0.06) 0%, rgba(2,132,199,0.02) 65%, transparent 100%); border:1px solid var(--border-card, rgba(255,255,255,0.08)); overflow:hidden;">
               <!-- Live HUD Radar Tag -->
               <div class="map-live-tag" style="position:absolute; top:12px; left:14px; display:inline-flex; align-items:center; gap:6px; background:rgba(10,20,40,0.85); backdrop-filter:blur(8px); border:1px solid rgba(0,210,255,0.35); border-radius:8px; padding:4px 10px; font-size:0.7rem; font-weight:800; color:#00d2ff; z-index:10; letter-spacing:0.8px;">
                 <span style="width:7px; height:7px; border-radius:50%; background:#00d2ff; box-shadow:0 0 8px #00d2ff; display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
@@ -5234,7 +5238,7 @@
             </div>
 
             <!-- RIGHT: EXECUTIVE REGIONAL RANKING SIDEBAR -->
-            <div class="cr-map-ranking-sidebar" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:12px; padding:0.95rem; display:flex; flex-direction:column; gap:0.6rem; max-height:600px; overflow-y:auto;">
+            <div class="cr-map-ranking-sidebar" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:12px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; max-height:480px; height:480px; overflow-y:auto;">
               <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-card, rgba(0,0,0,0.08)); padding-bottom:0.5rem;">
                 <div>
                   <div style="font-weight:800; font-size:0.88rem; color:var(--text-primary, #0f172a);">📍 Desglose de Zonas</div>
@@ -10295,9 +10299,9 @@
             if (elLeadBadge) elLeadBadge.textContent = `#1 • ${lVal}`;
           }
         }
-        if (rProvGam) {
-          const gamProvincias = ['San José', 'Alajuela', 'Heredia', 'Cartago'];
-          const gamSales = provList.filter(p => gamProvincias.includes(p.nombre)).reduce((acc, p) => acc + p.ventas, 0);
+                if (rProvGam) {
+          const gamProvincias = ['san josé', 'san jose', 'alajuela', 'heredia', 'cartago'];
+          const gamSales = provList.filter(p => gamProvincias.some(g => (p.nombre || '').toLowerCase().includes(g))).reduce((acc, p) => acc + p.ventas, 0);
           rProvGam.innerText = totalProvSales > 0 ? `${((gamSales / totalProvSales) * 100).toFixed(1)}%` : '0%';
         }
         if (rProvTotalRev) rProvTotalRev.innerText = formatCurrency(totalProvRev);
@@ -11094,6 +11098,16 @@
           const l = topCant[0];
           const lVal = cantMode === 'facturacion' ? formatCurrency(l.facturacion) : (l.ventas.toLocaleString() + ' vts');
           rCantLeader.innerText = `${l.nombre} (${lVal})`;
+
+          // Micro-KPI 3: Cantón Run-Rate
+          const elCantonVal = document.getElementById('mini-kpi-canton-val');
+          const elCantonBadge = document.getElementById('mini-kpi-canton-badge');
+          const elCantonSub = document.getElementById('mini-kpi-canton-sub');
+          if (elCantonVal && l) {
+            elCantonVal.textContent = l.nombre;
+            if (elCantonBadge) elCantonBadge.textContent = `${l.ventas.toLocaleString()} u.`;
+            if (elCantonSub) elCantonSub.textContent = `Líder Cantonal (${totalAllCantSales > 0 ? ((l.ventas / totalAllCantSales) * 100).toFixed(1) : 0}% share)`;
+          }
         }
         if (rCantTop3) {
           const top3Sum = topCant.slice(0, 3).reduce((acc, c) => acc + c.ventas, 0);
@@ -12076,6 +12090,13 @@
       
       applyAllFilters();
 
+      const themeParam = new URLSearchParams(window.location.search).get('theme');
+      if (themeParam === 'light' || themeParam === 'dark') {
+        document.documentElement.setAttribute('data-theme', themeParam);
+        App.theme = themeParam;
+        localStorage.setItem('salesland_theme', themeParam);
+      }
+
       const tabParam = new URLSearchParams(window.location.search).get('tab');
       if (tabParam) {
         const targetBtn = document.querySelector(`.tab-item-btn[data-tab="${tabParam}"]`) || 
@@ -12083,6 +12104,14 @@
         if (targetBtn) {
           targetBtn.click();
         }
+      }
+
+      const scrollParam = new URLSearchParams(window.location.search).get('scroll');
+      if (scrollParam) {
+        setTimeout(() => {
+          const el = document.getElementById(scrollParam);
+          if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }, 200);
       }
 
     });
