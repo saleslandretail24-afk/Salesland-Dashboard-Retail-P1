@@ -3116,6 +3116,213 @@
       cursor: pointer;
       transition: all 0.22s ease;
     }
+    
+    /* ====================================================================== */
+    /* UNIFIED TAB 4: CYBER-LINEAR COMMAND UI & MOBILE ERGONOMICS             */
+    /* ====================================================================== */
+    .mini-kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    .mini-kpi-card {
+      background: var(--bg-card-elevated, #f8fafc);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 14px;
+      padding: 0.85rem 1.05rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+    .mini-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #0284c7, #00d2ff);
+    }
+    [data-theme="dark"] .mini-kpi-card {
+      background: rgba(13, 23, 44, 0.75);
+      border-color: rgba(56, 189, 248, 0.22);
+    }
+    .mini-kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: #00d2ff;
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.16);
+    }
+    .mini-kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--text-muted, #64748b);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .mini-kpi-val {
+      font-family: var(--font-brand, sans-serif);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-primary, #0f172a);
+      margin: 0.15rem 0;
+      line-height: 1.25;
+    }
+    [data-theme="dark"] .mini-kpi-val {
+      color: #f8fafc;
+    }
+    .mini-kpi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .badge-cyan {
+      background: rgba(2, 132, 199, 0.12);
+      color: #0284c7;
+      border: 1px solid rgba(2, 132, 199, 0.3);
+    }
+    [data-theme="dark"] .badge-cyan {
+      background: rgba(0, 210, 255, 0.15);
+      color: #00d2ff;
+      border-color: rgba(0, 210, 255, 0.35);
+    }
+    .badge-green {
+      background: rgba(34, 197, 94, 0.15);
+      color: #16a34a;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+    [data-theme="dark"] .badge-green {
+      color: #22c55e;
+    }
+    .mini-kpi-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted, #64748b);
+    }
+    [data-theme="dark"] .mini-kpi-sub {
+      color: #94a3b8;
+    }
+
+    /* Radar Pulse in Leader Pin */
+    .hud-radar-pulse {
+      fill: none;
+      stroke: #0284c7;
+      stroke-width: 2.2;
+      opacity: 0.85;
+      animation: hudRadarPulse 2.2s infinite ease-out;
+    }
+    [data-theme="dark"] .hud-radar-pulse {
+      stroke: #00d2ff;
+    }
+    .hud-radar-pulse-2 {
+      fill: none;
+      stroke: #0ea5e9;
+      stroke-width: 1.5;
+      opacity: 0.6;
+      animation: hudRadarPulse 2.2s infinite ease-out 0.9s;
+    }
+    [data-theme="dark"] .hud-radar-pulse-2 {
+      stroke: #0284c7;
+    }
+    @keyframes hudRadarPulse {
+      0% { r: 14px; opacity: 1; }
+      100% { r: 50px; opacity: 0; }
+    }
+    .cr-pin-badge .hud-radar-pulse,
+    .cr-pin-badge .hud-radar-pulse-2 {
+      display: none;
+    }
+    .cr-pin-badge.is-leader .hud-radar-pulse,
+    .cr-pin-badge.is-leader .hud-radar-pulse-2 {
+      display: block;
+    }
+
+    /* Dot-Matrix HUD Canvas Background */
+    #wrapper-prov-map-canvas {
+      background-image: radial-gradient(rgba(2, 132, 199, 0.12) 1px, transparent 1px) !important;
+      background-size: 20px 20px !important;
+    }
+    [data-theme="dark"] #wrapper-prov-map-canvas {
+      background-image: radial-gradient(rgba(0, 210, 255, 0.14) 1px, transparent 1px) !important;
+      background-size: 20px 20px !important;
+    }
+    @keyframes blinkLiveDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    /* Sidebar Ranking Unified Styles */
+    .cr-sidebar-prov-item.is-leader {
+      border-color: #00d2ff !important;
+      background: linear-gradient(90deg, rgba(0, 210, 255, 0.12) 0%, transparent 100%) !important;
+    }
+    [data-theme="light"] .cr-sidebar-prov-item.is-leader {
+      border-color: #0284c7 !important;
+      background: linear-gradient(90deg, rgba(2, 132, 199, 0.1) 0%, transparent 100%) !important;
+    }
+
+    /* Mobile Enhancements for Tab 4 */
+    @media (max-width: 768px) {
+      .mini-kpis-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.5rem !important;
+        margin-bottom: 0.85rem !important;
+      }
+      .mini-kpi-card {
+        padding: 0.7rem 0.8rem !important;
+        border-radius: 11px !important;
+      }
+      .mini-kpi-val {
+        font-size: 1.1rem !important;
+      }
+      .mini-kpi-header {
+        font-size: 0.66rem !important;
+      }
+      .mini-kpi-sub {
+        font-size: 0.66rem !important;
+      }
+      .map-grand-layout {
+        grid-template-columns: 1fr !important;
+        gap: 0.85rem !important;
+      }
+      #wrapper-prov-map-canvas {
+        min-height: 410px !important;
+        height: 410px !important;
+        border-radius: 12px !important;
+      }
+      .cr-map-ranking-sidebar {
+        max-height: 380px !important;
+        border-radius: 12px !important;
+        padding: 0.75rem !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .cr-sidebar-prov-item {
+        padding: 0.6rem 0.75rem !important;
+        min-height: 52px !important;
+        touch-action: manipulation !important;
+      }
+      .map-live-tag {
+        font-size: 0.64rem !important;
+        padding: 3px 8px !important;
+      }
+    }
+    @media (max-width: 440px) {
+      .mini-kpis-grid {
+        grid-template-columns: 1fr !important;
+      }
+      #wrapper-prov-map-canvas {
+        min-height: 360px !important;
+        height: 360px !important;
+      }
+    }
+
     .cr-sidebar-prov-item:hover {
       border-color: #06b6d4;
       transform: translateX(4px);
@@ -4694,23 +4901,53 @@
           </div>
 
           <!-- Micro-KPI Summary Ribbon for Provincias -->
-          <div id="prov-chart-micro-ribbon" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); align-items:center; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.55rem 0.85rem; margin-bottom:0.85rem; font-size:0.75rem; gap:0.6rem;">
-            <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>🏆</span> <span style="color:var(--text-muted);">Provincia Líder:</span>
-              <strong id="prov-ribbon-leader" style="color:var(--text-brand); font-weight:800;">-</strong>
+          <!-- 4 EXECUTIVE MINI-KPIS (Cyber-Linear Command UI) -->
+          <div class="mini-kpis-grid" id="prov-mini-kpis-container">
+            <div class="mini-kpi-card" id="mini-kpi-leader-card">
+              <div class="mini-kpi-header">
+                <span>👑 Provincia Líder</span>
+                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-leader-badge">#1 NACIONAL</span>
+              </div>
+              <div class="mini-kpi-val" id="mini-kpi-leader-val" style="color:var(--text-brand, #0284c7);">-</div>
+              <div class="mini-kpi-sub" id="mini-kpi-leader-sub">
+                <span id="prov-ribbon-leader">-</span>
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>🎯</span> <span style="color:var(--text-muted);">Concentración GAM:</span>
-              <strong id="prov-ribbon-gam-pct" style="color:#0284c7; font-weight:800;">-</strong>
+
+            <div class="mini-kpi-card" id="mini-kpi-gam-card">
+              <div class="mini-kpi-header">
+                <span>🏙️ Dominancia GAM</span>
+                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-gam-badge">CENTRAL</span>
+              </div>
+              <div class="mini-kpi-val" id="prov-ribbon-gam-pct">-</div>
+              <div class="mini-kpi-sub" id="mini-kpi-gam-sub">
+                San José, Alajuela, Heredia y Cartago
+              </div>
             </div>
-            <div class="facturacion-stat" style="display:flex; align-items:center; gap:0.35rem;">
-              <span>💰</span> <span style="color:var(--text-muted);">Facturación Total:</span>
-              <strong id="prov-ribbon-total-rev" style="color:#10b981; font-weight:800;">-</strong>
+
+            <div class="mini-kpi-card" id="mini-kpi-canton-card">
+              <div class="mini-kpi-header">
+                <span>⚡ Cantón Run-Rate</span>
+                <span class="mini-kpi-badge badge-green" id="mini-kpi-canton-badge">▲ ACTIVO</span>
+              </div>
+              <div class="mini-kpi-val" id="mini-kpi-canton-val">-</div>
+              <div class="mini-kpi-sub" id="mini-kpi-canton-sub">
+                Mayor volumen cantonal relativo
+              </div>
             </div>
-            <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>📍</span> <span style="color:var(--text-muted);">Cobertura:</span>
-              <strong id="prov-ribbon-coverage" style="color:var(--text-secondary); font-weight:700;">7 / 7 Provincias</strong>
+
+            <div class="mini-kpi-card" id="mini-kpi-coverage-card">
+              <div class="mini-kpi-header">
+                <span>📍 Cobertura Territorial</span>
+                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-coverage-badge">100% ACTIVO</span>
+              </div>
+              <div class="mini-kpi-val" id="prov-ribbon-coverage">7 / 7 Provincias</div>
+              <div class="mini-kpi-sub" id="mini-kpi-coverage-sub">
+                <span class="facturacion-stat" style="display:inline-block;"><span id="prov-ribbon-total-rev">-</span> • </span>82 Cantones activos
+              </div>
             </div>
+          </div>
+          </div>
           </div>
 
           <!-- Active Filter Banner (When a province is clicked) -->
@@ -4766,6 +5003,12 @@
           <div id="wrapper-prov-map" class="map-grand-layout">
             <!-- LEFT: EXPANDED MAP CANVAS -->
             <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:600px; height:600px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:12px; background:radial-gradient(circle at center, rgba(6,182,212,0.06) 0%, rgba(2,132,199,0.02) 65%, transparent 100%); border:1px solid var(--border-card, rgba(255,255,255,0.08)); overflow:hidden;">
+              <!-- Live HUD Radar Tag -->
+              <div class="map-live-tag" style="position:absolute; top:12px; left:14px; display:inline-flex; align-items:center; gap:6px; background:rgba(10,20,40,0.85); backdrop-filter:blur(8px); border:1px solid rgba(0,210,255,0.35); border-radius:8px; padding:4px 10px; font-size:0.7rem; font-weight:800; color:#00d2ff; z-index:10; letter-spacing:0.8px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:#00d2ff; box-shadow:0 0 8px #00d2ff; display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
+                LIVE RADAR • COSTA RICA GEO-GRID
+              </div>
+
               <svg id="svg-costa-rica-map" viewBox="30 35 730 610" style="width:100%; height:100%; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3));">
                 <defs>
                   <filter id="cr-glow-filter" x="-25%" y="-25%" width="150%" height="150%">
@@ -4901,36 +5144,50 @@
                 <!-- Province Interactive Badges Layer -->
                 <g id="cr-labels-layer">
                   <g id="cr-pin-Alajuela" class="cr-pin-badge" data-prov-slug="Alajuela" data-province="Alajuela" transform="translate(340, 220)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">ALAJUELA</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Alajuela">-</text>
     </g>
                 <g id="cr-pin-Cartago" class="cr-pin-badge" data-prov-slug="Cartago" data-province="Cartago" transform="translate(530, 365)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">CARTAGO</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Cartago">-</text>
     </g>
                 <g id="cr-pin-Guanacaste" class="cr-pin-badge" data-prov-slug="Guanacaste" data-province="Guanacaste" transform="translate(195, 215)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">GUANACASTE</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Guanacaste">-</text>
     </g>
                 <g id="cr-pin-Heredia" class="cr-pin-badge" data-prov-slug="Heredia" data-province="Heredia" transform="translate(445, 185)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">HEREDIA</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Heredia">-</text>
     </g>
                 <g id="cr-pin-Limon" class="cr-pin-badge" data-prov-slug="Limon" data-province="Limón" transform="translate(600, 310)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">LIMÓN</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Limon">-</text>
     </g>
                 <g id="cr-pin-Puntarenas" class="cr-pin-badge" data-prov-slug="Puntarenas" data-province="Puntarenas" transform="translate(365, 485)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">PUNTARENAS</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-Puntarenas">-</text>
     </g>
                 <g id="cr-pin-San-Jose" class="cr-pin-badge" data-prov-slug="San-Jose" data-province="San José" transform="translate(415, 380)">
+      <circle cx="0" cy="0" r="32" class="hud-radar-pulse"></circle>
+      <circle cx="0" cy="0" r="22" class="hud-radar-pulse-2"></circle>
       <rect x="-58" y="-20" width="116" height="40" rx="9" class="cr-pin-bg"></rect>
       <text x="0" y="-4" class="cr-pin-name">SAN JOSÉ</text>
       <text x="0" y="11" class="cr-pin-val" id="cr-pin-val-San-Jose">-</text>
@@ -10031,6 +10288,12 @@
           const lShare = totalProvSales > 0 ? ((l.ventas / totalProvSales) * 100).toFixed(1) + '%' : '0%';
           const lVal = provMode === 'facturacion' ? formatCurrency(l.facturacion) : (l.ventas.toLocaleString() + ' u.');
           rProvLeader.innerText = `${l.nombre} (${lVal} - ${lShare})`;
+          const elLeadVal = document.getElementById('mini-kpi-leader-val');
+          const elLeadBadge = document.getElementById('mini-kpi-leader-badge');
+          if (elLeadVal) {
+            elLeadVal.textContent = `${l.nombre} (${lShare})`;
+            if (elLeadBadge) elLeadBadge.textContent = `#1 • ${lVal}`;
+          }
         }
         if (rProvGam) {
           const gamProvincias = ['San José', 'Alajuela', 'Heredia', 'Cartago'];
@@ -10701,27 +10964,24 @@
             const regionTag = provRegions[p.nombre] || 'Costa Rica';
             const primaryVal = provMode === 'facturacion' ? formatCurrency(p.facturacion) : (p.ventas.toLocaleString() + ' ventas');
             const secondaryVal = isSupervisor ? '' : (provMode === 'facturacion' ? (p.ventas.toLocaleString() + ' ventas') : formatCurrency(p.facturacion));
+            const isLeader = (idx === 0);
 
             return `
-              <div class="cr-sidebar-prov-item" data-province="${p.nombre}" onclick="window.drillDownToProvince('${p.nombre}')" style="cursor:pointer;" title="Clic para ver cantones de ${p.nombre}">
+              <div class="cr-sidebar-prov-item ${isLeader ? 'is-leader' : ''}" data-province="${p.nombre}" onclick="window.drillDownToProvince('${p.nombre}')" style="cursor:pointer;" title="Clic para ver cantones de ${p.nombre}">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <div style="display:flex; align-items:center; gap:0.4rem;">
-                    <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#f59e0b' : (idx === 1 ? '#0284c7' : '#94a3b8')};">${rankBadges[idx] || ('#' + (idx+1))}</span>
-                    <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${p.nombre}</strong>
-                    <span style="font-size:0.68rem; color:var(--text-muted, #64748b);">(${regionTag})</span>
+                  <div style="display:flex; align-items:center; gap:0.45rem;">
+                    <span style="font-size:0.75rem; font-weight:800; color:${isLeader ? '#00d2ff' : '#94a3b8'}; width:18px;">${idx + 1}.</span>
+                    <strong style="font-size:0.88rem; color:var(--text-primary, #0f172a);">${p.nombre}</strong>
+                    ${isLeader ? '<span style="font-size:0.62rem; background:rgba(0,210,255,0.2); color:#00d2ff; padding:1px 5px; border-radius:4px; font-weight:800;">👑 TOP 1</span>' : ''}
                   </div>
-                  <span style="font-size:0.75rem; font-weight:800; background:rgba(6,182,212,0.15); color:#06b6d4; padding:2px 7px; border-radius:12px;">${sharePct}% cuota</span>
+                  <span style="font-size:0.86rem; font-weight:800; color:var(--accent-cyan, #00d2ff);">${primaryVal}</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; align-items:baseline; font-size:0.78rem;">
-                  <span style="font-weight:800; color:var(--text-brand, #0284c7);">${primaryVal}</span>
-                  <span style="color:var(--text-muted, #64748b); font-size:0.72rem;">${secondaryVal}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--text-muted, #64748b); margin-top:2px;">
+                  <span>${regionTag} • ${p.topSupervisor || ''}</span>
+                  <span style="color:#00d2ff; font-weight:700;">${sharePct}% cuota</span>
                 </div>
-                <div style="width:100%; height:5px; background:rgba(0,0,0,0.08); border-radius:3px; overflow:hidden; margin-top:2px;">
-                  <div style="width:${barPct}%; height:100%; background:linear-gradient(90deg, #0284c7 0%, #06b6d4 100%); border-radius:3px;"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:var(--text-muted, #64748b); margin-top:1px;">
-                  <span>🏬 Top: <strong>${p.topServicio}</strong></span>
-                  <span>🗺️ <strong>${p.cantonesCount}</strong> cantones</span>
+                <div style="width:100%; height:4px; background:rgba(0,0,0,0.08); border-radius:2px; margin-top:5px; overflow:hidden;">
+                  <div style="width:${sharePct}%; height:100%; background:linear-gradient(90deg, #0284c7, #00d2ff); border-radius:2px;"></div>
                 </div>
               </div>
             `;
