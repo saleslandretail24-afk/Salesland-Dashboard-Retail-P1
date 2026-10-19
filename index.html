@@ -413,366 +413,280 @@
       border-color: var(--text-muted);
     }
 
-    /* 5 EXECUTIVE KPI CARDS ROW (Exact Layout of Screenshot) */
-    /* ==========================================================================
-   PREMIUM EXECUTIVE KPI CARDS SYSTEM
-   ========================================================================== */
-.kpi-row-salesland {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.1rem;
-  margin-bottom: 1.75rem;
-}
+        /* ==========================================================================
+       CYBER HUD GLASSMORPHISM: 5 EXECUTIVE KPI CARDS (OPCIÓN 1 + 4 UNIFICADA)
+       ========================================================================== */
+    .kpi-row-salesland {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.15rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (max-width: 1280px) {
+      .kpi-row-salesland { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .kpi-row-salesland { grid-template-columns: 1fr; }
+    }
 
-@media (max-width: 1280px) {
-  .kpi-row-salesland {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
+    .salesland-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(241, 245, 249, 0.85) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 1.15rem 1.25rem 1.1rem;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.03), inset 0 1px 1px rgba(255,255,255,0.95);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 162px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    [data-theme="dark"] .salesland-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.88) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .salesland-card:hover {
+      transform: translateY(-5px) scale(1.015);
+      box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 0 24px var(--glow-color);
+      border-color: var(--card-border-hover);
+    }
 
-.salesland-card {
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.90) 100%);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  border-radius: 18px;
-  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
-  padding: 1rem 1.15rem 0.95rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 130px;
-  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
+    /* Ambient Aurora Glow in upper corner */
+    .hud-aurora-glow {
+      position: absolute;
+      top: -24px;
+      right: -24px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--glow-color);
+      filter: blur(30px);
+      opacity: 0.22;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .salesland-card:hover .hud-aurora-glow { opacity: 0.45; }
+    [data-theme="dark"] .salesland-card:hover .hud-aurora-glow { opacity: 0.6; }
 
-[data-theme="dark"] .salesland-card {
-  background: linear-gradient(155deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 24px -3px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
+    /* Thematic Colors */
+    .hud-c-meta {
+      --glow-color: #0284c7;
+      --accent: #0284c7;
+      --card-border-hover: rgba(2, 132, 199, 0.4);
+    }
+    .hud-c-cump {
+      --glow-color: #10b981;
+      --accent: #10b981;
+      --card-border-hover: rgba(16, 185, 129, 0.4);
+    }
+    .hud-c-proy {
+      --glow-color: #f59e0b;
+      --accent: #f59e0b;
+      --card-border-hover: rgba(245, 158, 11, 0.4);
+    }
+    .hud-c-yoy {
+      --glow-color: #6366f1;
+      --accent: #6366f1;
+      --card-border-hover: rgba(99, 102, 241, 0.4);
+    }
+    .hud-c-mom {
+      --glow-color: #a855f7;
+      --accent: #a855f7;
+      --card-border-hover: rgba(168, 85, 247, 0.4);
+    }
 
-/* Radiant top accent bar with rounded pill shape */
-.salesland-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3.5px;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  background: #0284c7;
-  opacity: 0.95;
-}
+    /* HUD Header: Tactical code + Pulsing LED + 3D Icon Badge */
+    .hud-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      padding-bottom: 0.55rem;
+      border-bottom: 1px dashed rgba(226, 232, 240, 0.75);
+    }
+    [data-theme="dark"] .hud-card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
 
-/* Subtle corner ambient wash */
-.salesland-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0.55;
-  filter: blur(30px);
-  transition: opacity 0.3s ease;
-}
+    .hud-tag-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .hud-led {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: hudPulse 2s infinite ease-in-out;
+    }
+    @keyframes hudPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.85); }
+    }
+    .hud-code {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
 
-/* Individual card accents */
-.kpi-card-meta::before { background: linear-gradient(90deg, #0284c7, #38bdf8); }
-.kpi-card-meta::after { background: rgba(56, 189, 248, 0.16); }
+    .hud-icon-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,244,248,0.5));
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      transition: all 0.3s ease;
+    }
+    [data-theme="dark"] .hud-icon-badge {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .salesland-card:hover .hud-icon-badge {
+      transform: rotate(8deg) scale(1.1);
+      box-shadow: 0 0 14px var(--glow-color);
+    }
 
-.kpi-card-cump::before { background: linear-gradient(90deg, #059669, #10b981); }
-.kpi-card-cump::after { background: rgba(16, 185, 129, 0.16); }
+    /* Main Value Group */
+    .hud-card-body {
+      margin: 0.5rem 0 0.35rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hud-big-num {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--text-main);
+    }
+    .hud-sub-label {
+      font-size: 0.76rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.kpi-card-proy::before { background: linear-gradient(90deg, #ea580c, #f59e0b); }
-.kpi-card-proy::after { background: rgba(245, 158, 11, 0.16); }
+    /* Segmented Equalizer Progress Bar */
+    .hud-equalizer {
+      display: flex;
+      gap: 3.5px;
+      margin-top: 0.65rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hud-equalizer-seg {
+      flex: 1;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(148, 163, 184, 0.22);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    [data-theme="dark"] .hud-equalizer-seg {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .hud-equalizer-seg.active-cyan { background: #0284c7; box-shadow: 0 0 7px #0284c7; }
+    .hud-equalizer-seg.active-emerald { background: #10b981; box-shadow: 0 0 7px #10b981; }
+    .hud-equalizer-seg.active-amber { background: #f59e0b; box-shadow: 0 0 7px #f59e0b; }
+    .hud-equalizer-seg.active-indigo { background: #6366f1; box-shadow: 0 0 7px #6366f1; }
+    .hud-equalizer-seg.active-purple { background: #a855f7; box-shadow: 0 0 7px #a855f7; }
+    .hud-equalizer-seg.active-rose { background: #f43f5e; box-shadow: 0 0 7px #f43f5e; }
 
-.kpi-card-yoy::before { background: linear-gradient(90deg, #4f46e5, #818cf8); }
-.kpi-card-yoy::after { background: rgba(99, 102, 241, 0.16); }
+    /* Footer: Telemetry Tag Pill + Micro Metrics */
+    .hud-card-footer {
+      margin-top: 0.65rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid rgba(226, 232, 240, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    [data-theme="dark"] .hud-card-footer {
+      border-top-color: rgba(255, 255, 255, 0.06);
+    }
+    .hud-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.22rem 0.65rem;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .hud-pill-cyan { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+    .hud-pill-amber { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+    .hud-pill-emerald { background: rgba(16, 185, 129, 0.12); color: #059669; }
+    .hud-pill-danger { background: rgba(244, 63, 94, 0.12); color: #e11d48; }
 
-.kpi-card-mom::before { background: linear-gradient(90deg, #7c3aed, #c084fc); }
-.kpi-card-mom::after { background: rgba(139, 92, 246, 0.16); }
+    .hud-meta-right {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
 
-/* Dark mode glowing bars */
-[data-theme="dark"] .salesland-card::after {
-  opacity: 0.28;
-}
-[data-theme="dark"] .kpi-card-meta::before { background: linear-gradient(90deg, #38bdf8, #06b6d4); box-shadow: 0 0 14px rgba(56, 189, 248, 0.7); }
-[data-theme="dark"] .kpi-card-cump::before { background: linear-gradient(90deg, #10b981, #34d399); box-shadow: 0 0 14px rgba(52, 211, 153, 0.7); }
-[data-theme="dark"] .kpi-card-proy::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); box-shadow: 0 0 14px rgba(251, 191, 36, 0.7); }
-[data-theme="dark"] .kpi-card-yoy::before { background: linear-gradient(90deg, #818cf8, #a5b4fc); box-shadow: 0 0 14px rgba(129, 140, 248, 0.7); }
-[data-theme="dark"] .kpi-card-mom::before { background: linear-gradient(90deg, #c084fc, #e879f9); box-shadow: 0 0 14px rgba(192, 132, 252, 0.7); }
+    .hud-pill-var {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      width: auto !important;
+    }
+    .hud-pill-var.positive {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #065f46;
+    }
+    .hud-pill-var.positive strong { color: #059669; }
+    [data-theme="dark"] .hud-pill-var.positive {
+      background: rgba(16, 185, 129, 0.18);
+      color: #34d399;
+    }
+    [data-theme="dark"] .hud-pill-var.positive strong { color: #34d399; }
 
-/* Hover effects */
-.salesland-card:hover {
-  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
-  transform: translateY(-4px);
-  border-color: rgba(2, 132, 199, 0.35);
-}
-.salesland-card:hover::after {
-  opacity: 0.85;
-}
+    .hud-pill-var.negative {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: #9f1239;
+    }
+    .hud-pill-var.negative strong { color: #e11d48; }
+    [data-theme="dark"] .hud-pill-var.negative {
+      background: rgba(244, 63, 94, 0.18);
+      color: #fb7185;
+    }
+    [data-theme="dark"] .hud-pill-var.negative strong { color: #fb7185; }
 
-[data-theme="dark"] .salesland-card:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.15);
-}
+    .hud-pill-var.neutral {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+    }
 
-/* Card Header */
-.sl-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.55rem;
-}
-
-.sl-card-title {
-  font-size: 0.73rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Icon Container */
-.sl-card-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border-radius: 11px;
-  transition: transform 0.25s ease;
-}
-.salesland-card:hover .sl-card-icon {
-  transform: scale(1.08) rotate(3deg);
-}
-
-.kpi-card-meta .sl-card-icon {
-  background: rgba(2, 132, 199, 0.08);
-  border: 1px solid rgba(2, 132, 199, 0.18);
-  color: #0284c7;
-}
-.kpi-card-cump .sl-card-icon {
-  background: rgba(16, 185, 129, 0.09);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #059669;
-}
-.kpi-card-proy .sl-card-icon {
-  background: rgba(245, 158, 11, 0.09);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  color: #d97706;
-}
-.kpi-card-yoy .sl-card-icon {
-  background: rgba(99, 102, 241, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.18);
-  color: #4f46e5;
-}
-.kpi-card-mom .sl-card-icon {
-  background: rgba(139, 92, 246, 0.08);
-  border: 1px solid rgba(139, 92, 246, 0.18);
-  color: #7c3aed;
-}
-
-[data-theme="dark"] .kpi-card-meta .sl-card-icon {
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.28);
-  color: #38bdf8;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
-}
-[data-theme="dark"] .kpi-card-cump .sl-card-icon {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(52, 211, 153, 0.28);
-  color: #34d399;
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
-}
-[data-theme="dark"] .kpi-card-proy .sl-card-icon {
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(251, 191, 36, 0.28);
-  color: #fbbf24;
-  box-shadow: 0 0 12px rgba(251, 191, 36, 0.15);
-}
-[data-theme="dark"] .kpi-card-yoy .sl-card-icon {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: rgba(129, 140, 248, 0.28);
-  color: #a5b4fc;
-  box-shadow: 0 0 12px rgba(129, 140, 248, 0.15);
-}
-[data-theme="dark"] .kpi-card-mom .sl-card-icon {
-  background: rgba(139, 92, 246, 0.12);
-  border-color: rgba(192, 132, 252, 0.28);
-  color: #c084fc;
-  box-shadow: 0 0 12px rgba(192, 132, 252, 0.15);
-}
-
-/* Card Body & Value */
-.sl-card-body {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin-bottom: 0.55rem;
-}
-
-.sl-card-val-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.sl-card-big-num {
-  font-family: var(--font-brand);
-  font-size: 2.15rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--text-brand);
-  line-height: 1;
-}
-
-[data-theme="dark"] .sl-card-big-num {
-  color: #ffffff;
-  text-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
-}
-
-.sl-card-subtext {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-top: 0.3rem;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-[data-theme="dark"] .sl-card-subtext {
-  color: #94a3b8;
-}
-
-/* Card Footer */
-.sl-card-footer {
-  margin-top: auto;
-  width: 100%;
-}
-
-.sl-card-mini-tag {
-  font-size: 0.69rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: rgba(148, 163, 184, 0.1);
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  letter-spacing: 0.02em;
-}
-
-[data-theme="dark"] .sl-card-mini-tag {
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-}
-
-/* Slim Animated Progress Track */
-.sl-progress-track {
-  width: 100%;
-  height: 6px;
-  background: rgba(148, 163, 184, 0.18);
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-}
-
-[data-theme="dark"] .sl-progress-track {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.sl-progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #10b981, #34d399);
-  border-radius: 999px;
-  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
-}
-
-/* Variation Badges (Cards 4 & 5) */
-.sl-variation-badge {
-  background: var(--badge-gray-bg);
-  border: 1px solid var(--badge-gray-border);
-  border-radius: 8px;
-  padding: 0.28rem 0.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.2s ease;
-}
-
-.sl-variation-badge .sl-badge-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.sl-variation-badge.positive {
-  background: rgba(16, 185, 129, 0.09);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: #065f46;
-}
-.sl-variation-badge.positive strong {
-  color: #059669;
-  font-weight: 700;
-}
-
-[data-theme="dark"] .sl-variation-badge.positive {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(52, 211, 153, 0.3);
-  color: #a7f3d0;
-}
-[data-theme="dark"] .sl-variation-badge.positive strong {
-  color: #34d399;
-}
-
-.sl-variation-badge.negative {
-  background: rgba(244, 63, 94, 0.09);
-  border: 1px solid rgba(244, 63, 94, 0.25);
-  color: #9f1239;
-}
-.sl-variation-badge.negative strong {
-  color: #e11d48;
-  font-weight: 700;
-}
-
-[data-theme="dark"] .sl-variation-badge.negative {
-  background: rgba(244, 63, 94, 0.15);
-  border-color: rgba(251, 113, 133, 0.3);
-  color: #fecdd3;
-}
-[data-theme="dark"] .sl-variation-badge.negative strong {
-  color: #fb7185;
-}
-
-.sl-variation-badge.neutral {
-  background: rgba(148, 163, 184, 0.08);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  color: #64748b;
-}
-.sl-variation-badge.neutral strong {
-  color: #94a3b8;
-}
-
-/* TABS NAVIGATION */
+    /* TABS NAVIGATION */
     .nav-tabs-wrapper {
       display: flex;
       gap: 0.5rem;
@@ -4341,128 +4255,222 @@
       <div id="p2-upload-feedback" style="margin-top:0.85rem; font-size:0.85rem; display:none; font-weight:600;"></div>
     </div>
 
-    <!-- 5 EXECUTIVE KPI CARDS (Premium Executive Redesign) -->
+        <!-- 5 EXECUTIVE KPI CARDS (Cyber HUD Glassmorphism: Opción 1 + 4) -->
     <div class="kpi-row-salesland">
-      <!-- Card 1: Meta -->
-      <div class="salesland-card kpi-card-meta">
-        <div class="sl-card-header">
-          <span class="sl-card-title">Meta Mensual</span>
-          <div class="sl-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      
+      <!-- Card 1: Meta Mensual -->
+      <div class="salesland-card hud-c-meta kpi-card-meta">
+        <div class="hud-aurora-glow"></div>
+        <div class="hud-card-header">
+          <div class="hud-tag-group">
+            <span class="hud-led" id="kpi-meta-led"></span>
+            <span class="hud-code">KPI-01 // TARGET BASE</span>
+          </div>
+          <div class="hud-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <circle cx="12" cy="12" r="10"/>
               <circle cx="12" cy="12" r="6"/>
               <circle cx="12" cy="2"/>
             </svg>
           </div>
         </div>
-        <div class="sl-card-body">
-          <div class="sl-card-val-group">
-            <div class="sl-card-big-num" id="kpi-meta-num">7,806</div>
-            <div class="sl-card-subtext" id="kpi-meta-subtext">Instalaciones</div>
+        <div class="hud-card-body">
+          <div class="hud-big-num" id="kpi-meta-num">7,806</div>
+          <div class="hud-sub-label">
+            <span id="kpi-meta-subtext">Cuota mensual objetivo</span>
+            <span style="color:#0284c7; font-weight:700;" id="kpi-meta-pct-base">100%</span>
           </div>
         </div>
-        <div class="sl-card-footer">
-          <span class="sl-card-mini-tag">🎯 Cuota Base</span>
+        <div class="hud-equalizer" id="kpi-meta-equalizer">
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+          <div class="hud-equalizer-seg active-cyan"></div>
+        </div>
+        <div class="hud-card-footer">
+          <span class="hud-pill hud-pill-cyan">🎯 <span id="kpi-meta-pill-text">Asignación Base</span></span>
+          <span class="hud-meta-right" id="kpi-meta-tag-right">Retail P1</span>
         </div>
       </div>
 
-      <!-- Card 2: Cump. De meta -->
-      <div class="salesland-card kpi-card-cump">
-        <div class="sl-card-header">
-          <span class="sl-card-title">Cumplimiento</span>
-          <div class="sl-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Card 2: Cumplimiento de Meta -->
+      <div class="salesland-card hud-c-cump kpi-card-cump">
+        <div class="hud-aurora-glow"></div>
+        <div class="hud-card-header">
+          <div class="hud-tag-group">
+            <span class="hud-led" id="kpi-cump-led" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span>
+            <span class="hud-code">KPI-02 // CUMP. REAL</span>
+          </div>
+          <div class="hud-icon-badge" id="kpi-cump-icon" style="color:#f59e0b;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
               <polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
           </div>
         </div>
-        <div class="sl-card-body">
-          <div class="sl-card-val-group">
-            <div class="sl-card-big-num" id="kpi-cump-num">67.9 %</div>
-            <div class="sl-card-subtext" id="kpi-cump-subtext">del objetivo</div>
+        <div class="hud-card-body">
+          <div class="hud-big-num" id="kpi-cump-num" style="color:#d97706;">43.2 %</div>
+          <div class="hud-sub-label">
+            <span id="kpi-cump-ejecutadas">3,372 ejecutadas</span>
+            <span style="color:#d97706; font-weight:700;" id="kpi-cump-subtext">Faltan 4,434</span>
           </div>
         </div>
-        <div class="sl-card-footer">
-          <div class="sl-progress-track" title="Progreso de Cumplimiento">
-            <div class="sl-progress-bar" id="kpi-cump-bar" style="width: 67.9%;"></div>
-          </div>
+        <!-- 10 segments equalizer -->
+        <div class="hud-equalizer" id="kpi-cump-equalizer">
+          <div class="hud-equalizer-seg active-amber"></div>
+          <div class="hud-equalizer-seg active-amber"></div>
+          <div class="hud-equalizer-seg active-amber"></div>
+          <div class="hud-equalizer-seg active-amber"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+        </div>
+        <div id="kpi-cump-bar" style="display:none;"></div>
+        <div class="hud-card-footer">
+          <span class="hud-pill hud-pill-amber" id="kpi-cump-pill">⚠️ <span id="kpi-cump-status">Ritmo Medio</span></span>
+          <span class="hud-meta-right" id="kpi-cump-ratio">3,372 / 7,806</span>
         </div>
       </div>
 
-      <!-- Card 3: Proyección -->
-      <div class="salesland-card kpi-card-proy">
-        <div class="sl-card-header">
-          <span class="sl-card-title">Proyección Cierre</span>
-          <div class="sl-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Card 3: Proyección Run-rate -->
+      <div class="salesland-card hud-c-proy kpi-card-proy">
+        <div class="hud-aurora-glow"></div>
+        <div class="hud-card-header">
+          <div class="hud-tag-group">
+            <span class="hud-led" id="kpi-proy-led" style="background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+            <span class="hud-code">KPI-03 // RUN-RATE PROY</span>
+          </div>
+          <div class="hud-icon-badge" id="kpi-proy-icon" style="color:#10b981;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
               <polyline points="17 6 23 6 23 12"/>
             </svg>
           </div>
         </div>
-        <div class="sl-card-body">
-          <div class="sl-card-val-group">
-            <div class="sl-card-big-num" id="kpi-proy-num">5,302</div>
-            <div class="sl-card-subtext" id="kpi-proy-subtext">69.9% de meta</div>
+        <div class="hud-card-body">
+          <div class="hud-big-num" id="kpi-proy-num">5,498</div>
+          <div class="hud-sub-label">
+            <span id="kpi-proy-subtext" style="color:#10b981; font-weight:700;">▲ 70.4% de meta</span>
+            <span style="color:var(--text-muted);">Estimación cierre</span>
           </div>
         </div>
-        <div class="sl-card-footer">
-          <span class="sl-card-mini-tag">⚡ Estimación Run-Rate</span>
+        <div class="hud-equalizer" id="kpi-proy-equalizer">
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg active-emerald"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+        </div>
+        <div class="hud-card-footer">
+          <span class="hud-pill hud-pill-emerald">⚡ <span id="kpi-proy-pill-text">Run-Rate Diario</span></span>
+          <span class="hud-meta-right" id="kpi-proy-rate">~177 / día</span>
         </div>
       </div>
 
-      <!-- Card 4: Variación Vs año anterior -->
-      <div class="salesland-card kpi-card-yoy">
-        <div class="sl-card-header">
-          <span class="sl-card-title">Vs Año Ant. (YoY)</span>
-          <div class="sl-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <!-- Card 4: YoY Variation -->
+      <div class="salesland-card hud-c-yoy kpi-card-yoy">
+        <div class="hud-aurora-glow"></div>
+        <div class="hud-card-header">
+          <div class="hud-tag-group">
+            <span class="hud-led" id="kpi-yoy-led" style="background:#f43f5e; box-shadow:0 0 8px #f43f5e;"></span>
+            <span class="hud-code">KPI-04 // YoY DELTA</span>
+          </div>
+          <div class="hud-icon-badge" style="color:#6366f1;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
               <line x1="16" y1="2" x2="16" y2="6"/>
               <line x1="8" y1="2" x2="8" y2="6"/>
               <line x1="3" y1="10" x2="21" y2="10"/>
             </svg>
           </div>
         </div>
-        <div class="sl-card-body">
-          <div class="sl-card-val-group">
-            <div class="sl-card-big-num" id="kpi-yoy-val">932</div>
-            <div class="sl-card-subtext">Ventas Mismo Período</div>
+        <div class="hud-card-body">
+          <div class="hud-big-num" id="kpi-yoy-val">7,980</div>
+          <div class="hud-sub-label">
+            <span>Ventas Mismo Período</span>
+            <strong id="kpi-yoy-sub-delta" style="color:#f43f5e; font-weight:700;">-57.8% ⬇</strong>
           </div>
         </div>
-        <div class="sl-card-footer">
-          <div class="sl-variation-badge positive" id="kpi-yoy-badge">
-            <span class="sl-badge-label">% Año Q</span> <strong id="kpi-yoy-pct">+4.4% ↑</strong>
+        <div class="hud-equalizer" id="kpi-yoy-equalizer">
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+        </div>
+        <div class="hud-card-footer">
+          <div class="hud-pill-var negative" id="kpi-yoy-badge">
+            <span class="sl-badge-label">% Año Q</span> <strong id="kpi-yoy-pct">-57.8% ⬇</strong>
           </div>
+          <span class="hud-meta-right" id="kpi-yoy-period">Oct 2025</span>
         </div>
       </div>
 
-      <!-- Card 5: Variación Vs Mes anterior -->
-      <div class="salesland-card kpi-card-mom">
-        <div class="sl-card-header">
-          <span class="sl-card-title">Vs Mes Ant. (MoM)</span>
-          <div class="sl-card-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Card 5: MoM Variation -->
+      <div class="salesland-card hud-c-mom kpi-card-mom">
+        <div class="hud-aurora-glow"></div>
+        <div class="hud-card-header">
+          <div class="hud-tag-group">
+            <span class="hud-led" id="kpi-mom-led" style="background:#f43f5e; box-shadow:0 0 8px #f43f5e;"></span>
+            <span class="hud-code">KPI-05 // MoM DELTA</span>
+          </div>
+          <div class="hud-icon-badge" style="color:#a855f7;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <polyline points="23 4 23 10 17 10"/>
               <polyline points="1 20 1 14 7 14"/>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
             </svg>
           </div>
         </div>
-        <div class="sl-card-body">
-          <div class="sl-card-val-group">
-            <div class="sl-card-big-num" id="kpi-mom-val">1,082</div>
-            <div class="sl-card-subtext">Ventas Mes Previo</div>
+        <div class="hud-card-body">
+          <div class="hud-big-num" id="kpi-mom-val">5,699</div>
+          <div class="hud-sub-label">
+            <span>Ventas Mes Previo</span>
+            <strong id="kpi-mom-sub-delta" style="color:#f43f5e; font-weight:700;">-40.9% ⬇</strong>
           </div>
         </div>
-        <div class="sl-card-footer">
-          <div class="sl-variation-badge negative" id="kpi-mom-badge">
-            <span class="sl-badge-label">% Mes Q</span> <strong id="kpi-mom-pct">-10.1% ↓</strong>
+        <div class="hud-equalizer" id="kpi-mom-equalizer">
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg active-rose"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+          <div class="hud-equalizer-seg"></div>
+        </div>
+        <div class="hud-card-footer">
+          <div class="hud-pill-var negative" id="kpi-mom-badge">
+            <span class="sl-badge-label">% Mes Q</span> <strong id="kpi-mom-pct">-40.9% ⬇</strong>
           </div>
+          <span class="hud-meta-right" id="kpi-mom-period">Sept 2026</span>
         </div>
       </div>
+
     </div>
+
+
 
     <!-- NAVIGATION TABS -->
     <div class="nav-tabs-wrapper">
@@ -7637,40 +7645,90 @@
         kpiMetaSub.innerText = meta > 0 ? 'Instalaciones' : 'Cuota mensual';
       }
 
+      // Helper to dynamically illuminate 10 equalizer bars
+      function updateEqualizer(containerId, activeCount, colorClass) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        const segs = el.querySelectorAll('.hud-equalizer-seg');
+        segs.forEach((seg, idx) => {
+          seg.className = 'hud-equalizer-seg' + (idx < activeCount ? ' ' + colorClass : '');
+        });
+      }
+
+      // Card 1 Equalizer & Subtext
+      updateEqualizer('kpi-meta-equalizer', meta > 0 ? 10 : 0, 'active-cyan');
+      const kpiMetaPctBase = document.getElementById('kpi-meta-pct-base');
+      if (kpiMetaPctBase) kpiMetaPctBase.innerText = meta > 0 ? '100%' : '0%';
+      const kpiMetaPillText = document.getElementById('kpi-meta-pill-text');
+      if (kpiMetaPillText) kpiMetaPillText.innerText = f.mes !== 'all' ? `Meta ${f.mes}` : 'Asignación Base';
+      const kpiMetaTagRight = document.getElementById('kpi-meta-tag-right');
+      if (kpiMetaTagRight) kpiMetaTagRight.innerText = App.currentProject === 'P2' ? 'Retail P2' : 'Retail P1';
+
       // Card 2: Cumplimiento de meta del proyecto
       const cumpPct = meta > 0 ? ((currentVentas / meta) * 100).toFixed(1) : '0';
       const kpiCump = document.getElementById('kpi-cump-num');
-      if (kpiCump) {
-        kpiCump.innerText = meta > 0 ? cumpPct + ' %' : 'N/A';
-        const numVal = parseFloat(cumpPct);
-        if (meta > 0 && numVal >= 60) {
-          kpiCump.style.color = '#16a34a';
-        } else if (meta > 0 && numVal >= 40) {
-          kpiCump.style.color = '#d97706';
-        } else if (meta > 0) {
-          kpiCump.style.color = '#e11d48';
-        } else {
-          kpiCump.style.color = '';
-        }
+      const numVal = parseFloat(cumpPct);
+      let cumpColorClass = 'active-rose';
+      let cumpTextColor = '#e11d48';
+      let cumpStatusText = 'Bajo Cuota';
+      let cumpPillClass = 'hud-pill-danger';
+
+      if (meta > 0 && numVal >= 60) {
+        cumpColorClass = 'active-emerald';
+        cumpTextColor = '#059669';
+        cumpStatusText = 'Ritmo Óptimo';
+        cumpPillClass = 'hud-pill-emerald';
+      } else if (meta > 0 && numVal >= 40) {
+        cumpColorClass = 'active-amber';
+        cumpTextColor = '#d97706';
+        cumpStatusText = 'Ritmo Medio';
+        cumpPillClass = 'hud-pill-amber';
       }
 
-      const kpiCumpBar = document.getElementById('kpi-cump-bar');
-      if (kpiCumpBar) {
-        const pctClamped = Math.min(100, Math.max(0, parseFloat(cumpPct) || 0));
-        kpiCumpBar.style.width = pctClamped + '%';
-        if (pctClamped >= 60) {
-          kpiCumpBar.style.background = 'linear-gradient(90deg, #10b981, #34d399)';
-        } else if (pctClamped >= 40) {
-          kpiCumpBar.style.background = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
-        } else {
-          kpiCumpBar.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
-        }
+      if (kpiCump) {
+        kpiCump.innerText = meta > 0 ? cumpPct + ' %' : 'N/A';
+        kpiCump.style.color = meta > 0 ? cumpTextColor : '';
       }
+
+      // Animate 10 equalizer bars
+      const pctClamped = Math.min(100, Math.max(0, numVal || 0));
+      const cumpSegsActive = meta > 0 ? Math.min(10, Math.round((pctClamped / 100) * 10)) : 0;
+      updateEqualizer('kpi-cump-equalizer', cumpSegsActive, cumpColorClass);
+
+      // Update LED & Icon
+      const kpiCumpLed = document.getElementById('kpi-cump-led');
+      if (kpiCumpLed) {
+        kpiCumpLed.style.background = cumpTextColor;
+        kpiCumpLed.style.boxShadow = `0 0 8px ${cumpTextColor}`;
+      }
+      const kpiCumpIcon = document.getElementById('kpi-cump-icon');
+      if (kpiCumpIcon) kpiCumpIcon.style.color = cumpTextColor;
+
+      // Dual subtext: Ejecutadas + Faltantes
+      const kpiCumpEjec = document.getElementById('kpi-cump-ejecutadas');
+      if (kpiCumpEjec) kpiCumpEjec.innerText = `${currentVentas.toLocaleString()} ejecutadas`;
 
       const kpiCumpSub = document.getElementById('kpi-cump-subtext');
       if (kpiCumpSub) {
-        kpiCumpSub.innerText = 'del objetivo';
+        if (meta > 0 && currentVentas >= meta) {
+          kpiCumpSub.innerText = '¡Meta lograda!';
+          kpiCumpSub.style.color = '#059669';
+        } else if (meta > 0) {
+          kpiCumpSub.innerText = `Faltan ${(meta - currentVentas).toLocaleString()}`;
+          kpiCumpSub.style.color = cumpTextColor;
+        } else {
+          kpiCumpSub.innerText = 'Sin cuota';
+          kpiCumpSub.style.color = '';
+        }
       }
+
+      // Pill & Ratio
+      const kpiCumpPill = document.getElementById('kpi-cump-pill');
+      if (kpiCumpPill) kpiCumpPill.className = `hud-pill ${cumpPillClass}`;
+      const kpiCumpStatus = document.getElementById('kpi-cump-status');
+      if (kpiCumpStatus) kpiCumpStatus.innerText = cumpStatusText;
+      const kpiCumpRatio = document.getElementById('kpi-cump-ratio');
+      if (kpiCumpRatio) kpiCumpRatio.innerText = meta > 0 ? `${currentVentas.toLocaleString()} / ${meta.toLocaleString()}` : `${currentVentas.toLocaleString()} ventas`;
 
       // Card 3: Proyección de cierre con ritmo de días
       let curMonth = f.mes !== 'all' ? f.mes : 'Septiembre';
@@ -7695,15 +7753,28 @@
       const kpiProy = document.getElementById('kpi-proy-num');
       if (kpiProy) kpiProy.innerText = proy.toLocaleString();
 
-      const kpiProySub = document.getElementById('kpi-proy-subtext');
-      if (kpiProySub) {
-        if (meta > 0) {
-          const pPct = ((proy / meta) * 100).toFixed(1);
-          const pColor = parseFloat(pPct) >= 60 ? '#16a34a' : (parseFloat(pPct) >= 40 ? '#d97706' : '#e11d48');
-          kpiProySub.innerHTML = `<span style="color:${pColor}; font-weight:700;">${pPct}%</span> de meta`;
-        } else {
-          kpiProySub.innerText = 'Cierre est.';
-        }
+      let proySegs = 0;
+      let proyColor = 'active-emerald';
+      let proyTextColor = '#059669';
+      if (meta > 0) {
+        const pPct = ((proy / meta) * 100).toFixed(1);
+        const pNum = parseFloat(pPct);
+        if (pNum >= 60) { proyColor = 'active-emerald'; proyTextColor = '#059669'; }
+        else if (pNum >= 40) { proyColor = 'active-amber'; proyTextColor = '#d97706'; }
+        else { proyColor = 'active-rose'; proyTextColor = '#e11d48'; }
+        proySegs = Math.min(10, Math.round((pNum / 100) * 10));
+        const kpiProySub = document.getElementById('kpi-proy-subtext');
+        if (kpiProySub) kpiProySub.innerHTML = `<span style="color:${proyTextColor}; font-weight:700;">▲ ${pPct}%</span> de meta`;
+      } else {
+        const kpiProySub = document.getElementById('kpi-proy-subtext');
+        if (kpiProySub) kpiProySub.innerText = 'Cierre est.';
+      }
+      updateEqualizer('kpi-proy-equalizer', proySegs, proyColor);
+
+      const kpiProyRate = document.getElementById('kpi-proy-rate');
+      if (kpiProyRate) {
+        const dailyRate = Math.round(currentVentas / Math.max(1, elapsedDays));
+        kpiProyRate.innerText = `~${dailyRate.toLocaleString()} / día`;
       }
 
       // Calculate YoY (Same Month, Previous Year)
@@ -7727,11 +7798,18 @@
         const yoyDiff = currentVentas - yoySales;
         const yoyPct = ((yoyDiff / yoySales) * 100).toFixed(1);
         if (yoyDiff >= 0) {
-          yoyBadge.className = 'sl-variation-badge positive';
+          yoyBadge.className = 'hud-pill-var positive';
           yoyPctEl.innerText = `+${yoyPct}% ↑`;
+          updateEqualizer('kpi-yoy-equalizer', 7, 'active-emerald');
         } else {
-          yoyBadge.className = 'sl-variation-badge negative';
+          yoyBadge.className = 'hud-pill-var negative';
           yoyPctEl.innerText = `${yoyPct}% ↓`;
+          updateEqualizer('kpi-yoy-equalizer', 3, 'active-rose');
+        }
+        const yoySubDelta = document.getElementById('kpi-yoy-sub-delta');
+        if (yoySubDelta) {
+          yoySubDelta.innerText = yoyDiff >= 0 ? `+${yoyPct}% ⬆` : `${yoyPct}% ⬇`;
+          yoySubDelta.style.color = yoyDiff >= 0 ? '#059669' : '#f43f5e';
         }
       } else if (yoyBadge && yoyPctEl) {
         yoyBadge.className = 'sl-variation-badge neutral';
@@ -7769,11 +7847,18 @@
         const momDiff = currentVentas - momSales;
         const momPct = ((momDiff / momSales) * 100).toFixed(1);
         if (momDiff >= 0) {
-          momBadge.className = 'sl-variation-badge positive';
+          momBadge.className = 'hud-pill-var positive';
           momPctEl.innerText = `+${momPct}% ↑`;
+          updateEqualizer('kpi-mom-equalizer', 7, 'active-emerald');
         } else {
-          momBadge.className = 'sl-variation-badge negative';
+          momBadge.className = 'hud-pill-var negative';
           momPctEl.innerText = `${momPct}% ↓`;
+          updateEqualizer('kpi-mom-equalizer', 4, 'active-rose');
+        }
+        const momSubDelta = document.getElementById('kpi-mom-sub-delta');
+        if (momSubDelta) {
+          momSubDelta.innerText = momDiff >= 0 ? `+${momPct}% ⬆` : `${momPct}% ⬇`;
+          momSubDelta.style.color = momDiff >= 0 ? '#059669' : '#f43f5e';
         }
       } else if (momBadge && momPctEl) {
         momBadge.className = 'sl-variation-badge neutral';
