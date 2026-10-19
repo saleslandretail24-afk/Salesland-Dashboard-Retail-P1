@@ -430,48 +430,44 @@
     }
 
     .salesland-card {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(241, 245, 249, 0.85) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      border-radius: 20px;
+      background: #ffffff !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      filter: none !important;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
       padding: 1.15rem 1.25rem 1.1rem;
-      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.03), inset 0 1px 1px rgba(255,255,255,0.95);
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       min-height: 162px;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
     [data-theme="dark"] .salesland-card {
-      background: linear-gradient(145deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.88) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      background: #0f172a !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      filter: none !important;
+      border: 1px solid #1e293b;
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
     }
     .salesland-card:hover {
-      transform: translateY(-5px) scale(1.015);
-      box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.12), 0 0 24px var(--glow-color);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.08);
+      border-color: var(--card-border-hover);
+    }
+    [data-theme="dark"] .salesland-card:hover {
+      box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.5);
       border-color: var(--card-border-hover);
     }
 
-    /* Ambient Aurora Glow in upper corner */
+    /* Sin difuminado ni resplandor borroso */
     .hud-aurora-glow {
-      position: absolute;
-      top: -24px;
-      right: -24px;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: var(--glow-color);
-      filter: blur(30px);
-      opacity: 0.22;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      display: none !important;
     }
-    .salesland-card:hover .hud-aurora-glow { opacity: 0.45; }
-    [data-theme="dark"] .salesland-card:hover .hud-aurora-glow { opacity: 0.6; }
 
     /* Thematic Colors */
     .hud-c-meta {
@@ -524,7 +520,7 @@
       height: 8px;
       border-radius: 50%;
       background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
+      box-shadow: none !important;
       animation: hudPulse 2s infinite ease-in-out;
     }
     @keyframes hudPulse {
@@ -544,8 +540,8 @@
       width: 34px;
       height: 34px;
       border-radius: 10px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,244,248,0.5));
-      border: 1px solid rgba(255,255,255,0.7);
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       box-shadow: 0 4px 10px rgba(0,0,0,0.03);
       display: flex;
       align-items: center;
@@ -554,12 +550,12 @@
       transition: all 0.3s ease;
     }
     [data-theme="dark"] .hud-icon-badge {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.1);
+      background: #1e293b;
+      border: 1px solid #334155;
     }
     .salesland-card:hover .hud-icon-badge {
       transform: rotate(8deg) scale(1.1);
-      box-shadow: 0 0 14px var(--glow-color);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
 
     /* Main Value Group */
@@ -604,12 +600,12 @@
     [data-theme="dark"] .hud-equalizer-seg {
       background: rgba(255, 255, 255, 0.1);
     }
-    .hud-equalizer-seg.active-cyan { background: #0284c7; box-shadow: 0 0 7px #0284c7; }
-    .hud-equalizer-seg.active-emerald { background: #10b981; box-shadow: 0 0 7px #10b981; }
-    .hud-equalizer-seg.active-amber { background: #f59e0b; box-shadow: 0 0 7px #f59e0b; }
-    .hud-equalizer-seg.active-indigo { background: #6366f1; box-shadow: 0 0 7px #6366f1; }
-    .hud-equalizer-seg.active-purple { background: #a855f7; box-shadow: 0 0 7px #a855f7; }
-    .hud-equalizer-seg.active-rose { background: #f43f5e; box-shadow: 0 0 7px #f43f5e; }
+    .hud-equalizer-seg.active-cyan { background: #0284c7 !important; box-shadow: none !important; }
+    .hud-equalizer-seg.active-emerald { background: #10b981 !important; box-shadow: none !important; }
+    .hud-equalizer-seg.active-amber { background: #f59e0b !important; box-shadow: none !important; }
+    .hud-equalizer-seg.active-indigo { background: #6366f1 !important; box-shadow: none !important; }
+    .hud-equalizer-seg.active-purple { background: #a855f7 !important; box-shadow: none !important; }
+    .hud-equalizer-seg.active-rose { background: #f43f5e !important; box-shadow: none !important; }
 
     /* Footer: Telemetry Tag Pill + Micro Metrics */
     .hud-card-footer {
@@ -4260,8 +4256,7 @@
       
       <!-- Card 1: Meta Mensual -->
       <div class="salesland-card hud-c-meta kpi-card-meta">
-        <div class="hud-aurora-glow"></div>
-        <div class="hud-card-header">
+                <div class="hud-card-header">
           <div class="hud-tag-group">
             <span class="hud-led" id="kpi-meta-led"></span>
             <span class="hud-code">KPI-01 // TARGET BASE</span>
@@ -4301,10 +4296,9 @@
 
       <!-- Card 2: Cumplimiento de Meta -->
       <div class="salesland-card hud-c-cump kpi-card-cump">
-        <div class="hud-aurora-glow"></div>
-        <div class="hud-card-header">
+                <div class="hud-card-header">
           <div class="hud-tag-group">
-            <span class="hud-led" id="kpi-cump-led" style="background:#f59e0b; box-shadow:0 0 8px #f59e0b;"></span>
+            <span class="hud-led" id="kpi-cump-led" style="background:#f59e0b; "></span>
             <span class="hud-code">KPI-02 // CUMP. REAL</span>
           </div>
           <div class="hud-icon-badge" id="kpi-cump-icon" style="color:#f59e0b;">
@@ -4343,10 +4337,9 @@
 
       <!-- Card 3: Proyección Run-rate -->
       <div class="salesland-card hud-c-proy kpi-card-proy">
-        <div class="hud-aurora-glow"></div>
-        <div class="hud-card-header">
+                <div class="hud-card-header">
           <div class="hud-tag-group">
-            <span class="hud-led" id="kpi-proy-led" style="background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+            <span class="hud-led" id="kpi-proy-led" style="background:#10b981; "></span>
             <span class="hud-code">KPI-03 // RUN-RATE PROY</span>
           </div>
           <div class="hud-icon-badge" id="kpi-proy-icon" style="color:#10b981;">
@@ -4383,10 +4376,9 @@
 
       <!-- Card 4: YoY Variation -->
       <div class="salesland-card hud-c-yoy kpi-card-yoy">
-        <div class="hud-aurora-glow"></div>
-        <div class="hud-card-header">
+                <div class="hud-card-header">
           <div class="hud-tag-group">
-            <span class="hud-led" id="kpi-yoy-led" style="background:#f43f5e; box-shadow:0 0 8px #f43f5e;"></span>
+            <span class="hud-led" id="kpi-yoy-led" style="background:#f43f5e; "></span>
             <span class="hud-code">KPI-04 // YoY DELTA</span>
           </div>
           <div class="hud-icon-badge" style="color:#6366f1;">
@@ -4427,10 +4419,9 @@
 
       <!-- Card 5: MoM Variation -->
       <div class="salesland-card hud-c-mom kpi-card-mom">
-        <div class="hud-aurora-glow"></div>
-        <div class="hud-card-header">
+                <div class="hud-card-header">
           <div class="hud-tag-group">
-            <span class="hud-led" id="kpi-mom-led" style="background:#f43f5e; box-shadow:0 0 8px #f43f5e;"></span>
+            <span class="hud-led" id="kpi-mom-led" style="background:#f43f5e; "></span>
             <span class="hud-code">KPI-05 // MoM DELTA</span>
           </div>
           <div class="hud-icon-badge" style="color:#a855f7;">
@@ -5017,7 +5008,7 @@
             <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:480px; height:480px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:12px; background:radial-gradient(circle at center, rgba(6,182,212,0.06) 0%, rgba(2,132,199,0.02) 65%, transparent 100%); border:1px solid var(--border-card, rgba(255,255,255,0.08)); overflow:hidden;">
               <!-- Live HUD Radar Tag -->
               <div class="map-live-tag" style="position:absolute; top:12px; left:14px; display:inline-flex; align-items:center; gap:6px; background:rgba(10,20,40,0.85); backdrop-filter:blur(8px); border:1px solid rgba(0,210,255,0.35); border-radius:8px; padding:4px 10px; font-size:0.7rem; font-weight:800; color:#00d2ff; z-index:10; letter-spacing:0.8px;">
-                <span style="width:7px; height:7px; border-radius:50%; background:#00d2ff; box-shadow:0 0 8px #00d2ff; display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
+                <span style="width:7px; height:7px; border-radius:50%; background:#00d2ff;  display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
                 LIVE RADAR • COSTA RICA GEO-GRID
               </div>
 
@@ -7699,7 +7690,7 @@
       const kpiCumpLed = document.getElementById('kpi-cump-led');
       if (kpiCumpLed) {
         kpiCumpLed.style.background = cumpTextColor;
-        kpiCumpLed.style.boxShadow = `0 0 8px ${cumpTextColor}`;
+        kpiCumpLed.style.boxShadow = 'none';
       }
       const kpiCumpIcon = document.getElementById('kpi-cump-icon');
       if (kpiCumpIcon) kpiCumpIcon.style.color = cumpTextColor;
