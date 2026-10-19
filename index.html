@@ -4581,6 +4581,11 @@
               <span style="color:var(--text-muted);">Proyección:</span>
               <strong id="tbl-ribbon-proy" style="color:#d97706; font-weight:800;">-</strong>
             </div>
+            <div style="display:flex; align-items:center; gap:0.35rem;">
+              <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#f59e0b;"></span>
+              <span style="color:var(--text-muted);">% Proy. / Meta:</span>
+              <strong id="tbl-ribbon-proy-pct" style="color:#d97706; font-weight:800;">-</strong>
+            </div>
             <div class="facturacion-stat" style="display:flex; align-items:center; gap:0.35rem;">
               <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
               <span style="color:var(--text-muted);">Facturación:</span>
@@ -4592,15 +4597,16 @@
             <table class="services-table">
               <thead>
                 <tr>
-                  <th style="min-width:145px; width:25%;">Servicio Vendido</th>
-                  <th style="text-align:center; width:9%; white-space:nowrap;">Anterior</th>
-                  <th style="text-align:center; width:9%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Actual</th>
+                  <th style="min-width:140px; width:22%;">Servicio Vendido</th>
+                  <th style="text-align:center; width:8%; white-space:nowrap;">Anterior</th>
+                  <th style="text-align:center; width:8%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Actual</th>
                   <th style="text-align:center; width:8%; color:#0284c7; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap;">Meta</th>
-                  <th style="text-align:center; width:9%; color:#059669; font-weight:800; background:rgba(5, 150, 105, 0.07); white-space:nowrap;">% Cump.</th>
-                  <th style="text-align:center; width:9%; color:#d97706; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap;">⚡ Proy.</th>
-                  <th style="text-align:center; width:10%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Var. MoM</th>
+                  <th style="text-align:center; width:8%; color:#059669; font-weight:800; background:rgba(5, 150, 105, 0.07); white-space:nowrap;">% Cump.</th>
+                  <th style="text-align:center; width:8%; color:#d97706; font-weight:800; background:rgba(217, 119, 6, 0.07); white-space:nowrap;">⚡ Proy.</th>
+                  <th style="text-align:center; width:9%; color:#d97706; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap;">% Proy.</th>
+                  <th style="text-align:center; width:9%; font-weight:800; color:var(--text-brand); white-space:nowrap;">Var. MoM</th>
                   <th style="text-align:center; width:8%; font-weight:800; color:var(--text-brand); white-space:nowrap;">% MoM</th>
-                  <th class="col-facturacion" style="text-align:center; width:13%; white-space:nowrap;">Facturación ₡</th>
+                  <th class="col-facturacion" style="text-align:center; width:12%; white-space:nowrap;">Facturación ₡</th>
                 </tr>
               </thead>
               <tbody id="services-mom-tbody">
@@ -7983,6 +7989,7 @@
         const hasMeta = sMeta !== null && sMeta > 0;
         const cumpPct = hasMeta ? ((curCount / sMeta) * 100).toFixed(1) : null;
         const proyVal = elapsedDays < totalDaysInMonth ? Math.round((curCount / Math.max(1, elapsedDays)) * totalDaysInMonth) : curCount;
+        const proyPct = hasMeta ? ((proyVal / sMeta) * 100).toFixed(1) : null;
 
         sumPrev += prevCount;
         sumCur += curCount;
@@ -8020,6 +8027,26 @@
           `;
         }
 
+        let proyBadge = '-';
+        if (hasMeta) {
+          const numProy = parseFloat(proyPct);
+          const barWidth = Math.min(100, Math.max(0, numProy));
+          const barColor = numProy >= 100 ? '#10b981' : (numProy >= 80 ? '#0284c7' : (numProy >= 50 ? '#d97706' : '#e11d48'));
+          let badgeStyle = numProy >= 100 
+            ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);' 
+            : (numProy >= 70
+               ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
+               : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
+          proyBadge = `
+            <div style="display:inline-flex; flex-direction:column; align-items:center; gap:4px;">
+              <span class="tag-diff" style="${badgeStyle} font-weight:800; font-size:0.82rem; padding:3px 8px; border-radius:12px;">${proyPct}%</span>
+              <div style="width:52px; height:4px; background:rgba(148, 163, 184, 0.22); border-radius:3px; overflow:hidden;">
+                <div style="width:${barWidth}%; height:100%; background:${barColor}; border-radius:3px;"></div>
+              </div>
+            </div>
+          `;
+        }
+
         const isPospagoConsol = (serv === 'Pospago' && shouldConsolidatePospago);
 
         let servTitleHtml = `<strong>${escapeHtml(serv)}</strong>`;
@@ -8047,7 +8074,8 @@
             <td style="text-align:center; font-weight:800; color:var(--text-brand); font-size:0.95rem; white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${curCount.toLocaleString()}</td>
             <td style="text-align:center; font-weight:800; color:#0284c7; font-size:0.92rem; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${hasMeta ? sMeta.toLocaleString() : '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>'}</td>
             <td style="text-align:center; background:rgba(5, 150, 105, 0.03); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${cumpBadge}</td>
-            <td style="text-align:center; font-weight:800; color:#d97706; font-size:0.92rem; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${proyVal.toLocaleString()}</td>
+            <td style="text-align:center; font-weight:800; color:#d97706; font-size:0.92rem; background:rgba(217, 119, 6, 0.03); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${proyVal.toLocaleString()}</td>
+            <td style="text-align:center; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${proyBadge}</td>
             <td style="text-align:center; white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;"><span class="${diffClass}" style="padding:4px 8px; font-weight:800; font-size:0.78rem; box-shadow:0 1px 2px rgba(0,0,0,0.04);">${diffIcon}</span></td>
             <td style="text-align:center; font-weight:800; font-size:0.85rem; color:${diff > 0 ? '#16a34a' : (diff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.92rem 0.45rem; vertical-align:middle;">${pct.includes('+') || diff > 0 ? '+' : ''}${pct}%</td>
             <td class="col-facturacion" style="text-align:center; font-weight:700; color:var(--accent-emerald-text); white-space:nowrap; padding:0.92rem 0.5rem; font-size:0.85rem; vertical-align:middle;">${formatCurrency(rev)}</td>
@@ -8068,6 +8096,17 @@
             const sDiff = sub.cur - sub.prev;
             const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '+100%' : '0%');
             const sProy = elapsedDays < totalDaysInMonth ? Math.round((sub.cur / Math.max(1, elapsedDays)) * totalDaysInMonth) : sub.cur;
+            const sProyPct = (sub.meta !== null && sub.meta > 0) ? ((sProy / sub.meta) * 100).toFixed(1) : null;
+            let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
+            if (sub.meta !== null && sub.meta > 0) {
+              const sProyNum = parseFloat(sProyPct);
+              const sProyBadgeStyle = sProyNum >= 100
+                ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
+                : (sProyNum >= 70
+                   ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
+                   : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
+              sProyHtml = `<span class="tag-diff" style="${sProyBadgeStyle} font-weight:700; font-size:0.75rem; padding:2px 6px; border-radius:10px;">${sProyPct}%</span>`;
+            }
             let sDiffClass = 'tag-diff neutral';
             let sDiffIcon = '';
             if (sDiff > 0) {
@@ -8101,6 +8140,7 @@
                 <td style="text-align:center; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); padding:0.42rem 0.35rem;">${sMetaHtml}</td>
                 <td style="text-align:center; background:rgba(5, 150, 105, 0.03); padding:0.42rem 0.35rem;">${sCumpHtml}</td>
                 <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sProy.toLocaleString()}</td>
+                <td style="text-align:center; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); padding:0.42rem 0.35rem;">${sProyHtml}</td>
                 <td style="text-align:center; padding:0.42rem 0.35rem;"><span class="${sDiffClass}" style="font-size:0.71rem; padding:1px 5px;">${sDiffIcon}</span></td>
                 <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem; font-size:0.78rem;">${sPct.includes('+') || sDiff > 0 ? '+' : ''}${sPct}%</td>
                 <td class="col-facturacion" style="text-align:center; color:var(--text-muted); padding:0.42rem 0.45rem; font-size:0.79rem;">${formatCurrency(sub.rev)}</td>
@@ -8111,7 +8151,7 @@
       });
 
       if (allServiceNames.length === 0) {
-        tableHtml = '<tr><td colspan="9" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No hay ventas de servicios en el período.</td></tr>';
+        tableHtml = '<tr><td colspan="10" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No hay ventas de servicios en el período.</td></tr>';
       }
       document.getElementById('services-mom-tbody').innerHTML = tableHtml;
 
@@ -8120,6 +8160,7 @@
       const totalPctMoM = sumPrev > 0 ? ((totalDiff / sumPrev) * 100).toFixed(1) : (sumCur > 0 ? '+100%' : '0%');
       const totalTargetNum = f.servicio === 'all' ? getTotalTargetQuota(curMonth) : (sumMeta > 0 ? sumMeta : getTotalTargetQuota(curMonth));
       const totalCumpPct = totalTargetNum > 0 ? ((sumCur / totalTargetNum) * 100).toFixed(1) : '0';
+      const totalProyPct = totalTargetNum > 0 ? ((sumProy / totalTargetNum) * 100).toFixed(1) : '0';
 
       const tfootEl = document.getElementById('services-mom-tfoot');
       if (tfootEl) {
@@ -8142,6 +8183,13 @@
              ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
              : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
 
+        const footProyNum = parseFloat(totalProyPct);
+        let footProyBadgeStyle = footProyNum >= 100
+          ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
+          : (footProyNum >= 70
+             ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
+             : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
+
         tfootEl.innerHTML = `
           <tr style="background:var(--bg-card-elevated, #f8fafc); border-top:2px solid var(--border-card, #e2e8f0); font-weight:800;">
             <td style="padding:0.95rem 0.55rem; color:var(--text-brand); font-size:0.9rem; vertical-align:middle;">TOTAL (${allServiceNames.length} Servicios)</td>
@@ -8149,7 +8197,8 @@
             <td style="text-align:center; color:var(--text-brand); font-size:1.02rem; font-weight:800; white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${sumCur.toLocaleString()}</td>
             <td style="text-align:center; color:#0284c7; font-size:0.95rem; font-weight:800; background:rgba(2, 132, 199, 0.07); border-left:1px solid rgba(2, 132, 199, 0.2); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${totalTargetNum.toLocaleString()}</td>
             <td style="text-align:center; background:rgba(5, 150, 105, 0.07); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;"><span class="tag-diff" style="${footBadgeStyle} font-weight:800; font-size:0.84rem; padding:4px 9px;">${totalCumpPct}%</span></td>
-            <td style="text-align:center; color:#d97706; font-size:0.95rem; font-weight:800; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${sumProy.toLocaleString()}</td>
+            <td style="text-align:center; color:#d97706; font-size:0.95rem; font-weight:800; background:rgba(217, 119, 6, 0.07); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${sumProy.toLocaleString()}</td>
+            <td style="text-align:center; background:rgba(217, 119, 6, 0.07); border-right:1px solid rgba(217, 119, 6, 0.2); white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;"><span class="tag-diff" style="${footProyBadgeStyle} font-weight:800; font-size:0.84rem; padding:4px 9px;">${totalProyPct}%</span></td>
             <td style="text-align:center; white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;"><span class="${footDiffClass}" style="padding:4px 8px; font-weight:800; font-size:0.78rem;">${footDiffIcon}</span></td>
             <td style="text-align:center; font-size:0.88rem; font-weight:800; color:${totalDiff > 0 ? '#16a34a' : (totalDiff < 0 ? '#e11d48' : 'var(--text-secondary)')}; white-space:nowrap; padding:0.95rem 0.45rem; vertical-align:middle;">${totalPctMoM.includes('+') || totalDiff > 0 ? '+' : ''}${totalPctMoM}%</td>
             <td class="col-facturacion" style="text-align:center; font-weight:800; color:var(--accent-emerald-text); white-space:nowrap; padding:0.95rem 0.5rem; font-size:0.9rem; vertical-align:middle;">${formatCurrency(sumRev)}</td>
@@ -8186,9 +8235,15 @@
       if (tblRibbonMeta) tblRibbonMeta.innerText = totalTargetNum.toLocaleString();
       if (tblRibbonCump) tblRibbonCump.innerText = totalCumpPct + '%';
       if (tblRibbonProy) tblRibbonProy.innerText = sumProy.toLocaleString();
+      const tblRibbonProyPct = document.getElementById('tbl-ribbon-proy-pct');
+      if (tblRibbonProyPct) {
+        tblRibbonProyPct.innerText = totalProyPct + '%';
+        const numP = parseFloat(totalProyPct);
+        tblRibbonProyPct.style.color = numP >= 100 ? '#10b981' : (numP >= 70 ? '#d97706' : '#e11d48');
+      }
       if (tblRibbonRev) tblRibbonRev.innerText = formatCurrency(sumRev);
       const tblBottomProy = document.getElementById('tbl-bottom-proy');
-      if (tblBottomProy) tblBottomProy.innerText = sumProy.toLocaleString() + ' ventas est.';
+      if (tblBottomProy) tblBottomProy.innerText = `${sumProy.toLocaleString()} ventas est. (${totalProyPct}% de meta)`;
       const tblBottomGap = document.getElementById('tbl-bottom-gap');
       if (tblBottomGap) {
         const gapVal = sumCur - totalTargetNum;
