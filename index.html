@@ -4132,9 +4132,10 @@
               <option value="Pospago">Pospago (Consolidado: Nuevo + Porta + Migración)</option>
               <option value="Prepago">Prepago</option>
               <option value="Portabilidad Prepago">Portabilidad Prepago</option>
-              <option value="Gpon">Gpon</option>
-              <option value="IFI">IFI</option>
-              <option value="DTH">DTH</option>
+              <option value="Hogar">Hogar (Consolidado: Gpon + DTH + IFI)</option>
+              <option value="Gpon">Gpon (Solo)</option>
+              <option value="DTH">DTH (Solo)</option>
+              <option value="IFI">IFI (Solo)</option>
               <option value="Portabilidad Postpago">Portabilidad Postpago (Solo)</option>
               <option value="Migración Pospago">Migración Pospago (Solo)</option>
               <option value="Pospago Línea Nueva">Pospago Línea Nueva (Solo)</option>
@@ -6194,6 +6195,9 @@
       if (filterService === 'Pospago' || filterService === 'Pospago (Consolidado)') {
         return recordService === 'Pospago' || recordService === 'Portabilidad Postpago' || recordService === 'Migración Pospago';
       }
+      if (filterService === 'Hogar' || filterService === 'Hogar (Consolidado)') {
+        return recordService === 'Gpon' || recordService === 'DTH' || recordService === 'IFI';
+      }
       if (filterService === 'Pospago Línea Nueva') {
         return recordService === 'Pospago';
       }
@@ -6220,6 +6224,9 @@
           }
           return (parseInt(supTargets['Pospago']) || 0) + (parseInt(supTargets['Portabilidad Postpago']) || 0);
         }
+        if (sLower.includes('hogar') || sLower.includes('residencial') || (sLower.includes('gpon') && sLower.includes('dth'))) {
+          return (parseInt(supTargets['Gpon']) || 0) + (parseInt(supTargets['DTH']) || 0) + (parseInt(supTargets['IFI']) || 0);
+        }
         if (sLower.includes('gpon') || sLower.includes('fibra')) return parseInt(supTargets['Gpon']) || 0;
         if (sLower.includes('dth')) return parseInt(supTargets['DTH']) || 0;
         if (sLower.includes('ifi') || sLower.includes('internet individual')) return parseInt(supTargets['IFI']) || 0;
@@ -6233,6 +6240,9 @@
       if (sLower.includes('porta') && sLower.includes('prepago')) return parseInt(targets['Portabilidad Prepago']) || 0;
       if (sLower.includes('pospago') || sLower.includes('postpago') || sLower.includes('migración') || sLower.includes('migracion')) {
         return parseInt(targets['Pospago']) || 0;
+      }
+      if (sLower.includes('hogar') || sLower.includes('residencial') || (sLower.includes('gpon') && sLower.includes('dth'))) {
+        return (parseInt(targets['Gpon']) || 0) + (parseInt(targets['DTH']) || 0) + (parseInt(targets['IFI']) || 0);
       }
       if (sLower.includes('gpon') || sLower.includes('fibra')) return parseInt(targets['Gpon']) || 0;
       if (sLower.includes('dth')) {
@@ -7902,7 +7912,13 @@
       const pospagoSubPrev = { 'Pospago': 0, 'Portabilidad Postpago': 0, 'Migración Pospago': 0 };
       const pospagoSubRev = { 'Pospago': 0, 'Portabilidad Postpago': 0, 'Migración Pospago': 0 };
 
+      // Tracking Hogar (Gpon, DTH, IFI) subcomponents
+      const hogarSubCur = { 'Gpon': 0, 'DTH': 0, 'IFI': 0 };
+      const hogarSubPrev = { 'Gpon': 0, 'DTH': 0, 'IFI': 0 };
+      const hogarSubRev = { 'Gpon': 0, 'DTH': 0, 'IFI': 0 };
+
       const shouldConsolidatePospago = (f.servicio === 'all' || f.servicio === 'Pospago' || f.servicio === 'Pospago (Consolidado)');
+      const shouldConsolidateHogar = (f.servicio === 'all' || f.servicio === 'Hogar' || f.servicio === 'Hogar (Consolidado)');
 
       App.data.forEach(r => {
         if (r[10] !== 'VENTA') return;
@@ -7921,7 +7937,14 @@
         }
 
         const isPospagoFamily = (rawTipo === 'Pospago' || rawTipo === 'Portabilidad Postpago' || rawTipo === 'Migración Pospago');
-        const sTipo = (shouldConsolidatePospago && isPospagoFamily) ? 'Pospago' : rawTipo;
+        const isHogarFamily = (rawTipo === 'Gpon' || rawTipo === 'DTH' || rawTipo === 'IFI');
+
+        let sTipo = rawTipo;
+        if (shouldConsolidatePospago && isPospagoFamily) {
+          sTipo = 'Pospago';
+        } else if (shouldConsolidateHogar && isHogarFamily) {
+          sTipo = 'Hogar (Gpon, DTH, IFI)';
+        }
 
         if (sYear === curYear && sMonth.toLowerCase() === curMonth.toLowerCase()) {
           currentServices[sTipo] = (currentServices[sTipo] || 0) + 1;
@@ -7930,24 +7953,54 @@
             pospagoSubCur[rawTipo] = (pospagoSubCur[rawTipo] || 0) + 1;
             pospagoSubRev[rawTipo] = (pospagoSubRev[rawTipo] || 0) + sPrecio;
           }
+          if (isHogarFamily) {
+            hogarSubCur[rawTipo] = (hogarSubCur[rawTipo] || 0) + 1;
+            hogarSubRev[rawTipo] = (hogarSubRev[rawTipo] || 0) + sPrecio;
+          }
         } else if (sYear === prevYear && sMonth.toLowerCase() === prevMonth.toLowerCase()) {
           previousServices[sTipo] = (previousServices[sTipo] || 0) + 1;
           if (isPospagoFamily) {
             pospagoSubPrev[rawTipo] = (pospagoSubPrev[rawTipo] || 0) + 1;
           }
+          if (isHogarFamily) {
+            hogarSubPrev[rawTipo] = (hogarSubPrev[rawTipo] || 0) + 1;
+          }
         }
       });
+
+      // Desired Order: 1. Pospago, 2. Prepago, 3. Portabilidad Prepago, 4. Hogar (Gpon, DTH, IFI)
+      const SERVICE_PRIORITY = [
+        'Pospago',
+        'Prepago',
+        'Portabilidad Prepago',
+        'Hogar (Gpon, DTH, IFI)',
+        'Gpon',
+        'DTH',
+        'IFI',
+        'Portabilidad Postpago',
+        'Migración Pospago',
+        'Pospago Línea Nueva'
+      ];
 
       let allServiceNames;
       if (f.servicio !== 'all') {
         if (f.servicio === 'Pospago' || f.servicio === 'Pospago (Consolidado)') {
           allServiceNames = ['Pospago'];
+        } else if (f.servicio === 'Hogar' || f.servicio === 'Hogar (Consolidado)') {
+          allServiceNames = ['Hogar (Gpon, DTH, IFI)'];
         } else {
           allServiceNames = [f.servicio];
         }
       } else {
-        allServiceNames = Array.from(new Set([...Object.keys(currentServices), ...Object.keys(previousServices)]))
-          .sort((a,b) => (currentServices[b] || 0) - (currentServices[a] || 0));
+        allServiceNames = Array.from(new Set([...Object.keys(currentServices), ...Object.keys(previousServices)]));
+        allServiceNames.sort((a, b) => {
+          const pA = SERVICE_PRIORITY.indexOf(a);
+          const pB = SERVICE_PRIORITY.indexOf(b);
+          const rankA = pA !== -1 ? pA : 99;
+          const rankB = pB !== -1 ? pB : 99;
+          if (rankA !== rankB) return rankA - rankB;
+          return (currentServices[b] || 0) - (currentServices[a] || 0);
+        });
       }
 
       // Calculate days in month and elapsed days for projection
@@ -8048,6 +8101,7 @@
         }
 
         const isPospagoConsol = (serv === 'Pospago' && shouldConsolidatePospago);
+        const isHogarConsol = (serv === 'Hogar (Gpon, DTH, IFI)' && shouldConsolidateHogar);
 
         let servTitleHtml = `<strong>${escapeHtml(serv)}</strong>`;
         if (isPospagoConsol) {
@@ -8062,6 +8116,21 @@
               </div>
               <button type="button" onclick="togglePospagoBreakdown(event)" style="background:transparent; border:1px solid var(--border-card); border-radius:4px; padding:3px 7px; font-size:0.72rem; cursor:pointer; color:var(--text-secondary); white-space:nowrap; transition:all 0.15s;" title="Ver desglose detallado">
                 <span id="pospago-toggle-icon">▼ Desglose</span>
+              </button>
+            </div>
+          `;
+        } else if (isHogarConsol) {
+          servTitleHtml = `
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">
+              <div>
+                <strong style="font-size:0.95rem; color:var(--text-primary);">Hogar (Gpon, DTH, IFI)</strong>
+                <span style="font-size:0.73rem; background:rgba(217, 119, 6, 0.12); color:#d97706; padding:2px 7px; border-radius:10px; font-weight:700; margin-left:4px;">Consolidado</span>
+                <div style="font-size:0.75rem; color:var(--text-muted); font-weight:normal; margin-top:2px;">
+                  (Gpon: ${hogarSubCur['Gpon'].toLocaleString()} • DTH: ${hogarSubCur['DTH'].toLocaleString()} • IFI: ${hogarSubCur['IFI'].toLocaleString()})
+                </div>
+              </div>
+              <button type="button" onclick="toggleHogarBreakdown(event)" style="background:transparent; border:1px solid var(--border-card); border-radius:4px; padding:3px 7px; font-size:0.72rem; cursor:pointer; color:var(--text-secondary); white-space:nowrap; transition:all 0.15s;" title="Ver desglose detallado">
+                <span id="hogar-toggle-icon">▼ Desglose</span>
               </button>
             </div>
           `;
@@ -8138,6 +8207,96 @@
                 <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sub.prev.toLocaleString()}</td>
                 <td style="text-align:center; font-weight:600; color:var(--text-primary); padding:0.42rem 0.35rem;">${sub.cur.toLocaleString()}</td>
                 <td style="text-align:center; background:rgba(2, 132, 199, 0.03); border-left:1px solid rgba(2, 132, 199, 0.12); padding:0.42rem 0.35rem;">${sMetaHtml}</td>
+                <td style="text-align:center; background:rgba(5, 150, 105, 0.03); padding:0.42rem 0.35rem;">${sCumpHtml}</td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sProy.toLocaleString()}</td>
+                <td style="text-align:center; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); padding:0.42rem 0.35rem;">${sProyHtml}</td>
+                <td style="text-align:center; padding:0.42rem 0.35rem;"><span class="${sDiffClass}" style="font-size:0.71rem; padding:1px 5px;">${sDiffIcon}</span></td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem; font-size:0.78rem;">${sPct.includes('+') || sDiff > 0 ? '+' : ''}${sPct}%</td>
+                <td class="col-facturacion" style="text-align:center; color:var(--text-muted); padding:0.42rem 0.45rem; font-size:0.79rem;">${formatCurrency(sub.rev)}</td>
+              </tr>
+            `;
+          });
+        }
+
+        // If Hogar (Gpon, DTH, IFI) Consolidado, append detailed subrows
+        if (isHogarConsol) {
+          const isSupView = (typeof window !== 'undefined' && window.App && window.App.filters && window.App.filters.supervisor && window.App.filters.supervisor !== 'all');
+          const supT = isSupView ? getSupervisorTargets(curMonth) : null;
+          const globalT = getServiceTargets(curMonth);
+
+          const hogarSubItems = [
+            { 
+              name: 'Gpon', 
+              icon: '🌐',
+              cur: hogarSubCur['Gpon'] || 0, 
+              prev: hogarSubPrev['Gpon'] || 0, 
+              rev: hogarSubRev['Gpon'] || 0, 
+              meta: isSupView ? (supT ? parseInt(supT['Gpon']) || 0 : null) : (globalT ? parseInt(globalT['Gpon']) || 0 : null) 
+            },
+            { 
+              name: 'DTH', 
+              icon: '📺',
+              cur: hogarSubCur['DTH'] || 0, 
+              prev: hogarSubPrev['DTH'] || 0, 
+              rev: hogarSubRev['DTH'] || 0, 
+              meta: isSupView ? (supT ? parseInt(supT['DTH']) || 0 : null) : (globalT ? parseInt(globalT['DTH']) || 0 : null) 
+            },
+            { 
+              name: 'IFI', 
+              icon: '📡',
+              cur: hogarSubCur['IFI'] || 0, 
+              prev: hogarSubPrev['IFI'] || 0, 
+              rev: hogarSubRev['IFI'] || 0, 
+              meta: isSupView ? (supT ? parseInt(supT['IFI']) || 0 : null) : (globalT ? parseInt(globalT['IFI']) || 0 : null) 
+            }
+          ];
+
+          hogarSubItems.forEach(sub => {
+            const sDiff = sub.cur - sub.prev;
+            const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '+100%' : '0%');
+            const sProy = elapsedDays < totalDaysInMonth ? Math.round((sub.cur / Math.max(1, elapsedDays)) * totalDaysInMonth) : sub.cur;
+            const sProyPct = (sub.meta !== null && sub.meta > 0) ? ((sProy / sub.meta) * 100).toFixed(1) : null;
+            let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
+            if (sub.meta !== null && sub.meta > 0) {
+              const sProyNum = parseFloat(sProyPct);
+              const sProyBadgeStyle = sProyNum >= 100
+                ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
+                : (sProyNum >= 70
+                   ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
+                   : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
+              sProyHtml = `<span class="tag-diff" style="${sProyBadgeStyle} font-weight:700; font-size:0.75rem; padding:2px 6px; border-radius:10px;">${sProyPct}%</span>`;
+            }
+            let sDiffClass = 'tag-diff neutral';
+            let sDiffIcon = '';
+            if (sDiff > 0) {
+              sDiffClass = 'tag-diff pos';
+              sDiffIcon = '▲ +' + sDiff.toLocaleString();
+            } else if (sDiff < 0) {
+              sDiffClass = 'tag-diff neg';
+              sDiffIcon = '▼ ' + sDiff.toLocaleString();
+            } else {
+              sDiffIcon = '= 0';
+            }
+
+            let sMetaHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>';
+            let sCumpHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">-</span>';
+            if (sub.meta !== null && sub.meta !== undefined && sub.meta > 0) {
+              sMetaHtml = `<strong style="color:#d97706;">${sub.meta.toLocaleString()}</strong>`;
+              const sCumpNum = ((sub.cur / sub.meta) * 100).toFixed(1);
+              const sBadgeStyle = parseFloat(sCumpNum) >= 60
+                ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
+                : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);';
+              sCumpHtml = `<span class="tag-diff" style="${sBadgeStyle} font-weight:700; font-size:0.75rem; padding:2px 6px; border-radius:10px;">${sCumpNum}%</span>`;
+            }
+
+            tableHtml += `
+              <tr class="hogar-subrow" style="display:none; background:rgba(217, 119, 6, 0.035); font-size:0.79rem;">
+                <td style="padding:0.52rem 0.45rem 0.52rem 1.25rem; color:var(--text-secondary);">
+                  <span style="color:#d97706; font-weight:700; margin-right:3px;">↳</span> ${sub.icon} ${escapeHtml(sub.name)}
+                </td>
+                <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sub.prev.toLocaleString()}</td>
+                <td style="text-align:center; font-weight:600; color:var(--text-primary); padding:0.42rem 0.35rem;">${sub.cur.toLocaleString()}</td>
+                <td style="text-align:center; background:rgba(217, 119, 6, 0.03); border-left:1px solid rgba(217, 119, 6, 0.12); padding:0.42rem 0.35rem;">${sMetaHtml}</td>
                 <td style="text-align:center; background:rgba(5, 150, 105, 0.03); padding:0.42rem 0.35rem;">${sCumpHtml}</td>
                 <td style="text-align:center; color:var(--text-muted); padding:0.42rem 0.35rem;">${sProy.toLocaleString()}</td>
                 <td style="text-align:center; background:rgba(217, 119, 6, 0.03); border-right:1px solid rgba(217, 119, 6, 0.12); padding:0.42rem 0.35rem;">${sProyHtml}</td>
@@ -8328,6 +8487,27 @@
           color: '#0d9488',
           bg: 'rgba(13, 148, 136, 0.12)',
           gradCur: 'linear-gradient(90deg, #0d9488, #2dd4bf)'
+        },
+        'Hogar (Gpon, DTH, IFI)': {
+          icon: '🏠',
+          badge: 'Consolidado',
+          color: '#d97706',
+          bg: 'rgba(217, 119, 6, 0.12)',
+          gradCur: 'linear-gradient(90deg, #d97706, #fbbf24)'
+        },
+        'Gpon': {
+          icon: '🌐',
+          badge: 'Fibra',
+          color: '#ec4899',
+          bg: 'rgba(236, 72, 153, 0.12)',
+          gradCur: 'linear-gradient(90deg, #db2777, #f472b6)'
+        },
+        'DTH': {
+          icon: '📺',
+          badge: 'Satelital',
+          color: '#6366f1',
+          bg: 'rgba(99, 102, 241, 0.12)',
+          gradCur: 'linear-gradient(90deg, #4f46e5, #818cf8)'
         },
         'IFI': {
           icon: '📡',
@@ -8674,19 +8854,49 @@
       });
     }
 
-    // Toggle function for Pospago breakdown subrows
-    window.toggleAllPospagoDetails = function(e) {
+    // Toggle function for Hogar breakdown subrows
+    window.toggleHogarBreakdown = function(e) {
       if (e) { e.preventDefault(); e.stopPropagation(); }
-      const rows = document.querySelectorAll('.pospago-subrow');
-      const icon = document.getElementById('pospago-toggle-icon');
-      const lbl = document.getElementById('lbl-toggle-all-text');
+      const rows = document.querySelectorAll('.hogar-subrow');
+      const icon = document.getElementById('hogar-toggle-icon');
       if (!rows || rows.length === 0) return;
       const isHidden = (rows[0].style.display === 'none' || !rows[0].style.display);
       rows.forEach(r => r.style.display = isHidden ? 'table-row' : 'none');
       if (icon) icon.innerText = isHidden ? '▲ Ocultar' : '▼ Desglose';
-      if (lbl) lbl.innerText = isHidden ? 'Ocultar' : 'Desglose';
     };
-    window.togglePospagoBreakdown = window.toggleAllPospagoDetails;
+
+    // Toggle function for Pospago breakdown subrows
+    window.togglePospagoBreakdown = function(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const rows = document.querySelectorAll('.pospago-subrow');
+      const icon = document.getElementById('pospago-toggle-icon');
+      if (!rows || rows.length === 0) return;
+      const isHidden = (rows[0].style.display === 'none' || !rows[0].style.display);
+      rows.forEach(r => r.style.display = isHidden ? 'table-row' : 'none');
+      if (icon) icon.innerText = isHidden ? '▲ Ocultar' : '▼ Desglose';
+    };
+
+    // Global toggle function for all breakdown subrows
+    window.toggleAllServiceDetails = function(e) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const pRows = document.querySelectorAll('.pospago-subrow');
+      const hRows = document.querySelectorAll('.hogar-subrow');
+      const pIcon = document.getElementById('pospago-toggle-icon');
+      const hIcon = document.getElementById('hogar-toggle-icon');
+      const lbl = document.getElementById('lbl-toggle-all-text');
+
+      const anyHidden = (pRows.length > 0 && (pRows[0].style.display === 'none' || !pRows[0].style.display)) ||
+                        (hRows.length > 0 && (hRows[0].style.display === 'none' || !hRows[0].style.display));
+
+      const newDisplay = anyHidden ? 'table-row' : 'none';
+      pRows.forEach(r => r.style.display = newDisplay);
+      hRows.forEach(r => r.style.display = newDisplay);
+
+      if (pIcon) pIcon.innerText = anyHidden ? '▲ Ocultar' : '▼ Desglose';
+      if (hIcon) hIcon.innerText = anyHidden ? '▲ Ocultar' : '▼ Desglose';
+      if (lbl) lbl.innerText = anyHidden ? 'Ocultar' : 'Desglose';
+    };
+    window.toggleAllPospagoDetails = window.toggleAllServiceDetails;
 
     function renderHistoricalTrend(theme) {
       const f = App.filters;
