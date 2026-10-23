@@ -4193,6 +4193,553 @@
       }
     }
 
+/* ==========================================================================
+   🚀 UPGRADE 2026: FINTECH PRO & CYBER-HUD ENHANCEMENTS (TABS 4, 5, MOBILE & REPORTES)
+   ========================================================================== */
+
+/* --- TAB 5: CYBER-HUD DATA GRID STYLES --- */
+.cyber-hud-table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg, 14px);
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .cyber-hud-table-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(11, 31, 56, 0.9) 100%);
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 8px 32px rgba(2, 132, 199, 0.12);
+}
+.cyber-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+}
+[data-theme="dark"] .cyber-counter {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+.cyber-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: cyberPulse 2s infinite;
+}
+@keyframes cyberPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Quick Filter Toolbar */
+.tx-quick-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card-elevated, #f8fafc);
+  border-radius: 10px;
+  border: 1px solid var(--border-card, #e2e8f0);
+}
+[data-theme="dark"] .tx-quick-toolbar {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+.tx-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+  flex: 1;
+}
+.tx-search-box input {
+  width: 100%;
+  padding: 0.5rem 2rem 0.5rem 2.2rem;
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  font-size: 0.84rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+.tx-search-box input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+.tx-search-box .search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 15px;
+  height: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.tx-search-box .btn-clear-search {
+  position: absolute;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: none;
+}
+.tx-search-box .btn-clear-search:hover {
+  color: #ef4444;
+}
+
+/* Filter Chips / Pills */
+.tx-pill-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid var(--border-card);
+}
+[data-theme="dark"] .tx-pill-group {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.tx-pill-btn {
+  background: transparent;
+  border: none;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.tx-pill-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+.tx-pill-btn.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+}
+
+/* Cyber Code Badge */
+.badge-cyber-code {
+  display: inline-block;
+  font-family: var(--font-mono, 'Courier New', monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(2, 132, 199, 0.08);
+  color: #0284c7;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: all;
+}
+[data-theme="dark"] .badge-cyber-code {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.25);
+}
+.badge-cyber-code:hover {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+}
+
+/* Enhanced Table Rows */
+.tx-table-container {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border-card);
+  max-height: 580px;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card-elevated);
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+[data-theme="dark"] .data-table thead th {
+  background: #0b1f38 !important;
+  color: #94a3b8;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+}
+.data-table tbody tr {
+  transition: background 0.12s ease;
+}
+.data-table tbody tr:hover {
+  background: rgba(2, 132, 199, 0.06) !important;
+}
+[data-theme="dark"] .data-table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+
+/* Cyber Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.status-badge.venta {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.status-badge.rechazada {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.status-badge.duplicado {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.status-badge.pendiente {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+  border: 1px solid var(--border-card);
+}
+
+/* Enhanced Pagination Controls */
+.p-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.p-btn:hover:not(:disabled) {
+  border-color: #0284c7;
+  color: #0284c7;
+}
+.p-btn.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+}
+.p-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- TAB 4: ENHANCED MAP INTERACTION & LAYERS --- */
+.cr-map-prov-path {
+  transition: fill 0.35s ease, stroke 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+.cr-map-prov-path:hover {
+  filter: drop-shadow(0 0 12px rgba(2, 132, 199, 0.7));
+  stroke: #38bdf8 !important;
+  stroke-width: 2.5px !important;
+}
+.cr-pin-badge {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cr-pin-badge:hover {
+  transform: scale(1.1);
+}
+.cr-map-layer-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  padding: 3px;
+}
+.btn-map-layer {
+  background: transparent;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.15s ease;
+}
+.btn-map-layer:hover {
+  color: var(--text-primary);
+  background: rgba(0,0,0,0.05);
+}
+[data-theme="dark"] .btn-map-layer:hover {
+  background: rgba(255,255,255,0.06);
+}
+.btn-map-layer.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+}
+
+/* --- RESPONSIVE & MOBILE PERFECTION --- */
+@media (max-width: 900px) {
+  /* Horizontal swipeable tabs with touch ergonomics */
+  .nav-tabs-wrapper, .nav-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    white-space: nowrap !important;
+    padding-bottom: 6px !important;
+    gap: 0.4rem !important;
+  }
+  .nav-tabs-wrapper::-webkit-scrollbar, .nav-tabs::-webkit-scrollbar {
+    display: none !important;
+  }
+  .tab-item-btn {
+    flex-shrink: 0 !important;
+    font-size: 0.8rem !important;
+    padding: 0.5rem 0.85rem !important;
+  }
+
+  /* Compact header buttons */
+  .header-utility-actions {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 0.25rem 0 !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+  .header-utility-actions::-webkit-scrollbar {
+    display: none !important;
+  }
+  .header-utility-actions .btn-action {
+    flex-shrink: 0 !important;
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+@media (max-width: 680px) {
+  /* 2-column KPI Grid on Mobile */
+  .kpi-row-salesland {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.65rem !important;
+  }
+  .kpi-row-salesland > :nth-child(5) {
+    grid-column: span 2 !important;
+  }
+  .kpi-card {
+    padding: 0.9rem !important;
+  }
+  .kpi-main-val {
+    font-size: 1.45rem !important;
+  }
+
+  /* Bottom sheet modal on mobile */
+  .modal-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh !important;
+    margin: auto 0 0 0 !important;
+    padding: 1.25rem 1rem !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  /* Search & pills stack */
+  .tx-quick-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .tx-search-box {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .tx-pill-group {
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+}
+
+/* --- OPTION 4: EXECUTIVE REPORT (ONE-PAGER GERENCIAL) STYLES --- */
+#executive-report-modal .modal-box {
+  max-width: 960px;
+  width: 95%;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.report-sheet {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-brand, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+}
+.report-header-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--border-card);
+  margin-bottom: 1.5rem;
+}
+.report-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.report-kpi-tile {
+  background: var(--bg-card-elevated, #f8fafc);
+  border: 1px solid var(--border-card, #e2e8f0);
+  border-radius: 10px;
+  padding: 0.85rem;
+  text-align: center;
+}
+[data-theme="dark"] .report-kpi-tile {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.report-kpi-tile .kpi-num {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #0284c7;
+  font-family: var(--font-brand);
+  line-height: 1.1;
+  margin-top: 3px;
+}
+.report-kpi-tile .kpi-lbl {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+}
+.report-table th {
+  background: #0b1f38;
+  color: #ffffff;
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.report-table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border-card);
+  color: var(--text-primary);
+}
+.report-table tr:nth-child(even) {
+  background: var(--bg-card-elevated);
+}
+
+/* --- PRINT & PDF OPTIMIZATION (@media print) --- */
+@media print {
+  /* Hide non-printable web UI */
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+  }
+  header,
+  .nav-tabs-wrapper,
+  .nav-tabs,
+  .header-utility-actions,
+  #supervisor-mode-banner,
+  #auth-gateway-overlay,
+  #btn-security-settings,
+  #btn-mobile-qr,
+  .pagination-bar,
+  .tx-quick-toolbar,
+  .modal-overlay:not(#executive-report-modal),
+  .btn-action,
+  button {
+    display: none !important;
+  }
+
+  /* Show only executive report sheet when open */
+  #executive-report-modal {
+    position: static !important;
+    display: block !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  #executive-report-modal .modal-box {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    overflow: visible !important;
+  }
+  .report-sheet {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  .report-table th {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .report-table td {
+    border-color: #cbd5e1 !important;
+  }
+  .report-kpi-tile {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
 </style>
 </head>
 <body class="role-supervisor">
@@ -4799,6 +5346,9 @@
         </button>
         <button class="btn-action" id="btn-export-excel" title="Descargar datos en Excel">
           📥 XLSX
+        </button>
+        <button class="btn-action" id="btn-open-executive-report" onclick="window.openExecutiveReportModal()" style="background:#0284c7; color:#ffffff; border-color:#0284c7; font-weight:700; box-shadow:0 2px 6px rgba(2, 132, 199, 0.35);" title="Ver Informe Gerencial Ejecutivo One-Pager">
+          📄 Reporte
         </button>
         <button class="btn-action" id="btn-print" title="Imprimir / Exportar a PDF">
           🖨️ PDF
@@ -5517,6 +6067,16 @@
           </div>
 
           <!-- NUEVA BARRA DE CONTROL JERÁRQUICO TERRITORIAL (CASCADING TOOLBAR) -->
+                    <!-- MAP METRIC LAYER SELECTOR -->
+          <div class="cr-map-layer-selector" style="margin: 0.5rem 0 0.85rem 0; display:flex; gap:4px; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-right:4px;">🎨 Métrica del Mapa:</span>
+            <button type="button" class="btn-map-layer active" data-metric="ventas" onclick="window.setMapMetricLayer('ventas')">🎯 Ventas Totales</button>
+            <button type="button" class="btn-map-layer" data-metric="cuota" onclick="window.setMapMetricLayer('cuota')">📈 % Cuota Regional</button>
+            <button type="button" class="btn-map-layer" data-metric="pospago" onclick="window.setMapMetricLayer('pospago')">📱 Pospago</button>
+            <button type="button" class="btn-map-layer" data-metric="prepago" onclick="window.setMapMetricLayer('prepago')">💳 Prepago</button>
+            <button type="button" class="btn-map-layer" data-metric="hogar" onclick="window.setMapMetricLayer('hogar')">🌐 Hogar</button>
+          </div>
+
           <div class="cr-geo-toolbar-card">
             <div class="cr-geo-toolbar-top">
               <div class="cr-geo-breadcrumbs" id="cr-geo-breadcrumbs">
@@ -5967,6 +6527,9 @@
                 <button type="button" class="btn-cant-chart-mode" id="btn-cant-view-chart" onclick="window.toggleCantonView('chart')">
                   <span>📊</span> Gráfico
                 </button>
+                <button type="button" class="btn-action" onclick="window.exportCantonesExcel()" style="padding:0.35rem 0.65rem; font-size:0.74rem; background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.3); border-radius:6px; font-weight:700;" title="Descargar desglose de cantones en Excel">
+                  📥 Exportar Cantones (.xlsx)
+                </button>
               </div>
             </div>
 
@@ -6008,7 +6571,12 @@
                   <button type="button" class="btn-pdv-filter-canal" data-canal="Multimarca" onclick="window.filterPdvByCanal('Multimarca')">Multimarca</button>
                 </div>
               </div>
-              <span id="cr-pdvs-table-count" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">0 tiendas activas</span>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span id="cr-pdvs-table-count" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">0 tiendas activas</span>
+                <button type="button" class="btn-action" onclick="window.exportPdvsExcel()" style="padding:0.35rem 0.65rem; font-size:0.74rem; background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.3); border-radius:6px; font-weight:700;" title="Descargar tiendas en Excel">
+                  📥 Exportar Tiendas (.xlsx)
+                </button>
+              </div>
             </div>
 
             <!-- PDV Table -->
@@ -6038,26 +6606,74 @@
         </div>
       </div>
     </div><div id="tab-data-grid" class="tab-pane-content">
-      <div class="transactions-table-card">
-        <div class="content-card-header">
-          <div class="content-card-title">
-            <span>Registro Detallado de Activaciones</span>
-            <span class="badge-pill" id="table-total-count">0 Registros</span>
+      <div class="cyber-hud-table-card">
+        <div class="content-card-header" style="flex-wrap:wrap; gap:0.75rem;">
+          <div class="content-card-title" style="display:flex; align-items:center; gap:0.6rem;">
+            <span style="font-size:1.15rem;">📋</span>
+            <span>Auditoría y Explorador de Transacciones</span>
+            <span class="cyber-counter" id="table-total-count">
+              <span class="cyber-pulse-dot"></span>
+              <span id="table-total-count-text">0 Registros</span>
+            </span>
           </div>
 
-          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-            <input type="text" id="tx-search-input" placeholder="Buscar cliente, cédula, vendedor..." style="padding:0.45rem 0.85rem; border:1px solid var(--border-card); border-radius:var(--radius-sm); font-size:0.83rem; width:260px; outline:none; background:var(--bg-card); color:var(--text-primary);">
-            
-            <div class="filter-box-card" style="padding:0.25rem 0.65rem; min-width:110px;">
-              <div class="filter-select-wrapper">
-                <select id="tx-page-size" style="font-size:0.78rem;">
-                  <option value="20" selected>20 por pág</option>
-                  <option value="50">50 por pág</option>
-                  <option value="100">100 por pág</option>
-                </select>
-                <svg class="filter-chevron" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6z"/></svg>
-              </div>
-            </div>
+          <!-- Quick Actions & Export -->
+          <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn-action" id="btn-tx-export-excel" onclick="window.exportFilteredTransactionsExcel()" style="background:#10b981; color:#fff; border-color:#10b981; font-weight:700; font-size:0.78rem; padding:0.4rem 0.85rem;" title="Exportar registros filtrados a Excel">
+              📥 Descargar XLSX
+            </button>
+            <button class="btn-action" id="btn-tx-export-csv" onclick="window.exportFilteredTransactionsCSV()" style="background:var(--bg-card-elevated); color:var(--text-primary); font-size:0.78rem; padding:0.4rem 0.75rem;" title="Descargar como CSV">
+              📄 CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Filters Bar (Cyber-HUD) -->
+        <div class="tx-quick-toolbar">
+          <!-- Live Search with clear button -->
+          <div class="tx-search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="tx-search-input" placeholder="Buscar cliente, cédula, contrato, ID, tel, vendedor, PDV...">
+            <button type="button" id="btn-clear-tx-search" class="btn-clear-search" onclick="window.clearTxSearch()">✕</button>
+          </div>
+
+          <!-- Quick Status Pills -->
+          <div class="tx-pill-group" id="tx-status-pills">
+            <button type="button" class="tx-pill-btn active" data-status="all" onclick="window.filterTxStatus('all')">Todos</button>
+            <button type="button" class="tx-pill-btn" data-status="VENTA" onclick="window.filterTxStatus('VENTA')">🟢 Ventas</button>
+            <button type="button" class="tx-pill-btn" data-status="RECHAZADA" onclick="window.filterTxStatus('RECHAZADA')">🔴 Rechazadas</button>
+            <button type="button" class="tx-pill-btn" data-status="DUPLICADO" onclick="window.filterTxStatus('DUPLICADO')">🟡 Duplicados</button>
+          </div>
+
+          <!-- Quick Canal / Project Pills -->
+          <div class="tx-pill-group" id="tx-canal-pills">
+            <button type="button" class="tx-pill-btn active" data-canal="all" onclick="window.filterTxCanal('all')">Todos Canales</button>
+            <button type="button" class="tx-pill-btn" data-canal="Retail P1" onclick="window.filterTxCanal('Retail P1')">Retail P1</button>
+            <button type="button" class="tx-pill-btn" data-canal="Retail P2" onclick="window.filterTxCanal('Retail P2')">Retail P2</button>
+          </div>
+
+          <!-- Quick Service Filter -->
+          <div style="display:flex; align-items:center; gap:0.35rem;">
+            <select id="tx-service-select" onchange="window.filterTxService(this.value)" style="font-size:0.78rem; font-weight:600; padding:0.35rem 0.65rem; border-radius:6px; border:1px solid var(--border-card); background:var(--bg-card); color:var(--text-primary); cursor:pointer;">
+              <option value="all">Todos los Servicios</option>
+              <option value="PREPAGO">Prepago</option>
+              <option value="PORTA PREPAGO">Porta Prepago</option>
+              <option value="POSPAGO">Pospago</option>
+              <option value="GPON">GPON</option>
+              <option value="DTH">DTH</option>
+              <option value="IFI">IFI</option>
+            </select>
+          </div>
+
+          <!-- Page Size -->
+          <div style="display:flex; align-items:center; gap:0.35rem;">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Ver:</span>
+            <select id="tx-page-size" style="font-size:0.78rem; font-weight:600; padding:0.35rem 0.65rem; border-radius:6px; border:1px solid var(--border-card); background:var(--bg-card); color:var(--text-primary); cursor:pointer;">
+              <option value="20" selected>20 por pág</option>
+              <option value="50">50 por pág</option>
+              <option value="100">100 por pág</option>
+              <option value="250">250 por pág</option>
+            </select>
           </div>
         </div>
 
@@ -6065,21 +6681,21 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th data-sort="fecha">Fecha <span>↕</span></th>
-                <th data-sort="contrato">Contrato <span>↕</span></th>
-                <th data-sort="id">ID <span>↕</span></th>
-                <th data-sort="telefono">Teléfono <span>↕</span></th>
-                <th data-sort="cliente">Cliente <span>↕</span></th>
-                <th data-sort="cedula">Cédula <span>↕</span></th>
-                <th data-sort="plan">Plan <span>↕</span></th>
-                <th data-sort="precio" class="col-facturacion">Precio <span>↕</span></th>
-                <th data-sort="tipo">Servicio Vendido <span>↕</span></th>
-                <th data-sort="canal">Proyecto <span>↕</span></th>
-                <th data-sort="pdv">Punto Venta <span>↕</span></th>
-                <th data-sort="supervisor">Supervisor <span>↕</span></th>
-                <th data-sort="vendedor">Vendedor <span>↕</span></th>
-                <th data-sort="provincia">Provincia <span>↕</span></th>
-                <th data-sort="estado">Estado <span>↕</span></th>
+                <th data-sort="fecha">Fecha <span class="sort-icon">↕</span></th>
+                <th data-sort="contrato">Contrato <span class="sort-icon">↕</span></th>
+                <th data-sort="id">ID <span class="sort-icon">↕</span></th>
+                <th data-sort="telefono">Teléfono <span class="sort-icon">↕</span></th>
+                <th data-sort="cliente">Cliente <span class="sort-icon">↕</span></th>
+                <th data-sort="cedula">Cédula <span class="sort-icon">↕</span></th>
+                <th data-sort="plan">Plan <span class="sort-icon">↕</span></th>
+                <th data-sort="precio" class="col-facturacion">Precio <span class="sort-icon">↕</span></th>
+                <th data-sort="tipo">Servicio Vendido <span class="sort-icon">↕</span></th>
+                <th data-sort="canal">Proyecto <span class="sort-icon">↕</span></th>
+                <th data-sort="pdv">Punto Venta <span class="sort-icon">↕</span></th>
+                <th data-sort="supervisor">Supervisor <span class="sort-icon">↕</span></th>
+                <th data-sort="vendedor">Vendedor <span class="sort-icon">↕</span></th>
+                <th data-sort="provincia">Provincia <span class="sort-icon">↕</span></th>
+                <th data-sort="estado">Estado <span class="sort-icon">↕</span></th>
               </tr>
             </thead>
             <tbody id="tx-tbody">
@@ -6089,11 +6705,13 @@
         </div>
 
         <div class="pagination-bar">
-          <div style="font-size:0.8rem; color:var(--text-muted);" id="tx-page-info">Mostrando 1 a 20</div>
+          <div style="font-size:0.82rem; font-weight:600; color:var(--text-secondary);" id="tx-page-info">Mostrando 1 a 20</div>
           <div class="pagination-btns">
+            <button class="p-btn" id="btn-tx-first" onclick="goToTxPage(1)" title="Primera Página">« Primera</button>
             <button class="p-btn" id="btn-tx-prev">‹ Ant</button>
             <span id="tx-page-nums" style="display:flex; gap:0.25rem;"></span>
             <button class="p-btn" id="btn-tx-next">Sig ›</button>
+            <button class="p-btn" id="btn-tx-last" onclick="window.goToTxLastPage()" title="Última Página">Última »</button>
           </div>
         </div>
       </div>
@@ -6714,6 +7332,38 @@
         <p style="font-weight:700; color:var(--text-primary); margin-bottom:0.25rem;">Arrastra aquí tu nuevo archivo .xlsx</p>
         <p style="font-size:0.8rem; color:var(--text-muted);">O haz clic para seleccionar</p>
         <input type="file" id="file-input" accept=".xlsx, .xls" style="display:none;">
+      </div>
+    </div>
+  </div>
+
+    <!-- ====================================================================== -->
+  <!-- 📄 MODAL: INFORME GERENCIAL EJECUTIVO (ONE-PAGER CONSOLIDADO)            -->
+  <!-- ====================================================================== -->
+  <div class="modal-overlay" id="executive-report-modal">
+    <div class="modal-box" style="max-width:980px; width:95%; max-height:92vh; overflow-y:auto; padding:2rem 2.25rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; border-bottom:2px solid var(--border-card); padding-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="font-size:2rem; line-height:1;">📄</span>
+          <div>
+            <h2 style="font-family:var(--font-brand); font-weight:800; margin:0; font-size:1.35rem; color:var(--text-brand);">Informe Gerencial Ejecutivo</h2>
+            <p style="margin:3px 0 0 0; font-size:0.8rem; color:var(--text-muted);" id="exec-report-subtitle">Salesland Costa Rica • Retail Telecomunicaciones • Generado en tiempo real</p>
+          </div>
+        </div>
+        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+          <button class="btn-action" onclick="window.printExecutiveReport()" style="background:#0284c7; color:#fff; font-weight:700; font-size:0.82rem; padding:0.45rem 1rem; border-radius:6px;" title="Imprimir o Guardar en PDF">
+            🖨️ Imprimir / Guardar PDF
+          </button>
+          <button class="btn-action" onclick="window.exportExecutiveReportExcel()" style="background:#10b981; color:#fff; font-weight:700; font-size:0.82rem; padding:0.45rem 1rem; border-radius:6px;" title="Descargar como Excel Ejecutivo">
+            📥 Descargar Excel
+          </button>
+          <button class="btn-action" onclick="window.closeExecutiveReportModal()" style="padding:0.45rem 0.85rem; font-size:0.82rem; border-radius:6px;">
+            ✕ Cerrar
+          </button>
+        </div>
+      </div>
+
+      <div class="report-sheet" id="executive-report-content">
+        <!-- Rendered dynamically by window.renderExecutiveReport() -->
       </div>
     </div>
   </div>
@@ -11792,8 +12442,21 @@
           svgEl.setAttribute('viewBox', '30 35 730 610');
         }
 
-        const maxPV = provList.length > 0 ? Math.max(...provList.map(p => p.ventas)) : 1;
-        const minPV = provList.length > 0 ? Math.min(...provList.map(p => p.ventas)) : 0;
+        // Layer-aware value getter
+        function getProvMetricVal(pObj) {
+          if (!pObj) return 0;
+          const lyr = App.mapMetricLayer || 'ventas';
+          if (lyr === 'cuota') return pObj.cuota || 0;
+          if (lyr === 'pospago') return (pObj.servicios && pObj.servicios.Pospago) || 0;
+          if (lyr === 'prepago') return (pObj.servicios && pObj.servicios.Prepago) || 0;
+          if (lyr === 'hogar') return (pObj.servicios && pObj.servicios.Hogar) || 0;
+          return pObj.ventas || 0;
+        }
+
+        const provVals = provList.map(p => getProvMetricVal(p));
+        const maxPV = provVals.length > 0 ? Math.max(...provVals) : 1;
+        const minPV = provVals.length > 0 ? Math.min(...provVals) : 0;
+        const tooltip = document.getElementById('cr-map-floating-tooltip');
 
         document.querySelectorAll('.cr-map-prov-path').forEach(el => {
           el.style.opacity = '1';
@@ -11802,10 +12465,52 @@
           const pName = el.getAttribute('data-province');
           const stdP = window.getStandardProvName(pName);
           const pObj = provData[stdP];
-          const v = pObj ? pObj.ventas : 0;
+          const v = getProvMetricVal(pObj);
           el.style.fill = getChoroplethColor(v, minPV, maxPV, isDark);
 
+          // Update SVG Pin badge value
+          const pSlug = window.getProvSlug(pName);
+          const pinValEl = document.getElementById(`cr-pin-val-${pSlug}`);
+          if (pinValEl && pObj) {
+            if (App.mapMetricLayer === 'cuota') pinValEl.textContent = `${pObj.cuota.toFixed(1)}%`;
+            else pinValEl.textContent = v.toLocaleString();
+          }
+
+          // Tooltip events
+          el.onmouseenter = (e) => {
+            if (tooltip && pObj) {
+              const topC = Object.keys(pObj.cantones || {}).sort((a,b) => pObj.cantones[b] - pObj.cantones[a])[0] || '-';
+              const topStore = Object.keys(pObj.pdvs || {}).sort((a,b) => pObj.pdvs[b] - pObj.pdvs[a])[0] || '-';
+              const lyrName = (App.mapMetricLayer || 'Ventas').toUpperCase();
+              tooltip.innerHTML = `
+                <div style="font-weight:800; font-size:0.86rem; color:#38bdf8; margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+                  <span>📍</span> ${escapeHtml(pName)}
+                </div>
+                <div style="font-size:0.76rem; color:#f8fafc; margin-bottom:2px;">
+                  ${lyrName}: <strong style="color:#10b981;">${App.mapMetricLayer === 'cuota' ? v.toFixed(1) + '%' : v.toLocaleString()}</strong>
+                </div>
+                <div style="font-size:0.72rem; color:#cbd5e1;">Total Ventas: ${pObj.ventas.toLocaleString()} (${pObj.cuota.toFixed(1)}%)</div>
+                <div style="font-size:0.69rem; color:#94a3b8; margin-top:3px; border-top:1px solid rgba(255,255,255,0.1); padding-top:3px;">
+                  Top Cantón: <strong style="color:#f8fafc;">${escapeHtml(topC)}</strong><br>
+                  Top Tienda: <strong style="color:#f8fafc;">${escapeHtml(topStore)}</strong>
+                </div>
+              `;
+              tooltip.style.display = 'block';
+            }
+          };
+          el.onmousemove = (e) => {
+            if (tooltip && svgEl) {
+              const rect = svgEl.getBoundingClientRect();
+              tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+              tooltip.style.top = (e.clientY - rect.top + 15) + 'px';
+            }
+          };
+          el.onmouseleave = () => {
+            if (tooltip) tooltip.style.display = 'none';
+          };
+
           el.onclick = () => {
+            if (tooltip) tooltip.style.display = 'none';
             window.drillDownToProvince(pName);
           };
         });
@@ -12131,11 +12836,190 @@
     };
 
 
-    function renderTransactionsTable() {
+    
+    // =========================================================================
+    // 🚀 UPGRADE 2026: ENHANCED INTERACTIVITY, DATA GRID, MAP LAYERS & REPORT
+    // =========================================================================
+
+    // App state defaults for new features
+    App.txQuickStatus = 'all';
+    App.txQuickCanal = 'all';
+    App.txQuickServicio = 'all';
+    App.mapMetricLayer = 'ventas';
+
+    // 📋 TOAST NOTIFICATION HELPER
+    
+    // 🗺️ EXPORT CANTONES TO EXCEL
+    window.exportCantonesExcel = function() {
+      const cantTable = document.getElementById('cr-cantones-table-body');
+      if (!cantTable) return;
+      const rows = [];
+      cantTable.querySelectorAll('tr').forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        if (tds.length >= 6) {
+          rows.push({
+            'Ranking': tds[0].textContent.trim(),
+            'Cantón': tds[1].textContent.trim(),
+            'Provincia': tds[2].textContent.trim(),
+            'Total Ventas': parseInt(tds[3].textContent.replace(/,/g, '').trim(), 10) || 0,
+            '% Cuota': tds[4].textContent.trim(),
+            'Facturación Estimada': tds[5].textContent.trim()
+          });
+        }
+      });
+      if (rows.length === 0) return alert('No hay cantones visibles para exportar.');
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Cantones");
+      XLSX.writeFile(wb, `Salesland_Cantones_${new Date().toISOString().slice(0,10)}.xlsx`);
+      window.showToast('Desglose de cantones descargado', '📥');
+    };
+
+    // 🏪 EXPORT PDVS TO EXCEL
+    window.exportPdvsExcel = function() {
+      const pdvTable = document.getElementById('cr-pdvs-table-body');
+      if (!pdvTable) return;
+      const rows = [];
+      pdvTable.querySelectorAll('tr').forEach(tr => {
+        const tds = tr.querySelectorAll('td');
+        if (tds.length >= 10) {
+          rows.push({
+            'Ranking': tds[0].textContent.trim(),
+            'Tienda / PDV': tds[1].textContent.trim(),
+            'Cantón': tds[2].textContent.trim(),
+            'Provincia': tds[3].textContent.trim(),
+            'Canal': tds[4].textContent.trim(),
+            'Pospago': parseInt(tds[5].textContent.replace(/,/g, '').trim(), 10) || 0,
+            'Prepago': parseInt(tds[6].textContent.replace(/,/g, '').trim(), 10) || 0,
+            'Porta': parseInt(tds[7].textContent.replace(/,/g, '').trim(), 10) || 0,
+            'Hogar': parseInt(tds[8].textContent.replace(/,/g, '').trim(), 10) || 0,
+            'Total Ventas': parseInt(tds[9].textContent.replace(/,/g, '').trim(), 10) || 0,
+            'Facturación': tds[10].textContent.trim()
+          });
+        }
+      });
+      if (rows.length === 0) return alert('No hay tiendas visibles para exportar.');
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Tiendas_PDVs");
+      XLSX.writeFile(wb, `Salesland_PDVs_${new Date().toISOString().slice(0,10)}.xlsx`);
+      window.showToast('Directorio de tiendas descargado', '📥');
+    };
+
+
+    window.showToast = function(msg, icon = '✓') {
+      let t = document.getElementById('salesland-toast-popup');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'salesland-toast-popup';
+        t.style.cssText = 'position:fixed; bottom:24px; right:24px; z-index:999999; background:rgba(15,23,42,0.92); color:#fff; padding:0.65rem 1.15rem; border-radius:10px; font-weight:700; font-size:0.83rem; display:flex; align-items:center; gap:0.5rem; box-shadow:0 10px 30px rgba(0,0,0,0.35); border:1px solid rgba(56,189,248,0.3); backdrop-filter:blur(8px); transition:all 0.3s cubic-bezier(0.4,0,0.2,1); opacity:0; transform:translateY(15px); pointer-events:none; font-family:var(--font-brand);';
+        document.body.appendChild(t);
+      }
+      t.innerHTML = `<span>${icon}</span> <span>${escapeHtml(msg)}</span>`;
+      t.style.opacity = '1';
+      t.style.transform = 'translateY(0)';
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(15px)';
+      }, 2400);
+    };
+
+    // 📋 COPY TO CLIPBOARD HELPER
+    window.copyToClipboard = function(text) {
+      if (!text || text === '-') return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          window.showToast(`Copiado: ${text}`, '📋');
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+      function fallbackCopy(str) {
+        const ta = document.createElement('textarea');
+        ta.value = str;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          window.showToast(`Copiado: ${str}`, '📋');
+        } catch(e) {}
+        document.body.removeChild(ta);
+      }
+    };
+
+    // 📋 TAB 5: QUICK FILTERS & NAVIGATION
+    window.filterTxStatus = function(status) {
+      App.txQuickStatus = status;
+      document.querySelectorAll('#tx-status-pills .tx-pill-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-status') === status);
+      });
+      App.txPage = 1;
+      renderTransactionsTable();
+    };
+
+    window.filterTxCanal = function(canal) {
+      App.txQuickCanal = canal;
+      document.querySelectorAll('#tx-canal-pills .tx-pill-btn').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-canal') === canal);
+      });
+      App.txPage = 1;
+      renderTransactionsTable();
+    };
+
+    window.filterTxService = function(service) {
+      App.txQuickServicio = service;
+      App.txPage = 1;
+      renderTransactionsTable();
+    };
+
+    window.clearTxSearch = function() {
+      const inp = document.getElementById('tx-search-input');
+      const btn = document.getElementById('btn-clear-tx-search');
+      if (inp) inp.value = '';
+      if (btn) btn.style.display = 'none';
+      App.filters.txSearch = '';
+      App.txPage = 1;
+      renderTransactionsTable();
+    };
+
+    window.goToTxLastPage = function() {
+      const data = getFilteredTransactionsData();
+      const totalPages = Math.ceil(data.length / App.txPageSize) || 1;
+      goToTxPage(totalPages);
+    };
+
+    function getFilteredTransactionsData() {
       let data = [...App.filtered];
 
-      // Search filter across all key fields including contrato, id, and telefono
-      const q = App.filters.txSearch.toLowerCase().trim();
+      // Quick Status Filter
+      if (App.txQuickStatus && App.txQuickStatus !== 'all') {
+        data = data.filter(r => r[10] === App.txQuickStatus);
+      }
+
+      // Quick Canal Filter
+      if (App.txQuickCanal && App.txQuickCanal !== 'all') {
+        data = data.filter(r => {
+          const c = String(r[7] || '');
+          return c.includes(App.txQuickCanal);
+        });
+      }
+
+      // Quick Service Filter
+      if (App.txQuickServicio && App.txQuickServicio !== 'all') {
+        const qS = App.txQuickServicio.toLowerCase();
+        data = data.filter(r => {
+          const s = String(r[9] || '').toLowerCase();
+          return s.includes(qS);
+        });
+      }
+
+      // Search Filter
+      const q = (App.filters.txSearch || '').toLowerCase().trim();
       if (q) {
         data = data.filter(r => {
           return (r[3] && r[3].toLowerCase().includes(q)) ||
@@ -12144,11 +13028,354 @@
                  (r[12] && r[12].toLowerCase().includes(q)) ||
                  (r[8] && r[8].toLowerCase().includes(q)) ||
                  (r[5] && r[5].toLowerCase().includes(q)) ||
+                 (r[9] && r[9].toLowerCase().includes(q)) ||
+                 (r[14] && r[14].toLowerCase().includes(q)) ||
                  (r[16] && String(r[16]).toLowerCase().includes(q)) ||
                  (r[17] && String(r[17]).toLowerCase().includes(q)) ||
                  (r[18] && String(r[18]).toLowerCase().includes(q));
         });
       }
+
+      return data;
+    }
+
+    // 📋 EXPORT FILTERED TRANSACTIONS TO EXCEL
+    window.exportFilteredTransactionsExcel = function() {
+      const data = getFilteredTransactionsData();
+      if (data.length === 0) return alert('No hay registros visibles para exportar con los filtros seleccionados.');
+      
+      const rows = data.map(r => ({
+        'Fecha': r[0],
+        'Contrato': r[16] || '',
+        'ID Trámite': r[17] || '',
+        'Teléfono': r[18] || '',
+        'Cliente': r[3],
+        'Cédula': r[4],
+        'Plan': r[5],
+        'Precio (₡)': r[6],
+        'Servicio Vendido': r[9],
+        'Proyecto/Canal': r[7],
+        'Punto de Venta': r[8],
+        'Supervisor': r[12],
+        'Vendedor': r[11],
+        'Provincia': r[14],
+        'Cantón': r[15] || '',
+        'Estado': r[10]
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Transacciones_Filtradas");
+      const d = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(wb, `Salesland_Transacciones_${d}.xlsx`);
+      window.showToast('Archivo Excel descargado con éxito', '📥');
+    };
+
+    // 📋 EXPORT FILTERED TRANSACTIONS TO CSV
+    window.exportFilteredTransactionsCSV = function() {
+      const data = getFilteredTransactionsData();
+      if (data.length === 0) return alert('No hay registros visibles para exportar.');
+      
+      const headers = ['Fecha', 'Contrato', 'ID', 'Telefono', 'Cliente', 'Cedula', 'Plan', 'Precio', 'Servicio', 'Canal', 'PDV', 'Supervisor', 'Vendedor', 'Provincia', 'Estado'];
+      const csvRows = [headers.join(',')];
+
+      data.forEach(r => {
+        const row = [
+          `"${(r[0] || '').replace(/"/g, '""')}"`,
+          `"${(r[16] || '').replace(/"/g, '""')}"`,
+          `"${(r[17] || '').replace(/"/g, '""')}"`,
+          `"${(r[18] || '').replace(/"/g, '""')}"`,
+          `"${(r[3] || '').replace(/"/g, '""')}"`,
+          `"${(r[4] || '').replace(/"/g, '""')}"`,
+          `"${(r[5] || '').replace(/"/g, '""')}"`,
+          r[6] || 0,
+          `"${(r[9] || '').replace(/"/g, '""')}"`,
+          `"${(r[7] || '').replace(/"/g, '""')}"`,
+          `"${(r[8] || '').replace(/"/g, '""')}"`,
+          `"${(r[12] || '').replace(/"/g, '""')}"`,
+          `"${(r[11] || '').replace(/"/g, '""')}"`,
+          `"${(r[14] || '').replace(/"/g, '""')}"`,
+          `"${(r[10] || '').replace(/"/g, '""')}"`
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      const blob = new Blob(["\uFEFF" + csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Salesland_Transacciones_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.showToast('Archivo CSV descargado con éxito', '📄');
+    };
+
+    // 🗺️ TAB 4: MAP METRIC LAYER CONTROLLER
+    window.setMapMetricLayer = function(metric) {
+      App.mapMetricLayer = metric;
+      document.querySelectorAll('.btn-map-layer').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-metric') === metric);
+      });
+      if (typeof renderSupervisorsAndTerritory === 'function') {
+        renderSupervisorsAndTerritory();
+      }
+      window.showToast(`Capa de mapa activa: ${metric.toUpperCase()}`, '🎨');
+    };
+
+    // 📄 OPTION 4: EXECUTIVE REPORT ONE-PAGER CONTROLLER
+    window.openExecutiveReportModal = function() {
+      const modal = document.getElementById('executive-report-modal');
+      if (!modal) return;
+      window.renderExecutiveReport();
+      modal.classList.add('open');
+    };
+
+    window.closeExecutiveReportModal = function() {
+      const modal = document.getElementById('executive-report-modal');
+      if (modal) modal.classList.remove('open');
+    };
+
+    window.printExecutiveReport = function() {
+      window.print();
+    };
+
+    window.renderExecutiveReport = function() {
+      const container = document.getElementById('executive-report-content');
+      const subtitle = document.getElementById('exec-report-subtitle');
+      if (!container) return;
+
+      const activeMonth = App.filters.mes && App.filters.mes !== 'all' ? App.filters.mes : 'Octubre';
+      const activeYear = App.filters.ano || '2026';
+      const activeProject = App.filters.proyecto && App.filters.proyecto !== 'all' ? App.filters.proyecto : 'Consolidado (P1 + P2)';
+      const activeSupervisor = App.filters.supervisor && App.filters.supervisor !== 'all' ? `• Supervisor: ${App.filters.supervisor}` : '';
+      
+      const ahora = new Date().toLocaleDateString('es-CR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      if (subtitle) {
+        subtitle.textContent = `Período: ${activeMonth} ${activeYear} • Proyecto: ${activeProject} ${activeSupervisor} • Generado: ${ahora}`;
+      }
+
+      // Calculate executive metrics from App.filtered
+      const totalVentas = App.filtered.length;
+      const targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota() : (App.targetQuota || 7806);
+      const cumpPct = targetQuota > 0 ? ((totalVentas / targetQuota) * 100).toFixed(1) : '0.0';
+
+      // Daily run-rate projection
+      const day = new Date().getDate();
+      const totalDays = 31;
+      const projected = day > 0 ? Math.round((totalVentas / day) * totalDays) : totalVentas;
+
+      // Group by services
+      const sMap = { 'PREPAGO': 0, 'PORTA PREPAGO': 0, 'POSPAGO': 0, 'HOGAR': 0 };
+      const vMap = {};
+      const pMap = {};
+      const cMap = { 'Cadenas': 0, 'Multimarca': 0, 'Otros': 0 };
+
+      App.filtered.forEach(r => {
+        const s = String(r[9] || '').toUpperCase();
+        if (s.includes('PORTA PRE')) sMap['PORTA PREPAGO']++;
+        else if (s.includes('PREPAGO')) sMap['PREPAGO']++;
+        else if (s.includes('POSPAGO') || s.includes('POSTPAGO') || s.includes('MIGRACION') || s.includes('PORTA POST')) sMap['POSPAGO']++;
+        else if (s.includes('GPON') || s.includes('DTH') || s.includes('IFI') || s.includes('HOGAR')) sMap['HOGAR']++;
+
+        // Vendedor
+        const v = r[11] || 'Sin Asignar';
+        vMap[v] = (vMap[v] || 0) + 1;
+
+        // Provincia
+        const p = r[14] || 'Otras';
+        pMap[p] = (pMap[p] || 0) + 1;
+
+        // Canal
+        const c = String(r[7] || '');
+        if (c.toLowerCase().includes('cadenas')) cMap['Cadenas']++;
+        else if (c.toLowerCase().includes('multi')) cMap['Multimarca']++;
+        else cMap['Otros']++;
+      });
+
+      // Top 5 Vendedores
+      const topSellers = Object.entries(vMap).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+      // Top 5 Provincias
+      const topProvs = Object.entries(pMap).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+      container.innerHTML = `
+        <!-- 1. BLOQUE DE KPIS CONSOLIDADOS -->
+        <div class="report-kpi-grid">
+          <div class="report-kpi-tile">
+            <div class="kpi-lbl">🎯 Meta Mensual</div>
+            <div class="kpi-num">${targetQuota.toLocaleString()}</div>
+          </div>
+          <div class="report-kpi-tile">
+            <div class="kpi-lbl">⚡ Ventas Aprobadas</div>
+            <div class="kpi-num" style="color:#0284c7;">${totalVentas.toLocaleString()}</div>
+          </div>
+          <div class="report-kpi-tile">
+            <div class="kpi-lbl">🏆 % Cumplimiento</div>
+            <div class="kpi-num" style="color:${cumpPct >= 80 ? '#10b981' : (cumpPct >= 50 ? '#f59e0b' : '#ef4444')};">${cumpPct}%</div>
+          </div>
+          <div class="report-kpi-tile">
+            <div class="kpi-lbl">📈 Proyección Cierre</div>
+            <div class="kpi-num" style="color:#8b5cf6;">${projected.toLocaleString()}</div>
+          </div>
+          <div class="report-kpi-tile">
+            <div class="kpi-lbl">🏢 Canales Activos</div>
+            <div class="kpi-num" style="color:#0f172a;">${(cMap['Cadenas'] + cMap['Multimarca']).toLocaleString()}</div>
+          </div>
+        </div>
+
+        <!-- 2. DESGLOSE POR SERVICIOS COMERCIALES -->
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="font-size:1rem; font-weight:800; color:var(--text-brand); margin:0 0 0.6rem 0; display:flex; align-items:center; gap:0.4rem;">
+            <span>📊</span> Rendimiento por Familia de Servicio
+          </h3>
+          <table class="report-table">
+            <thead>
+              <tr>
+                <th>Servicio Comercial</th>
+                <th style="text-align:right;">Ventas Actuales</th>
+                <th style="text-align:right;">% Mix de Ventas</th>
+                <th style="width:35%;">Progreso Relativo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>📱 Prepago</strong></td>
+                <td style="text-align:right; font-weight:700; color:#0284c7;">${sMap['PREPAGO'].toLocaleString()}</td>
+                <td style="text-align:right; font-weight:600;">${totalVentas > 0 ? ((sMap['PREPAGO']/totalVentas)*100).toFixed(1) : 0}%</td>
+                <td>
+                  <div style="background:rgba(0,0,0,0.08); height:8px; border-radius:4px; overflow:hidden;">
+                    <div style="background:#0284c7; height:100%; width:${totalVentas > 0 ? (sMap['PREPAGO']/totalVentas)*100 : 0}%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>🔄 Portabilidad Prepago</strong></td>
+                <td style="text-align:right; font-weight:700; color:#10b981;">${sMap['PORTA PREPAGO'].toLocaleString()}</td>
+                <td style="text-align:right; font-weight:600;">${totalVentas > 0 ? ((sMap['PORTA PREPAGO']/totalVentas)*100).toFixed(1) : 0}%</td>
+                <td>
+                  <div style="background:rgba(0,0,0,0.08); height:8px; border-radius:4px; overflow:hidden;">
+                    <div style="background:#10b981; height:100%; width:${totalVentas > 0 ? (sMap['PORTA PREPAGO']/totalVentas)*100 : 0}%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>📑 Pospago (Consolidado)</strong></td>
+                <td style="text-align:right; font-weight:700; color:#8b5cf6;">${sMap['POSPAGO'].toLocaleString()}</td>
+                <td style="text-align:right; font-weight:600;">${totalVentas > 0 ? ((sMap['POSPAGO']/totalVentas)*100).toFixed(1) : 0}%</td>
+                <td>
+                  <div style="background:rgba(0,0,0,0.08); height:8px; border-radius:4px; overflow:hidden;">
+                    <div style="background:#8b5cf6; height:100%; width:${totalVentas > 0 ? (sMap['POSPAGO']/totalVentas)*100 : 0}%;"></div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>🌐 Servicios Hogar (GPON / DTH / IFI)</strong></td>
+                <td style="text-align:right; font-weight:700; color:#f59e0b;">${sMap['HOGAR'].toLocaleString()}</td>
+                <td style="text-align:right; font-weight:600;">${totalVentas > 0 ? ((sMap['HOGAR']/totalVentas)*100).toFixed(1) : 0}%</td>
+                <td>
+                  <div style="background:rgba(0,0,0,0.08); height:8px; border-radius:4px; overflow:hidden;">
+                    <div style="background:#f59e0b; height:100%; width:${totalVentas > 0 ? (sMap['HOGAR']/totalVentas)*100 : 0}%;"></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3. TOP ASESORES & TOP PROVINCIAS (2 COLUMNAS) -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem;">
+          <div>
+            <h3 style="font-size:0.95rem; font-weight:800; color:var(--text-brand); margin:0 0 0.5rem 0;">
+              👑 Cuadro de Honor: Top 5 Vendedores
+            </h3>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th style="width:30px;">#</th>
+                  <th>Asesor Comercial</th>
+                  <th style="text-align:right;">Ventas</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${topSellers.map(([v, n], idx) => `
+                  <tr>
+                    <td style="font-weight:700; color:${idx === 0 ? '#f59e0b' : (idx === 1 ? '#94a3b8' : (idx === 2 ? '#b45309' : 'inherit'))};">${idx+1}</td>
+                    <td><strong>${escapeHtml(v)}</strong></td>
+                    <td style="text-align:right; font-weight:700; color:#0284c7;">${n.toLocaleString()}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <h3 style="font-size:0.95rem; font-weight:800; color:var(--text-brand); margin:0 0 0.5rem 0;">
+              🗺️ Distribución Regional: Top Provincias
+            </h3>
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th style="width:30px;">#</th>
+                  <th>Provincia</th>
+                  <th style="text-align:right;">Ventas</th>
+                  <th style="text-align:right;">% Nacional</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${topProvs.map(([p, n], idx) => `
+                  <tr>
+                    <td style="font-weight:700;">#${idx+1}</td>
+                    <td><strong>${escapeHtml(p)}</strong></td>
+                    <td style="text-align:right; font-weight:700; color:#0284c7;">${n.toLocaleString()}</td>
+                    <td style="text-align:right; font-weight:600;">${totalVentas > 0 ? ((n/totalVentas)*100).toFixed(1) : 0}%</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    };
+
+    window.exportExecutiveReportExcel = function() {
+      const activeMonth = App.filters.mes && App.filters.mes !== 'all' ? App.filters.mes : 'Octubre';
+      const targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota() : (App.targetQuota || 7806);
+      const totalVentas = App.filtered.length;
+      const cumpPct = targetQuota > 0 ? ((totalVentas / targetQuota) * 100).toFixed(1) : '0.0';
+
+      const summaryData = [
+        ['REPORTE GERENCIAL EJECUTIVO - SALESLAND RETAIL'],
+        ['Período:', activeMonth, 'Año:', App.filters.ano || '2026'],
+        ['Fecha de Generación:', new Date().toLocaleString()],
+        [],
+        ['INDICADOR CLAVE', 'VALOR'],
+        ['Meta Comercial Base', targetQuota],
+        ['Ventas Totales Aprobadas', totalVentas],
+        ['Porcentaje de Cumplimiento', cumpPct + '%'],
+        [],
+        ['DESGLOSE POR FAMILIA DE SERVICIO'],
+        ['Servicio', 'Ventas']
+      ];
+
+      // Add services
+      const sMap = {};
+      App.filtered.forEach(r => {
+        const s = r[9] || 'Otros';
+        sMap[s] = (sMap[s] || 0) + 1;
+      });
+      Object.entries(sMap).forEach(([k, v]) => summaryData.push([k, v]));
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, ws, "Resumen_Gerencial");
+      XLSX.writeFile(wb, `Salesland_Reporte_Ejecutivo_${new Date().toISOString().slice(0,10)}.xlsx`);
+      window.showToast('Reporte ejecutivo Excel descargado', '📥');
+    };
+
+
+    function renderTransactionsTable() {
+      const data = getFilteredTransactionsData();
 
       // Sort
       const col = App.txSortCol;
@@ -12185,7 +13412,8 @@
       });
 
       const totalRows = data.length;
-      document.getElementById('table-total-count').innerText = `${totalRows.toLocaleString()} Registros`;
+      const cntEl = document.getElementById('table-total-count-text') || document.getElementById('table-total-count');
+      if (cntEl) cntEl.innerText = `${totalRows.toLocaleString()} Registros`;
 
       const totalPages = Math.ceil(totalRows / App.txPageSize) || 1;
       const curPage = Math.min(Math.max(App.txPage, 1), totalPages);
@@ -12224,42 +13452,53 @@
         html += `
           <tr>
             <td>${escapeHtml(fecha)}</td>
-            <td><span class="badge-code" title="${escapeHtml(contrato)}">${escapeHtml(contrato)}</span></td>
-            <td><span class="badge-code" title="${escapeHtml(idVal)}">${escapeHtml(idVal)}</span></td>
-            <td><strong style="color:var(--text-primary); font-family:var(--font-brand);">${escapeHtml(tel)}</strong></td>
+            <td><span class="badge-cyber-code" onclick="window.copyToClipboard('${escapeHtml(contrato)}')" title="Clic para copiar">${escapeHtml(contrato)}</span></td>
+            <td><span class="badge-cyber-code" onclick="window.copyToClipboard('${escapeHtml(idVal)}')" title="Clic para copiar">${escapeHtml(idVal)}</span></td>
+            <td><strong class="badge-cyber-code" style="color:var(--text-primary); cursor:pointer;" onclick="window.copyToClipboard('${escapeHtml(tel)}')" title="Clic para copiar">${escapeHtml(tel)}</strong></td>
             <td><strong>${escapeHtml(cliente)}</strong></td>
             <td>${escapeHtml(cedula)}</td>
             <td>${escapeHtml(plan)}</td>
-            <td><strong>${formatCurrency(precio)}</strong></td>
+            <td class="col-facturacion"><strong>${formatCurrency(precio)}</strong></td>
             <td>${escapeHtml(tipo)}</td>
             <td>${escapeHtml(canal)}</td>
             <td>${escapeHtml(pdv)}</td>
             <td>${escapeHtml(supervisor)}</td>
             <td>${escapeHtml(vendedor)}</td>
             <td>${escapeHtml(provincia)}</td>
-            <td><span class="${badgeCls}">${escapeHtml(estado)}</span></td>
+            <td><span class="${badgeCls}"><span class="cyber-pulse-dot" style="width:5px; height:5px; margin-right:4px;"></span>${escapeHtml(estado)}</span></td>
           </tr>
         `;
       });
 
       if (rows.length === 0) {
-        html = '<tr><td colspan="15" style="text-align:center; padding:2rem; color:var(--text-muted);">No se encontraron transacciones.</td></tr>';
+        html = '<tr><td colspan="15" style="text-align:center; padding:2.5rem; color:var(--text-muted); font-size:0.9rem;">🔍 No se encontraron transacciones con los criterios seleccionados.</td></tr>';
       }
       tbody.innerHTML = html;
 
       // Pagination Controls
-      document.getElementById('tx-page-info').innerText = totalRows === 0 ? 'Sin registros' : `Mostrando ${start + 1} a ${end} de ${totalRows.toLocaleString()}`;
-      document.getElementById('btn-tx-prev').disabled = curPage <= 1;
-      document.getElementById('btn-tx-next').disabled = curPage >= totalPages;
+      const infoEl = document.getElementById('tx-page-info');
+      if (infoEl) infoEl.innerText = totalRows === 0 ? 'Sin registros' : `Mostrando ${start + 1} a ${end} de ${totalRows.toLocaleString()}`;
+      
+      const prevBtn = document.getElementById('btn-tx-prev');
+      const nextBtn = document.getElementById('btn-tx-next');
+      const firstBtn = document.getElementById('btn-tx-first');
+      const lastBtn = document.getElementById('btn-tx-last');
+
+      if (prevBtn) prevBtn.disabled = curPage <= 1;
+      if (firstBtn) firstBtn.disabled = curPage <= 1;
+      if (nextBtn) nextBtn.disabled = curPage >= totalPages;
+      if (lastBtn) lastBtn.disabled = curPage >= totalPages;
 
       const pageNumsBox = document.getElementById('tx-page-nums');
-      let pNums = '';
-      const pStart = Math.max(1, curPage - 2);
-      const pEnd = Math.min(totalPages, curPage + 2);
-      for (let p = pStart; p <= pEnd; p++) {
-        pNums += `<button class="p-btn ${p === curPage ? 'active' : ''}" onclick="goToTxPage(${p})">${p}</button>`;
+      if (pageNumsBox) {
+        let pNums = '';
+        const pStart = Math.max(1, curPage - 2);
+        const pEnd = Math.min(totalPages, curPage + 2);
+        for (let p = pStart; p <= pEnd; p++) {
+          pNums += `<button class="p-btn ${p === curPage ? 'active' : ''}" onclick="goToTxPage(${p})">${p}</button>`;
+        }
+        pageNumsBox.innerHTML = pNums;
       }
-      pageNumsBox.innerHTML = pNums;
     }
 
     function goToTxPage(p) {
@@ -12534,6 +13773,8 @@
       // Transactions search & pagination
       document.getElementById('tx-search-input').addEventListener('input', (e) => {
         App.filters.txSearch = e.target.value;
+        const btnClear = document.getElementById('btn-clear-tx-search');
+        if (btnClear) btnClear.style.display = e.target.value ? 'block' : 'none';
         App.txPage = 1;
         renderTransactionsTable();
       });
