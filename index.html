@@ -1283,37 +1283,40 @@
       gap: 1.25rem;
     }
 
+    /* =============================================================
+       FINTECH PERFORMANCE PRO (Opción 3) — FICHAS COMERCIALES
+       ============================================================= */
     .seller-visual-card {
       background: var(--bg-card, #ffffff);
       border: 1px solid var(--border-card, #e2e8f0);
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-      padding: 1.15rem;
+      padding: 1.15rem 1.15rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.65rem;
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
       cursor: pointer;
     }
 
-    .seller-visual-card::before {
+    /* Fintech Left Accent Indicator Stripe */
+    .seller-visual-card::after {
       content: '';
       position: absolute;
-      top: 0; left: 16px; right: 16px; height: 3px;
-      border-radius: 0 0 4px 4px;
+      top: 0; left: 0; bottom: 0; width: 4.5px;
       background: #0284c7;
-      transition: all 0.2s ease;
+      transition: background 0.2s ease;
     }
-    .seller-visual-card.podio-oro::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .seller-visual-card.podio-plata::before { background: linear-gradient(90deg, #94a3b8, #cbd5e1); }
-    .seller-visual-card.podio-bronce::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .seller-visual-card.podio-oro::after, .seller-visual-card.rank-1::after { background: #f59e0b; }
+    .seller-visual-card.podio-plata::after, .seller-visual-card.rank-2::after { background: #94a3b8; }
+    .seller-visual-card.podio-bronce::after, .seller-visual-card.rank-3::after { background: #d97706; }
 
     .seller-visual-card:hover {
-      box-shadow: 0 10px 28px -4px rgba(2, 132, 199, 0.16);
-      transform: translateY(-3px);
-      border-color: rgba(2, 132, 199, 0.5);
+      box-shadow: 0 10px 24px -2px rgba(2, 132, 199, 0.14);
+      transform: translateY(-2.5px);
+      border-color: rgba(2, 132, 199, 0.45);
     }
 
     [data-theme="dark"] .seller-visual-card {
@@ -1323,61 +1326,32 @@
     }
 
     [data-theme="dark"] .seller-visual-card:hover {
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.18);
-      transform: translateY(-4px);
-      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 18px rgba(56, 189, 248, 0.16);
+      transform: translateY(-3px);
+      border-color: rgba(56, 189, 248, 0.45);
     }
 
-    /* Cyber-HUD Header for Seller Cards */
-    .hud-seller-header {
+    /* Fintech Top Bar */
+    .fintech-top {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      padding-top: 0.15rem;
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.2rem;
+      gap: 0.5rem;
     }
 
-    .hud-seller-code {
-      font-family: var(--font-mono, monospace);
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
+    .fintech-user-group {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.65rem;
+      min-width: 0;
+      flex: 1;
     }
 
-    .hud-seller-led {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #10b981;
-      display: inline-block;
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
-    }
-
-    .hud-seller-medal-badge {
-      font-size: 0.73rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 6px;
-      background: var(--bg-card-elevated, #f1f5f9);
-      font-family: var(--font-mono, monospace);
-      letter-spacing: 0.02em;
-    }
-    .podio-oro .hud-seller-medal-badge { background: rgba(245, 158, 11, 0.15); color: #b45309; }
-    [data-theme="dark"] .podio-oro .hud-seller-medal-badge { color: #fbbf24; }
-    .podio-plata .hud-seller-medal-badge { background: rgba(148, 163, 184, 0.15); color: #475569; }
-    [data-theme="dark"] .podio-plata .hud-seller-medal-badge { color: #cbd5e1; }
-    .podio-bronce .hud-seller-medal-badge { background: rgba(217, 119, 6, 0.15); color: #92400e; }
-    [data-theme="dark"] .podio-bronce .hud-seller-medal-badge { color: #f59e0b; }
-
-    /* Tactical Avatar & User Row */
-    .seller-avatar-tactical {
-      width: 44px;
-      height: 44px;
-      border-radius: 11px;
+    .fintech-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #fff;
       display: flex;
@@ -1385,105 +1359,151 @@
       justify-content: center;
       font-family: var(--font-display, 'Outfit', sans-serif);
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       flex-shrink: 0;
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    .podio-oro .seller-avatar-tactical { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .podio-plata .seller-avatar-tactical { background: linear-gradient(135deg, #64748b, #475569); }
-    .podio-bronce .seller-avatar-tactical { background: linear-gradient(135deg, #d97706, #b45309); }
+    .podio-oro .fintech-avatar, .rank-1 .fintech-avatar { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .podio-plata .fintech-avatar, .rank-2 .fintech-avatar { background: linear-gradient(135deg, #64748b, #475569); }
+    .podio-bronce .fintech-avatar, .rank-3 .fintech-avatar { background: linear-gradient(135deg, #d97706, #b45309); }
 
-    /* HUD Metrics Grid */
-    .hud-metrics-grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      background: var(--bg-card-elevated, #f8fafc);
-      border: 1px solid var(--border-card, #e2e8f0);
-      border-radius: 10px;
-      padding: 0.65rem 0.5rem;
-      text-align: center;
-      gap: 0.25rem;
+    .fintech-name-col {
+      min-width: 0;
+      flex: 1;
     }
 
-    .hud-m-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hud-m-item .m-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .hud-m-item .m-val {
-      font-family: var(--font-mono, monospace);
-      font-size: 1.15rem;
+    .fintech-seller-name {
+      font-family: var(--font-display, 'Outfit', sans-serif);
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--text-primary);
-      margin-top: 2px;
-    }
-
-    /* Progress Block */
-    .hud-progress-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .hud-prog-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .hud-prog-track {
-      height: 6px;
-      background: rgba(0, 0, 0, 0.06);
-      border-radius: 999px;
+      white-space: nowrap;
       overflow: hidden;
-      display: flex;
-    }
-    [data-theme="dark"] .hud-prog-track { background: rgba(255, 255, 255, 0.08); }
-
-    .hud-prog-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.4s ease;
-    }
-
-    /* Mix Chips */
-    .hud-chips-mix {
-      display: flex;
-      gap: 0.35rem;
-      flex-wrap: wrap;
-    }
-
-    .hud-chip {
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 5px;
-      background: rgba(2, 132, 199, 0.08);
-      color: var(--accent-blue, #0284c7);
-      font-family: var(--font-mono, monospace);
-    }
-    .hud-chip.chip-prepago { background: rgba(16, 185, 129, 0.08); color: #059669; }
-    [data-theme="dark"] .hud-chip.chip-prepago { color: #34d399; }
-    .hud-chip.chip-hogar { background: rgba(245, 158, 11, 0.08); color: #d97706; }
-    [data-theme="dark"] .hud-chip.chip-hogar { color: #fbbf24; }
-    .hud-chip.chip-porta { background: rgba(139, 92, 246, 0.08); color: #7c3aed; }
-    [data-theme="dark"] .hud-chip.chip-porta { color: #a78bfa; }
-
-    .seller-card-top {
+      text-overflow: ellipsis;
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.35rem;
+    }
+
+    .fintech-seller-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+
+    .fintech-pace-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: var(--font-mono, monospace);
+      letter-spacing: 0.01em;
+    }
+    [data-theme="dark"] .fintech-pace-badge { color: #34d399; }
+    .fintech-pace-badge.pace-hot { background: rgba(245, 158, 11, 0.14); color: #d97706; }
+    [data-theme="dark"] .fintech-pace-badge.pace-hot { color: #fbbf24; }
+    .fintech-pace-badge.pace-steady { background: rgba(2, 132, 199, 0.12); color: #0284c7; }
+    [data-theme="dark"] .fintech-pace-badge.pace-steady { color: #38bdf8; }
+    .fintech-pace-badge.pace-lag { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+    [data-theme="dark"] .fintech-pace-badge.pace-lag { color: #f87171; }
+
+    /* Fintech Main Stat (Large trading number) */
+    .fintech-main-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin: 0.15rem 0 0.1rem;
+    }
+
+    .fintech-big-num {
+      font-family: var(--font-display, 'Outfit', sans-serif);
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .podio-oro .fintech-big-num, .rank-1 .fintech-big-num { color: #f59e0b; }
+    .podio-plata .fintech-big-num, .rank-2 .fintech-big-num { color: #0284c7; }
+    .podio-bronce .fintech-big-num, .rank-3 .fintech-big-num { color: #d97706; }
+
+    .fintech-sub-num {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .fintech-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .fintech-kpi-subrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      padding: 0 1px;
+    }
+
+    /* Stacked Sales Mix Bar (Segmented) */
+    .fintech-split-bar {
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      margin: 0.45rem 0 0.35rem;
+      background: var(--bg-card-elevated, #f1f5f9);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    [data-theme="dark"] .fintech-split-bar {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .split-pospago { background: #0284c7; transition: width 0.4s ease; }
+    .split-prepago { background: #10b981; transition: width 0.4s ease; }
+    .split-porta { background: #8b5cf6; transition: width 0.4s ease; }
+    .split-hogar { background: #f59e0b; transition: width 0.4s ease; }
+
+    [data-theme="dark"] .split-pospago { background: #38bdf8; }
+    [data-theme="dark"] .split-prepago { background: #34d399; }
+    [data-theme="dark"] .split-porta { background: #a78bfa; }
+    [data-theme="dark"] .split-hogar { background: #fbbf24; }
+
+    .fintech-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.69rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-family: var(--font-mono, monospace);
+      padding: 0 1px;
+    }
+    .fintech-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .fintech-legend-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
     }
 
     .seller-avatar {
@@ -3792,6 +3812,387 @@
       display: flex;
     }
 
+
+    /* =============================================================
+       TAB 4: FINTECH PERFORMANCE PRO — INTELIGENCIA TERRITORIAL
+       ============================================================= */
+    .cr-geo-toolbar-card {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 14px;
+      padding: 0.9rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      margin-bottom: 0.5rem;
+    }
+    [data-theme="dark"] .cr-geo-toolbar-card {
+      background: #0f172a;
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .cr-geo-toolbar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .cr-geo-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted, #64748b);
+      flex-wrap: wrap;
+    }
+    .cr-geo-breadcrumb-step {
+      padding: 0.22rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border: 1px solid transparent;
+    }
+    [data-theme="dark"] .cr-geo-breadcrumb-step {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .cr-geo-breadcrumb-step:hover {
+      background: rgba(2, 132, 199, 0.12);
+      color: #0284c7;
+      border-color: rgba(2, 132, 199, 0.3);
+    }
+    .cr-geo-breadcrumb-step.current {
+      background: rgba(2, 132, 199, 0.15);
+      color: #0284c7;
+      border: 1px solid rgba(2, 132, 199, 0.4);
+    }
+    [data-theme="dark"] .cr-geo-breadcrumb-step.current {
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .btn-geo-reset-all {
+      padding: 0.35rem 0.8rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 7px;
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #ef4444;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .btn-geo-reset-all:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+    .cr-geo-selectors-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.75rem;
+    }
+    .cr-geo-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .cr-geo-input-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted, #64748b);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .cr-geo-select-field, .cr-geo-search-field {
+      padding: 0.52rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: 1px solid var(--border-card, #cbd5e1);
+      background: var(--bg-card-elevated, #f8fafc);
+      color: var(--text-primary, #0f172a);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    [data-theme="dark"] .cr-geo-select-field,
+    [data-theme="dark"] .cr-geo-search-field {
+      background: #1e293b;
+      border-color: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+    }
+    .cr-geo-select-field:focus, .cr-geo-search-field:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+
+    /* Ficha Territorial Fintech Pro (Right of map) */
+    .cr-territory-executive-card {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 14px;
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-height: 480px;
+      height: 480px;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+    .cr-territory-executive-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0; width: 4.5px;
+      background: #0284c7;
+      border-radius: 14px 0 0 14px;
+    }
+    [data-theme="dark"] .cr-territory-executive-card {
+      background: #0f172a;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .cr-card-geo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-card, rgba(0, 0, 0, 0.06));
+      padding-bottom: 0.5rem;
+    }
+    .cr-card-geo-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .cr-card-geo-subtitle {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .cr-card-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+    .cr-card-stat-tile {
+      background: var(--bg-card-elevated, #f8fafc);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 8px;
+      padding: 0.5rem 0.55rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    [data-theme="dark"] .cr-card-stat-tile {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+    .cr-card-stat-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+    .cr-card-stat-val {
+      font-family: var(--font-display, 'Outfit', sans-serif);
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+    .cr-card-stat-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .cr-card-mix-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .cr-card-mix-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .cr-card-top-stores {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .cr-card-store-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0.6rem;
+      background: var(--bg-card-elevated, #f8fafc);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 7px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    [data-theme="dark"] .cr-card-store-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+    .cr-card-store-item:hover {
+      border-color: #0284c7;
+      transform: translateX(3px);
+      background: rgba(2, 132, 199, 0.08);
+    }
+
+    /* Hierarchical 3-Level Section (Below Map) */
+    .cr-hier-nav-tabs {
+      display: flex;
+      gap: 0.4rem;
+      background: rgba(0, 0, 0, 0.04);
+      padding: 4px;
+      border-radius: 10px;
+      flex-wrap: wrap;
+    }
+    [data-theme="dark"] .cr-hier-nav-tabs {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .cr-hier-tab-btn {
+      padding: 0.45rem 0.95rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .cr-hier-tab-btn.active {
+      background: var(--bg-card, #ffffff);
+      color: #0284c7;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] .cr-hier-tab-btn.active {
+      background: #1e293b;
+      color: #38bdf8;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 7 Provincias Grid */
+    .cr-provincias-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.85rem;
+    }
+    .cr-prov-card {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-card, #e2e8f0);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+    .cr-prov-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0; width: 4.5px;
+      background: #0284c7;
+    }
+    .cr-prov-card.rank-1::after { background: #f59e0b; }
+    .cr-prov-card.rank-2::after { background: #94a3b8; }
+    .cr-prov-card.rank-3::after { background: #d97706; }
+    .cr-prov-card:hover {
+      transform: translateY(-2.5px);
+      border-color: #0284c7;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.12);
+    }
+    [data-theme="dark"] .cr-prov-card {
+      background: #0f172a;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Tables */
+    .cr-table-scroll-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-card, #e2e8f0);
+      background: var(--bg-card, #ffffff);
+      max-height: 520px;
+    }
+    [data-theme="dark"] .cr-table-scroll-container {
+      background: #0f172a;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .cr-geo-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      text-align: left;
+    }
+    .cr-geo-data-table th {
+      background: var(--bg-card-elevated, #f8fafc);
+      padding: 0.65rem 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-card, #e2e8f0);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    [data-theme="dark"] .cr-geo-data-table th {
+      background: #1e293b;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+    }
+    .cr-geo-data-table td {
+      padding: 0.6rem 0.85rem;
+      border-bottom: 1px solid var(--border-card, #f1f5f9);
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+    [data-theme="dark"] .cr-geo-data-table td {
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+    .cr-geo-data-table tbody tr:hover {
+      background: rgba(2, 132, 199, 0.06);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      #wrapper-prov-map {
+        grid-template-columns: 1fr !important;
+      }
+      .cr-territory-executive-card {
+        max-height: 380px !important;
+        height: auto !important;
+      }
+    }
+
 </style>
 </head>
 <body class="role-supervisor">
@@ -4962,7 +5363,7 @@
         <div class="content-card">
           <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
             <div>
-              <div class="hud-seller-code" style="margin-bottom:3px;"><span class="hud-seller-led"></span><span>SUP-OPS // EQUIPO DE SUPERVISIÓN</span></div>
+              <div class="hud-seller-code" style="margin-bottom:3px;"><span class="hud-seller-led"></span><span>FINTECH SUP-ANALYTICS // EQUIPO DE SUPERVISIÓN</span></div>
               <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:1.05rem;">
                 <span>👔</span> <span>Rendimiento de Supervisores</span>
               </div>
@@ -5017,7 +5418,7 @@
         <div class="content-card">
           <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
             <div>
-              <div class="hud-seller-code" style="margin-bottom:3px;"><span class="hud-seller-led"></span><span>PDV-NET // RED COMERCIAL Y CADENAS</span></div>
+              <div class="hud-seller-code" style="margin-bottom:3px;"><span class="hud-seller-led"></span><span>FINTECH NETWORK // RED COMERCIAL Y CADENAS</span></div>
               <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:1.05rem;">
                 <span>🏬</span> <span>Top Puntos de Venta (PDVs / Cadenas)</span>
               </div>
@@ -5076,14 +5477,15 @@
     <!-- TAB 4: TERRITORIO & PROVINCIAS -->
     <div id="tab-territorio" class="tab-pane-content">
       <div style="display: flex; flex-direction: column; gap: 1.25rem; width: 100%;">
+        <!-- CARD 1: MAPA COMERCIAL & CONTROL TERRITORIAL -->
         <div class="content-card" style="width: 100%;">
           <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
             <div>
               <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:1.1rem;">
-                <span>🗺️</span> <span>Mapa Comercial & Distribución por Zonas</span>
+                <span>🗺️</span> <span>Mapa Comercial &amp; Inteligencia Territorial</span>
               </div>
               <div id="lbl-prov-subtitle" style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
-                Concentración Geográfica, Densidad de Ventas y Desglose Regional de Costa Rica
+                Jerarquía Comercial: Provincias ➔ Cantones ➔ Puntos de Venta (PDVs) &amp; Mix de Servicios
               </div>
             </div>
 
@@ -5099,29 +5501,82 @@
                 </button>
               </div>
 
-              <!-- Metric Switcher Pills -->
+              <!-- Metric Pills: Ventas vs Facturación vs % Participación -->
               <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
-                <button type="button" class="btn-prov-chart-mode active" data-mode="ventas" title="Volumen de Ventas por Provincia">
+                <button type="button" class="btn-prov-chart-mode active" data-mode="ventas" title="Volumen de Ventas">
                   <span>⚡</span> Ventas
                 </button>
-                <button type="button" class="btn-prov-chart-mode" data-mode="facturacion" title="Facturación en Colones por Provincia">
+                <button type="button" class="btn-prov-chart-mode" data-mode="facturacion" title="Facturación en Colones">
                   <span>💰</span> Facturación
                 </button>
-                <button type="button" class="btn-prov-chart-mode" data-mode="participacion" title="% de Participación Nacional">
-                  <span>📊</span> % Cuota
+                <button type="button" class="btn-prov-chart-mode" data-mode="participacion" title="% de Participación Regional">
+                  <span>📈</span> % Cuota
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Micro-KPI Summary Ribbon for Provincias -->
-          <!-- 4 EXECUTIVE MINI-KPIS (Cyber-Linear Command UI) -->
-          <div class="mini-kpis-grid" id="prov-mini-kpis-container">
-            <div class="mini-kpi-card" id="mini-kpi-leader-card">
-              <div class="mini-kpi-header">
-                <span>👑 Provincia Líder</span>
-                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-leader-badge">#1 NACIONAL</span>
+          <!-- NUEVA BARRA DE CONTROL JERÁRQUICO TERRITORIAL (CASCADING TOOLBAR) -->
+          <div class="cr-geo-toolbar-card">
+            <div class="cr-geo-toolbar-top">
+              <div class="cr-geo-breadcrumbs" id="cr-geo-breadcrumbs">
+                <span class="cr-geo-breadcrumb-step current" onclick="window.resetTerritoryFilter()">🇨🇷 Costa Rica (Nacional)</span>
+                <span id="geo-crumb-arrow-prov" style="display:none; color:var(--text-muted);">›</span>
+                <span id="geo-crumb-prov" class="cr-geo-breadcrumb-step" style="display:none;" onclick="window.drillDownToProvince(App.selectedProvinceFilter)">📍 Provincia</span>
+                <span id="geo-crumb-arrow-canton" style="display:none; color:var(--text-muted);">›</span>
+                <span id="geo-crumb-canton" class="cr-geo-breadcrumb-step" style="display:none;">🏘️ Cantón</span>
+                <span id="geo-crumb-arrow-pdv" style="display:none; color:var(--text-muted);">›</span>
+                <span id="geo-crumb-pdv" class="cr-geo-breadcrumb-step" style="display:none;">🏪 PDV</span>
               </div>
+              <button type="button" class="btn-geo-reset-all" id="btn-geo-reset-all" onclick="window.resetTerritoryFilter()" title="Restablecer a vista nacional completa">
+                <span>↺</span> Restablecer Filtros
+              </button>
+            </div>
+
+            <div class="cr-geo-selectors-row">
+              <!-- Select 1: Provincia -->
+              <div class="cr-geo-input-wrap">
+                <label class="cr-geo-input-label" for="sel-geo-provincia">🏢 1. Provincia</label>
+                <select id="sel-geo-provincia" class="cr-geo-select-field" onchange="window.onGeoProvinciaChange(this.value)">
+                  <option value="">🇨🇷 Todas las Provincias</option>
+                  <option value="San José">📍 San José</option>
+                  <option value="Alajuela">📍 Alajuela</option>
+                  <option value="Cartago">📍 Cartago</option>
+                  <option value="Heredia">📍 Heredia</option>
+                  <option value="Guanacaste">📍 Guanacaste</option>
+                  <option value="Puntarenas">📍 Puntarenas</option>
+                  <option value="Limón">📍 Limón</option>
+                </select>
+              </div>
+
+              <!-- Select 2: Cantón -->
+              <div class="cr-geo-input-wrap">
+                <label class="cr-geo-input-label" for="sel-geo-canton">🗺️ 2. Cantón</label>
+                <select id="sel-geo-canton" class="cr-geo-select-field" onchange="window.onGeoCantonChange(this.value)">
+                  <option value="">Todos los Cantones</option>
+                </select>
+              </div>
+
+              <!-- Select 3: Punto de Venta / Tienda -->
+              <div class="cr-geo-input-wrap">
+                <label class="cr-geo-input-label" for="sel-geo-pdv">🏪 3. Tienda / PDV</label>
+                <select id="sel-geo-pdv" class="cr-geo-select-field" onchange="window.onGeoPdvChange(this.value)">
+                  <option value="">Todas las Tiendas</option>
+                </select>
+              </div>
+
+              <!-- Input: Búsqueda Rápida -->
+              <div class="cr-geo-input-wrap">
+                <label class="cr-geo-input-label" for="input-geo-search">🔍 Búsqueda Rápida</label>
+                <input type="text" id="input-geo-search" class="cr-geo-search-field" placeholder="Filtrar cantón, tienda, cadena..." oninput="window.onGeoQuickSearch(this.value)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Micro-KPI Summary Ribbon for Provincias -->
+          <div class="mini-kpis-grid" id="prov-mini-kpis-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:0.6rem; margin-bottom:0.75rem;">
+            <div class="mini-kpi-card" id="mini-kpi-leader-card">
+              <span class="mini-kpi-badge badge-cyan" id="mini-kpi-leader-badge">#1 NACIONAL</span>
               <div class="mini-kpi-val" id="mini-kpi-leader-val" style="color:var(--text-brand, #0284c7);">-</div>
               <div class="mini-kpi-sub" id="mini-kpi-leader-sub">
                 <span id="prov-ribbon-leader">-</span>
@@ -5129,96 +5584,33 @@
             </div>
 
             <div class="mini-kpi-card" id="mini-kpi-gam-card">
-              <div class="mini-kpi-header">
-                <span>🏙️ Dominancia GAM</span>
-                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-gam-badge">CENTRAL</span>
-              </div>
+              <span class="mini-kpi-badge badge-cyan" id="mini-kpi-gam-badge">CENTRAL</span>
               <div class="mini-kpi-val" id="prov-ribbon-gam-pct">-</div>
-              <div class="mini-kpi-sub" id="mini-kpi-gam-sub">
-                San José, Alajuela, Heredia y Cartago
-              </div>
+              <div class="mini-kpi-sub" id="mini-kpi-gam-sub">GAM (San José, Alajuela, Heredia, Cartago)</div>
             </div>
 
             <div class="mini-kpi-card" id="mini-kpi-canton-card">
-              <div class="mini-kpi-header">
-                <span>⚡ Cantón Run-Rate</span>
-                <span class="mini-kpi-badge badge-green" id="mini-kpi-canton-badge">▲ ACTIVO</span>
-              </div>
+              <span class="mini-kpi-badge badge-green" id="mini-kpi-canton-badge">▲ ACTIVO</span>
               <div class="mini-kpi-val" id="mini-kpi-canton-val">-</div>
-              <div class="mini-kpi-sub" id="mini-kpi-canton-sub">
-                Mayor volumen cantonal relativo
-              </div>
+              <div class="mini-kpi-sub" id="mini-kpi-canton-sub">Cantones con Ventas</div>
             </div>
 
             <div class="mini-kpi-card" id="mini-kpi-coverage-card">
-              <div class="mini-kpi-header">
-                <span>📍 Cobertura Territorial</span>
-                <span class="mini-kpi-badge badge-cyan" id="mini-kpi-coverage-badge">100% ACTIVO</span>
-              </div>
+              <span class="mini-kpi-badge badge-cyan" id="mini-kpi-coverage-badge">100% ACTIVO</span>
               <div class="mini-kpi-val" id="prov-ribbon-coverage">7 / 7 Provincias</div>
               <div class="mini-kpi-sub" id="mini-kpi-coverage-sub">
-                <span class="facturacion-stat" style="display:inline-block;"><span id="prov-ribbon-total-rev">-</span> • </span>82 Cantones activos
+                <span class="facturacion-stat" style="display:inline-block;"><span id="prov-ribbon-total-rev">-</span></span>
               </div>
             </div>
           </div>
 
-          <!-- Active Filter Banner (When a province is clicked) -->
-          <div id="prov-map-filter-banner" style="display:none; align-items:center; justify-content:space-between; background:linear-gradient(90deg, rgba(6,182,212,0.15) 0%, rgba(2,132,199,0.08) 100%); border:1px solid rgba(6,182,212,0.4); border-radius:8px; padding:0.5rem 0.9rem; margin-bottom:0.75rem; font-size:0.8rem;">
-            <div style="display:flex; align-items:center; gap:0.45rem;">
-              <span>📍</span>
-              <span>Filtrando Cantones por Zona: <strong id="lbl-active-prov-filter" style="color:#06b6d4; font-weight:800;">-</strong></span>
-            </div>
-            <button type="button" id="btn-clear-prov-filter" style="background:#ef4444; color:#fff; border:none; padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.2s;">
-              ✕ Ver Toda Costa Rica
-            </button>
-          </div>
-
-          <!-- SPLIT LAYOUT: MAP ON LEFT (EXPANDED), PROVINCE RANKING SIDEBAR ON RIGHT -->
-          
-          <!-- Super-SVG Toolbar: Breadcrumbs + Live Canton Search -->
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.35rem 0.75rem; margin-bottom:0.5rem;">
-            <!-- Breadcrumbs -->
-            <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.82rem;">
-              <span id="cr-crumb-country" style="font-weight:800; color:var(--text-primary); cursor:pointer;" onclick="if(window.resetToCountryView)window.resetToCountryView();" title="Volver a Costa Rica">🇨🇷 Costa Rica</span>
-              <span id="cr-crumb-sep" style="display:none; color:var(--text-muted); opacity:0.6;">›</span>
-              <span id="cr-crumb-prov" style="display:none; font-weight:800; color:#06b6d4; align-items:center; gap:0.35rem;">
-                <span id="cr-crumb-prov-name">Provincia</span>
-                <span style="font-size:0.72rem; color:var(--text-muted); font-weight:600;" id="cr-crumb-count">(Cantones)</span>
-              </span>
-            </div>
-
-            <!-- View Mode Switcher [ 🏢 7 Provincias ] | [ 📍 84 Cantones ] -->
-            <div style="display:flex; align-items:center; gap:0.4rem;">
-              <div class="cr-map-mode-toggle-group" style="display:inline-flex; background:rgba(15,23,42,0.08); border:1px solid var(--border-card, rgba(255,255,255,0.15)); border-radius:8px; padding:2px; gap:2px;">
-                <button type="button" id="btn-toggle-view-provs" class="btn-map-mode active" onclick="if(window.setMapViewMode)window.setMapViewMode('provincias');" style="border:none; background:var(--bg-card, #1e293b); color:var(--text-primary, #f8fafc); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
-                  🏢 7 Provincias
-                </button>
-                <button type="button" id="btn-toggle-view-cantones" class="btn-map-mode" onclick="if(window.setMapViewMode)window.setMapViewMode('cantones');" style="border:none; background:transparent; color:var(--text-muted, #94a3b8); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-                  📍 84 Cantones
-                </button>
-              </div>
-            </div>
-
-            <!-- Search Bar + Reset Button -->
-            <div style="display:flex; align-items:center; gap:0.6rem;">
-              <div class="cr-map-search-box">
-                <span style="position:absolute; left:8px; top:50%; transform:translateY(-50%); font-size:0.72rem; color:var(--text-muted); pointer-events:none;">🔍</span>
-                <input type="text" id="cr-map-search-input" class="cr-map-search-input" placeholder="Buscar cantón o provincia..." oninput="if(window.handleMapSearch)window.handleMapSearch(this.value);">
-                <div id="cr-map-search-results" class="cr-map-search-results"></div>
-              </div>
-              <button type="button" id="btn-reset-map-zoom" style="display:none;" class="btn-back-cr" onclick="if(window.resetToCountryView)window.resetToCountryView();">
-                ← Ver Costa Rica Completa
-              </button>
-            </div>
-          </div>
-
-          <div id="wrapper-prov-map" class="map-grand-layout">
-            <!-- LEFT: EXPANDED MAP CANVAS -->
-            <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:480px; height:480px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:12px; background:radial-gradient(circle at center, rgba(6,182,212,0.06) 0%, rgba(2,132,199,0.02) 65%, transparent 100%); border:1px solid var(--border-card, rgba(255,255,255,0.08)); overflow:hidden;">
-              <!-- Live HUD Radar Tag -->
-              <div class="map-live-tag" style="position:absolute; top:12px; left:14px; display:inline-flex; align-items:center; gap:6px; background:rgba(10,20,40,0.85); backdrop-filter:blur(8px); border:1px solid rgba(0,210,255,0.35); border-radius:8px; padding:4px 10px; font-size:0.7rem; font-weight:800; color:#00d2ff; z-index:10; letter-spacing:0.8px;">
-                <span style="width:7px; height:7px; border-radius:50%; background:#00d2ff;  display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
-                LIVE RADAR • COSTA RICA GEO-GRID
+          <!-- GRAND MAP & EXECUTIVE CARD CONTAINER -->
+          <div id="wrapper-prov-map" class="map-grand-layout" style="display:grid; grid-template-columns:1fr 340px; gap:1.15rem; align-items:start;">
+            <!-- LEFT: SVG CANVAS -->
+            <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:480px; height:480px; background:radial-gradient(ellipse at center, rgba(2,132,199,0.06) 0%, transparent 75%), var(--bg-card-elevated, #f8fafc); border-radius:12px; border:1px solid var(--border-card, #e2e8f0); overflow:hidden; display:flex; align-items:center; justify-content:center;">
+              <div class="map-live-tag" style="position:absolute; top:12px; left:12px; display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:20px; background:rgba(2,132,199,0.12); backdrop-filter:blur(6px); border:1px solid rgba(2,132,199,0.3); font-size:0.68rem; font-weight:800; color:#0284c7; z-index:10; letter-spacing:0.8px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:#0284c7; display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
+                RADAR TERRITORIAL • COSTA RICA
               </div>
 
               <svg id="svg-costa-rica-map" viewBox="30 35 730 610" style="width:100%; height:100%; filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3));">
@@ -5407,59 +5799,97 @@
                 </g>
               </svg>
 
-              <!-- Floating Luxury Tooltip -->
-              <div id="cr-map-floating-tooltip" style="position:absolute; display:none; pointer-events:none; z-index:1000; background:rgba(15,23,42,0.96); backdrop-filter:blur(14px); border:1px solid rgba(6,182,212,0.45); border-radius:12px; padding:10px 14px; box-shadow:0 14px 36px rgba(0,0,0,0.55), 0 0 16px rgba(6,182,212,0.25); min-width:220px; transform:translate(-50%, -115%); color:#fff; font-size:0.82rem;">
-                <div id="cr-tt-title" style="font-weight:800; font-size:1rem; display:flex; align-items:center; gap:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px; margin-bottom:7px;">
-                  📍 San José
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                  <span style="color:#94a3b8;">Métrica:</span>
+              <!-- Floating Tooltip -->
+              <div id="cr-map-floating-tooltip" style="position:absolute; display:none; pointer-events:none; z-index:1000; background:rgba(15,23,42,0.96); backdrop-filter:blur(14px); border:1px solid rgba(6,182,212,0.45); border-radius:12px; padding:10px 14px; box-shadow:0 14px 36px rgba(0,0,0,0.55), 0 0 16px rgba(6,182,212,0.25); min-width:220px; transition:top 0.08s ease, left 0.08s ease;">
+                <div id="cr-tt-title" style="font-weight:800; font-size:1rem; display:flex; align-items:center; gap:6px; color:#ffffff; margin-bottom:4px;">-</div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
                   <strong id="cr-tt-metric" style="color:#06b6d4; font-weight:800;">-</strong>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                  <span style="color:#94a3b8;">Participación:</span>
                   <strong id="cr-tt-share" style="color:#38bdf8;">-</strong>
                 </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                  <span style="color:#94a3b8;">Servicio Top:</span>
-                  <span id="cr-tt-service" style="font-weight:600;">-</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                  <span style="color:#94a3b8;">Supervisor:</span>
-                  <span id="cr-tt-sup" style="font-weight:600;">-</span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Cantones:</span>
-                  <span id="cr-tt-cantones" style="font-weight:600;">-</span>
-                </div>
-                <div style="font-size:0.72rem; color:#f59e0b; text-align:center; margin-top:8px; border-top:1px dashed rgba(255,255,255,0.1); padding-top:5px; font-weight:800;">
-                  👆 Clic para filtrar cantones de esta provincia
+                <div style="font-size:0.75rem; color:#94a3b8; display:flex; flex-direction:column; gap:2px; border-top:1px solid rgba(255,255,255,0.12); padding-top:5px;">
+                  <div>Estado: <span id="cr-tt-service" style="font-weight:600;">-</span></div>
+                  <div>Supervisor: <span id="cr-tt-sup" style="font-weight:600;">-</span></div>
+                  <div>Cantones: <span id="cr-tt-cantones" style="font-weight:600;">-</span></div>
                 </div>
               </div>
 
-              <!-- Heatmap Gradient Legend Bar (Bottom Left) -->
-              <div style="position:absolute; bottom:12px; left:14px; background:rgba(15,23,42,0.85); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:6px 12px; font-size:0.72rem; display:flex; align-items:center; gap:8px;">
+              <!-- Legend -->
+              <div id="cr-map-legend" style="position:absolute; bottom:10px; left:12px; z-index:10; display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.4); backdrop-filter:blur(6px); padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,0.12); font-size:0.68rem;">
                 <span style="color:#94a3b8; font-weight:700;">Menor Venta</span>
                 <div id="cr-map-legend-grad" style="width:90px; height:9px; border-radius:5px; background:linear-gradient(90deg, #152c48 0%, #0c4a6e 25%, #0284c7 50%, #00b4d8 75%, #00d2ff 100%); border:1px solid rgba(255,255,255,0.25);"></div>
                 <span style="color:#06b6d4; font-weight:800;">Líder Comercial</span>
               </div>
             </div>
 
-            <!-- RIGHT: EXECUTIVE REGIONAL RANKING SIDEBAR -->
-            <div class="cr-map-ranking-sidebar" style="background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:12px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; max-height:480px; height:480px; overflow-y:auto;">
-              <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-card, rgba(0,0,0,0.08)); padding-bottom:0.5rem;">
+            <!-- RIGHT: FICHA TERRITORIAL FINTECH PRO -->
+            <div id="cr-territory-executive-card" class="cr-territory-executive-card">
+              <!-- Zone Header -->
+              <div class="cr-card-geo-header">
                 <div>
-                  <div style="font-weight:800; font-size:0.88rem; color:var(--text-primary, #0f172a);">📍 Desglose de Zonas</div>
-                  <div id="cr-sidebar-subtitle" style="font-size:0.72rem; color:var(--text-muted, #64748b);">7 Provincias de Costa Rica</div>
+                  <div class="cr-card-geo-title" id="cr-card-geo-name">🇨🇷 Costa Rica (Nacional)</div>
+                  <div class="cr-card-geo-subtitle" id="cr-card-geo-subtitle">Visión Ejecutiva Integral de Ventas</div>
                 </div>
-                <button type="button" id="btn-sidebar-reset-filter" style="display:none; background:transparent; border:1px solid #ef4444; color:#ef4444; border-radius:5px; font-size:0.7rem; font-weight:700; padding:2px 8px; cursor:pointer;">
-                  ✕ Reset
-                </button>
+                <span class="fintech-pace-badge pace-hot" id="cr-card-geo-pace">🔥 +16.4% vs Ritmo</span>
               </div>
 
-              <!-- List container populated dynamically by JS -->
-              <div id="cr-sidebar-prov-list" style="display:flex; flex-direction:column; gap:0.5rem;">
-                <!-- Cards injected by JS -->
+              <!-- 3 Fintech Metrics -->
+              <div class="cr-card-stats-grid">
+                <div class="cr-card-stat-tile">
+                  <span class="cr-card-stat-label">Ventas Netas</span>
+                  <span class="cr-card-stat-val" id="cr-card-sales-val" style="color:#0284c7;">-</span>
+                  <span class="cr-card-stat-sub" id="cr-card-sales-pct">100% Nacional</span>
+                </div>
+                <div class="cr-card-stat-tile facturacion-stat">
+                  <span class="cr-card-stat-label">Facturación</span>
+                  <span class="cr-card-stat-val" id="cr-card-rev-val" style="color:#10b981;">-</span>
+                  <span class="cr-card-stat-sub" id="cr-card-rev-avg">Ticket Promedio</span>
+                </div>
+                <div class="cr-card-stat-tile">
+                  <span class="cr-card-stat-label">Puntos Venta</span>
+                  <span class="cr-card-stat-val" id="cr-card-coverage-val" style="color:#8b5cf6;">-</span>
+                  <span class="cr-card-stat-sub" id="cr-card-canton-count">Cantones</span>
+                </div>
+              </div>
+
+              <!-- Segmented 4-Service Mix Bar -->
+              <div class="cr-card-mix-section">
+                <div class="cr-card-mix-header">
+                  <span>📊 MIX DE 4 SERVICIOS</span>
+                  <span id="cr-card-mix-total">100%</span>
+                </div>
+                <div class="fintech-split-bar" id="cr-card-mix-bar" style="height:10px; border-radius:5px;">
+                  <div class="split-pospago" id="cr-split-pospago" style="width:25%;" title="Pospago"></div>
+                  <div class="split-prepago" id="cr-split-prepago" style="width:25%;" title="Prepago"></div>
+                  <div class="split-porta" id="cr-split-porta" style="width:25%;" title="Portabilidad"></div>
+                  <div class="split-hogar" id="cr-split-hogar" style="width:25%;" title="Hogar / Fibra"></div>
+                </div>
+                <div class="fintech-legend" id="cr-card-mix-legend" style="font-size:0.68rem;">
+                  <span class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#0284c7;"></span> Pospago: <strong id="lbl-mix-pospago">0</strong></span>
+                  <span class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#10b981;"></span> Prepago: <strong id="lbl-mix-prepago">0</strong></span>
+                  <span class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#8b5cf6;"></span> Porta: <strong id="lbl-mix-porta">0</strong></span>
+                  <span class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#f59e0b;"></span> Hogar: <strong id="lbl-mix-hogar">0</strong></span>
+                </div>
+              </div>
+
+              <!-- Top Retail Stores / PDVs in this zone -->
+              <div class="cr-card-top-stores">
+                <div style="font-size:0.75rem; font-weight:800; color:var(--text-primary); display:flex; justify-content:space-between; align-items:center;">
+                  <span>🏪 Top Tiendas / Puntos de Venta</span>
+                  <span id="lbl-card-store-count" style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">En esta zona</span>
+                </div>
+                <div id="cr-card-top-pdvs-list" style="display:flex; flex-direction:column; gap:0.35rem;">
+                  <!-- Dynamic Store Items -->
+                </div>
+              </div>
+
+              <!-- Sub-zones fast navigation chips -->
+              <div style="display:flex; flex-direction:column; gap:0.3rem;">
+                <div style="font-size:0.72rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.03em;">
+                  📍 Sub-zonas Disponibles
+                </div>
+                <div id="cr-card-subzones-list" style="display:flex; flex-wrap:wrap; gap:0.3rem; max-height:110px; overflow-y:auto;">
+                  <!-- Dynamic Sub-zone Chips -->
+                </div>
               </div>
             </div>
           </div>
@@ -5470,36 +5900,40 @@
           </div>
         </div>
 
-        <div class="content-card">
-          <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center;">
+        <!-- CARD 2: DESGLOSE JERÁRQUICO TERRITORIAL (3 NIVELES: PROVINCIAS | CANTONES | TIENDAS PDVs) -->
+        <div class="content-card" id="cr-geo-hierarchical-section" style="width: 100%;">
+          <div class="content-card-header" style="flex-wrap:wrap; gap:0.5rem; align-items:center; border-bottom:1px solid var(--border-card, #e2e8f0); padding-bottom:0.75rem;">
             <div>
               <div class="content-card-title" style="display:flex; align-items:center; gap:0.4rem; font-size:1.05rem;">
-                <span>🗺️</span> <span>Top Cantones de Costa Rica</span>
+                <span>📊</span> <span>Desglose Jerárquico: Ventas por Región, Cantón y Puntos de Venta</span>
               </div>
-              <div id="lbl-cant-subtitle" style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
-                Desglose Geográfico por Cantón
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
+                Seleccione el nivel de detalle para auditar la concentración comercial y el mix de productos
               </div>
             </div>
 
-            <!-- View Switcher Pills for Cantones -->
-            <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
-              <button type="button" class="btn-cant-chart-mode active" data-mode="ventas" title="Volumen de Activaciones">
-                <span>⚡</span> Ventas
+            <!-- 3 Pestañas Jerárquicas -->
+            <div class="cr-hier-nav-tabs">
+              <button type="button" class="cr-hier-tab-btn active" id="btn-hier-tab-prov" onclick="window.switchGeoSubTab('provincias')">
+                <span>🏢</span> 1. Provincias (Macro)
               </button>
-              <button type="button" class="btn-cant-chart-mode" data-mode="facturacion" title="Facturación por Cantón">
-                <span>💰</span> Facturación
+              <button type="button" class="cr-hier-tab-btn" id="btn-hier-tab-canton" onclick="window.switchGeoSubTab('cantones')">
+                <span>🗺️</span> 2. Cantones (Intermedio)
+              </button>
+              <button type="button" class="cr-hier-tab-btn" id="btn-hier-tab-pdv" onclick="window.switchGeoSubTab('pdvs')">
+                <span>🏪</span> 3. Puntos de Venta (Retail)
               </button>
             </div>
           </div>
 
-          <!-- Micro-KPI Summary Ribbon for Cantones -->
-          <div id="cant-chart-micro-ribbon" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); align-items:center; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.55rem 0.85rem; margin-bottom:0.85rem; font-size:0.75rem; gap:0.6rem;">
+          <!-- Micro-KPI Summary Ribbon for Current Tier -->
+          <div id="cant-chart-micro-ribbon" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); align-items:center; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:8px; padding:0.55rem 0.85rem; margin:0.85rem 0; font-size:0.75rem; gap:0.6rem;">
             <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>🏆</span> <span style="color:var(--text-muted);">Cantón Líder:</span>
+              <span>🏆</span> <span style="color:var(--text-muted);">Líder Comercial:</span>
               <strong id="cant-ribbon-leader" style="color:var(--text-brand); font-weight:800;">-</strong>
             </div>
             <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>📊</span> <span style="color:var(--text-muted);">Top 3 Cantones:</span>
+              <span>📊</span> <span style="color:var(--text-muted);">Top 3 Participación:</span>
               <strong id="cant-ribbon-top3" style="color:#0284c7; font-weight:800;">-</strong>
             </div>
             <div class="facturacion-stat" style="display:flex; align-items:center; gap:0.35rem;">
@@ -5507,20 +5941,103 @@
               <strong id="cant-ribbon-rev" style="color:#10b981; font-weight:800;">-</strong>
             </div>
             <div style="display:flex; align-items:center; gap:0.35rem;">
-              <span>🗺️</span> <span style="color:var(--text-muted);">Cantones Activos:</span>
+              <span>🗺️</span> <span style="color:var(--text-muted);">Unidades Activas:</span>
               <strong id="cant-ribbon-count" style="color:var(--text-secondary); font-weight:700;">-</strong>
             </div>
           </div>
 
-          <div class="chart-canvas-wrapper chart-cantones-wrapper" style="position: relative; width: 100%;">
-            <canvas id="chart-cantones"></canvas>
+          <!-- SUB-PANEL 1: 7 PROVINCIAS (GRID DE FICHAS FINTECH) -->
+          <div id="cr-subpanel-provincias" style="display:block;">
+            <div class="cr-provincias-cards-grid" id="cr-provincias-cards-container">
+              <!-- 7 Province Fintech Cards -->
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 2: CANTONES (TABLA Y GRÁFICO) -->
+          <div id="cr-subpanel-cantones" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <input type="text" id="cr-filter-canton-input" class="cr-geo-search-field" placeholder="Filtrar cantón por nombre..." style="width:240px;" oninput="window.filterCantonesTable(this.value)">
+                <span id="cr-cantones-table-count" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">84 cantones</span>
+              </div>
+              <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
+                <button type="button" class="btn-cant-chart-mode active" id="btn-cant-view-table" onclick="window.toggleCantonView('table')">
+                  <span>📋</span> Tabla
+                </button>
+                <button type="button" class="btn-cant-chart-mode" id="btn-cant-view-chart" onclick="window.toggleCantonView('chart')">
+                  <span>📊</span> Gráfico
+                </button>
+              </div>
+            </div>
+
+            <!-- Cantones Table -->
+            <div class="cr-table-scroll-container" id="cr-cantones-table-wrapper">
+              <table class="cr-geo-data-table">
+                <thead>
+                  <tr>
+                    <th style="width:40px;">#</th>
+                    <th>Cantón</th>
+                    <th>Provincia</th>
+                    <th style="text-align:right;">Total Ventas</th>
+                    <th style="text-align:right;">% Cuota</th>
+                    <th class="facturacion-stat" style="text-align:right;">Facturación (₡)</th>
+                    <th>Mix de 4 Servicios</th>
+                    <th style="text-align:center;">Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="cr-cantones-table-body">
+                  <!-- Cantones rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Cantones Chart Canvas -->
+            <div class="chart-canvas-wrapper chart-cantones-wrapper" id="cr-cantones-chart-wrapper" style="position: relative; width: 100%; display:none; margin-top:0.6rem;">
+              <canvas id="chart-cantones"></canvas>
+            </div>
+          </div>
+
+          <!-- SUB-PANEL 3: PUNTOS DE VENTA (RETAIL / TIENDAS) -->
+          <div id="cr-subpanel-pdvs" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <input type="text" id="cr-filter-pdv-input" class="cr-geo-search-field" placeholder="Buscar tienda (ej. Gollo, Monge, Walmart)..." style="width:280px;" oninput="window.filterPdvsTable(this.value)">
+                <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
+                  <button type="button" class="btn-pdv-filter-canal active" data-canal="all" onclick="window.filterPdvByCanal('all')">Todos</button>
+                  <button type="button" class="btn-pdv-filter-canal" data-canal="Cadenas" onclick="window.filterPdvByCanal('Cadenas')">Cadenas</button>
+                  <button type="button" class="btn-pdv-filter-canal" data-canal="Multimarca" onclick="window.filterPdvByCanal('Multimarca')">Multimarca</button>
+                </div>
+              </div>
+              <span id="cr-pdvs-table-count" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">0 tiendas activas</span>
+            </div>
+
+            <!-- PDV Table -->
+            <div class="cr-table-scroll-container">
+              <table class="cr-geo-data-table">
+                <thead>
+                  <tr>
+                    <th style="width:40px;">#</th>
+                    <th>Punto de Venta / Tienda</th>
+                    <th>Cantón</th>
+                    <th>Provincia</th>
+                    <th>Canal</th>
+                    <th style="text-align:center;">Pospago</th>
+                    <th style="text-align:center;">Prepago</th>
+                    <th style="text-align:center;">Porta</th>
+                    <th style="text-align:center;">Hogar</th>
+                    <th style="text-align:right;">Total Ventas</th>
+                    <th class="facturacion-stat" style="text-align:right;">Facturación (₡)</th>
+                  </tr>
+                </thead>
+                <tbody id="cr-pdvs-table-body">
+                  <!-- PDVs rows -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- TAB 5: DATA GRID TRANSACCIONAL -->
-    <div id="tab-data-grid" class="tab-pane-content">
+    </div><div id="tab-data-grid" class="tab-pane-content">
       <div class="transactions-table-card">
         <div class="content-card-header">
           <div class="content-card-title">
@@ -9864,106 +10381,108 @@
       const maxSales = sellerList.length > 0 ? Math.max(...sellerList.map(s => s.ventas), 1) : 1;
 
       sellerList.forEach((s, idx) => {
-        const initials = s.nombre.split(' ').map(p => p[0]).slice(0,2).join('').toUpperCase();
+        const initials = s.nombre.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
         
         let podioClass = '';
-        let codeLabel = `VEN-${String(idx + 1).padStart(2, '0')} // ASESOR COMERCIAL`;
-        let medalBadge = `#${idx + 1} RANK`;
+        let medalIcon = '👤';
 
         if (idx === 0) {
-          podioClass = 'podio-oro';
-          codeLabel = 'VEN-01 // PODIO ORO';
-          medalBadge = '🥇 1° LÍDER';
+          podioClass = 'podio-oro rank-1';
+          medalIcon = '🥇';
         } else if (idx === 1) {
-          podioClass = 'podio-plata';
-          codeLabel = 'VEN-02 // PODIO PLATA';
-          medalBadge = '🥈 2° PUESTO';
+          podioClass = 'podio-plata rank-2';
+          medalIcon = '🥈';
         } else if (idx === 2) {
-          podioClass = 'podio-bronce';
-          codeLabel = 'VEN-03 // PODIO BRONCE';
-          medalBadge = '🥉 3° PUESTO';
+          podioClass = 'podio-bronce rank-3';
+          medalIcon = '🥉';
         } else if (idx < 10) {
-          codeLabel = `VEN-${String(idx + 1).padStart(2, '0')} // TOP PERFORMER`;
-          medalBadge = `#${idx + 1} TOP`;
+          medalIcon = '🎖️';
         }
 
         const efectividad = s.tramitesTotales > 0 ? ((s.ventas / s.tramitesTotales) * 100).toFixed(1) : 0;
         const targetMeta = s.meta || 173;
         const cumpMeta = (s.cumplimientoMeta !== undefined) ? s.cumplimientoMeta : ((s.ventas / targetMeta) * 100);
-        const barPctMeta = Math.min(cumpMeta, 100);
 
         // Gap to meta
         const gapMeta = targetMeta - s.ventas;
         const gapText = gapMeta > 0 ? `Faltan ${gapMeta} u.` : `+${Math.abs(gapMeta)} sobre meta`;
 
-        // Bar gradient
-        let barGrad = 'linear-gradient(90deg, #10b981, #34d399)';
+        // Calculate dynamic Pace (Ritmo comercial) & Run-rate
+        const now = new Date();
+        const currentDay = Math.max(1, Math.min(now.getDate(), 31));
+        const daysInMonth = 31;
+        const expectedPaceUnits = (targetMeta / daysInMonth) * currentDay;
+        const paceDiff = Math.round(((s.ventas / Math.max(1, expectedPaceUnits)) - 1) * 100);
+        
+        const runRate = Math.round((s.ventas / currentDay) * daysInMonth);
+        const runRatePct = ((runRate / targetMeta) * 100).toFixed(1);
+
+        let paceBadgeClass = 'pace-hot';
+        let paceText = `🔥 +${paceDiff}% vs Ritmo`;
+        if (paceDiff >= 15) {
+          paceBadgeClass = 'pace-hot';
+          paceText = `🔥 +${paceDiff}% vs Ritmo`;
+        } else if (paceDiff >= -5) {
+          paceBadgeClass = 'pace-steady';
+          paceText = '⚡ En Meta';
+        } else if (paceDiff >= -20) {
+          paceBadgeClass = 'pace-steady';
+          paceText = '⚡ Ritmo Firme';
+        } else {
+          paceBadgeClass = 'pace-lag';
+          paceText = '⚠️ Ajustar Ritmo';
+        }
+
+        // Color for compliance percentage
         let numColor = '#10b981';
         if (cumpMeta < 40) {
-          barGrad = 'linear-gradient(90deg, #ef4444, #f87171)';
           numColor = '#ef4444';
         } else if (cumpMeta < 60) {
-          barGrad = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
           numColor = '#f59e0b';
         }
 
-        // Color for sales value based on podium
-        let salesColor = 'var(--text-primary)';
-        if (idx === 0) salesColor = '#f59e0b';
-        else if (idx === 1) salesColor = '#0284c7';
-        else if (idx === 2) salesColor = '#d97706';
-
-        // Mix 4 Services Breakdown Chips (Pospago, Prepago, Portabilidad, Hogar)
+        // Mix 4 Services Breakdown (Pospago, Prepago, Portabilidad, Hogar)
         const posQty = (s.servicios['Pospago'] || 0) + (s.servicios['Portabilidad Postpago'] || 0) + (s.servicios['Migración Pospago'] || 0);
         const preQty = s.servicios['Prepago'] || 0;
         const portaPreQty = s.servicios['Portabilidad Prepago'] || 0;
         const hogarQty = (s.servicios['Gpon'] || 0) + (s.servicios['DTH'] || 0) + (s.servicios['IFI'] || 0);
+        const totServ = Math.max(1, posQty + preQty + portaPreQty + hogarQty);
 
-        let mixChipsHtml = '';
-        if (posQty > 0) mixChipsHtml += `<span class="hud-chip">Pos: ${posQty}</span>`;
-        if (preQty > 0) mixChipsHtml += `<span class="hud-chip chip-prepago">Pre: ${preQty}</span>`;
-        if (portaPreQty > 0) mixChipsHtml += `<span class="hud-chip chip-porta">Porta: ${portaPreQty}</span>`;
-        if (hogarQty > 0) mixChipsHtml += `<span class="hud-chip chip-hogar">🏠 Hogar: ${hogarQty}</span>`;
-        if (!mixChipsHtml) mixChipsHtml = '<span style="color:var(--text-muted); font-size:0.7rem;">Sin ventas registradas</span>';
+        const posPct = ((posQty / totServ) * 100).toFixed(1);
+        const prePct = ((preQty / totServ) * 100).toFixed(1);
+        const portaPct = ((portaPreQty / totServ) * 100).toFixed(1);
+        const hogarPct = ((hogarQty / totServ) * 100).toFixed(1);
 
         cardsHtml += `
-          <div class="seller-visual-card ${podioClass}" onclick="openSellerDetailModal('${escapeHtml(s.nombre).replace(/'/g, "\\'")}')">
-            <!-- Tactical Cyber-HUD Header -->
-            <div class="hud-seller-header">
-              <div class="hud-seller-code">
-                <span class="hud-seller-led"></span>
-                <span>${codeLabel}</span>
+          <div class="seller-visual-card ${podioClass}" onclick="openSellerDetailModal('${escapeHtml(s.nombre).replace(/'/g, "\'")}')">
+            <!-- Fintech Top Header: User info + Pace Badge -->
+            <div class="fintech-top">
+              <div class="fintech-user-group">
+                <div class="fintech-avatar">${initials}</div>
+                <div class="fintech-name-col">
+                  <div class="fintech-seller-name" title="${escapeHtml(s.nombre)}">
+                    <span>${medalIcon}</span> <span style="overflow:hidden; text-overflow:ellipsis;">${escapeHtml(s.nombre)}</span>
+                  </div>
+                  <div class="fintech-seller-sub">👔 ${escapeHtml(s.supervisor)} • Retail P1</div>
+                </div>
               </div>
-              <span class="hud-seller-medal-badge">${medalBadge}</span>
+              <span class="fintech-pace-badge ${paceBadgeClass}">${paceText}</span>
             </div>
 
-            <!-- User Info Row -->
-            <div class="seller-card-top">
-              <div class="seller-avatar-tactical">${initials}</div>
-              <div class="seller-header-info">
-                <div class="seller-name" style="font-family:var(--font-display); font-weight:800; font-size:0.98rem;" title="${escapeHtml(s.nombre)}">${escapeHtml(s.nombre)}</div>
-                <div class="seller-sup-badge">👔 ${escapeHtml(s.supervisor)} • Retail P1</div>
-              </div>
+            <!-- Main Stat: Big Trading Number + Goal % -->
+            <div class="fintech-main-stat">
+              <span class="fintech-big-num">${s.ventas.toLocaleString()}</span>
+              <span class="fintech-sub-num">ventas / meta ${targetMeta} (<strong style="color:${numColor}; font-weight:800;">${cumpMeta.toFixed(1)}%</strong>)</span>
             </div>
 
-            <!-- HUD 3-Metric Counter Grid -->
-            <div class="hud-metrics-grid-3">
-              <div class="hud-m-item">
-                <span class="m-label">Ventas</span>
-                <span class="m-val" style="color:${salesColor};">${s.ventas.toLocaleString()}</span>
-              </div>
-              <div class="hud-m-item">
-                <span class="m-label">Meta Base</span>
-                <span class="m-val">${targetMeta}</span>
-              </div>
-              <div class="hud-m-item">
-                <span class="m-label">% Cump.</span>
-                <span class="m-val" style="color:${numColor};">${cumpMeta.toFixed(1)}%</span>
-              </div>
+            <!-- Run-Rate & Gap Row -->
+            <div class="fintech-meta-row">
+              <div>⚡ Run-rate estimado: <strong style="color:var(--text-primary); font-weight:700;">${runRate} u. (${runRatePct}%)</strong></div>
+              <div style="font-weight:700; color:${gapMeta <= 0 ? '#10b981' : 'var(--text-muted)'};">${gapText}</div>
             </div>
 
-            <!-- Sub-Metrics: Facturación & Efectividad -->
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; padding:0 2px;">
+            <!-- Sub-Metrics: Facturación (RBAC protected) & Efectividad -->
+            <div class="fintech-kpi-subrow">
               <div class="facturacion-stat seller-card-facturacion" style="color:var(--text-muted);">
                 Facturación: <strong style="color:var(--accent-emerald-text, #10b981); font-weight:800;">${formatCurrency(s.facturacion)}</strong>
               </div>
@@ -9972,23 +10491,23 @@
               </div>
             </div>
 
-            <!-- Progress Block towards Meta (173 u.) -->
-            <div class="hud-progress-block">
-              <div class="hud-prog-header">
-                <span>Meta Objetivo: ${targetMeta} u.</span>
-                <span style="color:${numColor}; font-weight:800;">${cumpMeta.toFixed(1)}% (${gapText})</span>
-              </div>
-              <div class="hud-prog-track">
-                <div class="hud-prog-fill" style="width: ${barPctMeta}%; background:${barGrad};"></div>
-              </div>
+            <!-- Segmented Split Bar (Sales Mix) -->
+            <div class="fintech-split-bar" title="Mix: Pospago (${posQty}), Prepago (${preQty}), Porta (${portaPreQty}), Hogar (${hogarQty})">
+              <div class="split-pospago" style="width:${posPct}%;"></div>
+              <div class="split-prepago" style="width:${prePct}%;"></div>
+              <div class="split-porta" style="width:${portaPct}%;"></div>
+              <div class="split-hogar" style="width:${hogarPct}%;"></div>
             </div>
 
-            <!-- 4 Services Mix Chips -->
-            <div class="hud-chips-mix">
-              ${mixChipsHtml}
+            <!-- Fintech Legend -->
+            <div class="fintech-legend">
+              <div class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#0284c7;"></span><span>Pos: <strong>${posQty}</strong></span></div>
+              <div class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#10b981;"></span><span>Pre: <strong>${preQty}</strong></span></div>
+              <div class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#8b5cf6;"></span><span>Por: <strong>${portaPreQty}</strong></span></div>
+              <div class="fintech-legend-item"><span class="fintech-legend-dot" style="background:#f59e0b;"></span><span>Hog: <strong>${hogarQty}</strong></span></div>
             </div>
-            
-            <button class="btn-seller-detail" onclick="event.stopPropagation(); openSellerDetailModal('${escapeHtml(s.nombre).replace(/'/g, "\\'")}')">
+
+            <button class="btn-seller-detail" onclick="event.stopPropagation(); openSellerDetailModal('${escapeHtml(s.nombre).replace(/'/g, "\'")}')">
               <span>📊 Ver Rendimiento Detallado</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
             </button>
@@ -10801,1076 +11320,817 @@
       });
 
       // ==========================================
-      // --- 3. PROVINCIAS (DISTRIBUCIÓN TERRITORIAL & MAPA EXPANDIDO) ---
-      // ==========================================
-      const provData = {};
-      App.filtered.forEach(r => {
-        if (r[10] === 'VENTA' && r[14] && r[14] !== 'Sin Especificar') {
-          const p = window.getStandardProvName(r[14]);
-          if (!provData[p]) provData[p] = { ventas: 0, facturacion: 0, cantones: new Set(), servicios: {}, supervisores: {} };
-          provData[p].ventas++;
-          provData[p].facturacion += (r[6] || 0);
-          if (r[15] && r[15] !== 'Sin Especificar') provData[p].cantones.add(r[15]);
-          if (r[3]) provData[p].servicios[r[3]] = (provData[p].servicios[r[3]] || 0) + 1;
-          if (r[12] && r[12] !== 'Sin Supervisor') provData[p].supervisores[r[12]] = (provData[p].supervisores[r[12]] || 0) + 1;
+      // --- 3. PROVINCIAS, CANTONES Y PUNTOS DE VENTA (JERARQUÍA FINTECH PRO) ---
+      // ======================================================================
+      App.selectedProvinceFilter = App.selectedProvinceFilter || null;
+      App.selectedCantonFilter = App.selectedCantonFilter || null;
+      App.selectedPdvFilter = App.selectedPdvFilter || null;
+      App.geoQuickSearch = App.geoQuickSearch || '';
+      App.geoActiveSubTab = App.geoActiveSubTab || 'provincias';
+      App.cantonViewMode = App.cantonViewMode || 'table';
+      App.pdvCanalFilter = App.pdvCanalFilter || 'all';
+
+      const CR_PROVINCIAS = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'];
+
+      function resolveRowGeo(r) {
+        const provRaw = (r[14] || '').trim();
+        const cantonRaw = (r[15] || '').trim();
+        const pdvRaw = (r[8] || '').trim();
+
+        let prov = null;
+        const clean = (typeof stripAccents === 'function' ? stripAccents(provRaw) : provRaw).toLowerCase().replace(/[\u0300-\u036f]/g, '');
+        if (clean.includes('san jose') || clean.includes('san-jose')) prov = 'San José';
+        else if (clean.includes('alajuela')) prov = 'Alajuela';
+        else if (clean.includes('cartago')) prov = 'Cartago';
+        else if (clean.includes('heredia')) prov = 'Heredia';
+        else if (clean.includes('guanacaste')) prov = 'Guanacaste';
+        else if (clean.includes('puntarenas')) prov = 'Puntarenas';
+        else if (clean.includes('limon')) prov = 'Limón';
+
+        if (!prov && cantonRaw && window.CR_CANTON_META && window.CR_CANTON_META[cantonRaw]) {
+          prov = window.getStandardProvName(window.CR_CANTON_META[cantonRaw].province);
         }
-      });
 
-      const provList = Object.keys(provData).map(name => {
-        const pObj = provData[name];
-        let topServ = '-';
-        let topServCount = 0;
-        Object.entries(pObj.servicios).forEach(([sName, cnt]) => {
-          if (cnt > topServCount) { topServCount = cnt; topServ = sName; }
-        });
+        let pdv = pdvRaw;
+        if (!CR_PROVINCIAS.includes(provRaw) && provRaw && (!pdvRaw || pdvRaw === 'General' || pdvRaw === 'Sin Especificar' || pdvRaw === 'NA')) {
+          pdv = provRaw;
+        }
+        if (!pdv || pdv === 'Sin Especificar' || pdv === 'NA') pdv = 'Tienda Retail';
+        const canton = cantonRaw && cantonRaw !== 'Sin Especificar' ? cantonRaw : 'General';
 
-        let topSup = '-';
-        let topSupCount = 0;
-        Object.entries(pObj.supervisores).forEach(([sName, cnt]) => {
-          if (cnt > topSupCount) { topSupCount = cnt; topSup = sName; }
-        });
+        return { prov: prov || 'San José', canton, pdv };
+      }
 
-        return {
-          nombre: name,
-          ventas: pObj.ventas,
-          facturacion: pObj.facturacion,
-          cantonesCount: pObj.cantones.size,
-          topServicio: topServ,
-          topSupervisor: topSup
+      const serviceCategoryMap = (serv) => {
+        if (!serv) return 'Hogar';
+        const s = serv.toLowerCase();
+        if (s.includes('pospago')) return 'Pospago';
+        if (s.includes('prepago')) return 'Prepago';
+        if (s.includes('porta')) return 'Portabilidad';
+        return 'Hogar';
+      };
+
+      // 1. Agregación Nacional de Provincias, Cantones y Puntos de Venta
+      const provData = {};
+      CR_PROVINCIAS.forEach(p => {
+        provData[p] = {
+          nombre: p,
+          ventas: 0,
+          facturacion: 0,
+          servicios: { Pospago: 0, Prepago: 0, Portabilidad: 0, Hogar: 0 },
+          cantones: {},
+          pdvs: {},
+          canales: {}
         };
       });
 
-      const provMode = App.provChartMode || 'ventas';
-      const totalProvSales = provList.reduce((acc, p) => acc + p.ventas, 0);
-      const totalProvRev = provList.reduce((acc, p) => acc + p.facturacion, 0);
+      const cantDataAll = {};
+      const pdvDataAll = {};
 
-      if (provMode === 'facturacion') {
-        provList.sort((a, b) => b.facturacion - a.facturacion);
-      } else if (provMode === 'participacion') {
-        provList.sort((a, b) => b.ventas - a.ventas);
-      } else {
-        provList.sort((a, b) => b.ventas - a.ventas);
-      }
+      App.filtered.forEach(r => {
+        if (r[10] !== 'VENTA') return;
+        const { prov, canton, pdv } = resolveRowGeo(r);
+        const canal = r[7] || 'Cadenas';
+        const monto = r[6] || 0;
+        const servCat = serviceCategoryMap(r[9]);
 
-      // Micro-KPI Summary Ribbon for Provincias
+        // A. Provincias (Sólo las 7 oficiales)
+        provData[prov].ventas++;
+        provData[prov].facturacion += monto;
+        provData[prov].servicios[servCat] = (provData[prov].servicios[servCat] || 0) + 1;
+        provData[prov].cantones[canton] = (provData[prov].cantones[canton] || 0) + 1;
+        provData[prov].pdvs[pdv] = (provData[prov].pdvs[pdv] || 0) + 1;
+        provData[prov].canales[canal] = (provData[prov].canales[canal] || 0) + 1;
+
+        // B. Cantones
+        if (!cantDataAll[canton]) {
+          cantDataAll[canton] = {
+            nombre: canton,
+            provincia: prov,
+            ventas: 0,
+            facturacion: 0,
+            servicios: { Pospago: 0, Prepago: 0, Portabilidad: 0, Hogar: 0 },
+            pdvs: {}
+          };
+        }
+        cantDataAll[canton].ventas++;
+        cantDataAll[canton].facturacion += monto;
+        cantDataAll[canton].servicios[servCat] = (cantDataAll[canton].servicios[servCat] || 0) + 1;
+        cantDataAll[canton].pdvs[pdv] = (cantDataAll[canton].pdvs[pdv] || 0) + 1;
+
+        // C. PDVs (Puntos de Venta / Tiendas)
+        const pdvKey = `${pdv}___${canton}___${prov}`;
+        if (!pdvDataAll[pdvKey]) {
+          pdvDataAll[pdvKey] = {
+            key: pdvKey,
+            nombre: pdv,
+            canton: canton,
+            provincia: prov,
+            canal: canal,
+            ventas: 0,
+            facturacion: 0,
+            servicios: { Pospago: 0, Prepago: 0, Portabilidad: 0, Hogar: 0 }
+          };
+        }
+        pdvDataAll[pdvKey].ventas++;
+        pdvDataAll[pdvKey].facturacion += monto;
+        pdvDataAll[pdvKey].servicios[servCat] = (pdvDataAll[pdvKey].servicios[servCat] || 0) + 1;
+      });
+
+      const totalNacVentas = Object.values(provData).reduce((a, b) => a + b.ventas, 0);
+      const totalNacRev = Object.values(provData).reduce((a, b) => a + b.facturacion, 0);
+
+      const provList = CR_PROVINCIAS.map(p => ({
+        ...provData[p],
+        cantonesCount: Object.keys(provData[p].cantones).length,
+        pdvsCount: Object.keys(provData[p].pdvs).length,
+        cuota: totalNacVentas > 0 ? ((provData[p].ventas / totalNacVentas) * 100) : 0
+      }));
+
+      provList.sort((a, b) => b.ventas - a.ventas);
+
+      // Micro-KPIs Provincias
       const rProvLeader = document.getElementById('prov-ribbon-leader');
       const rProvGam = document.getElementById('prov-ribbon-gam-pct');
       const rProvTotalRev = document.getElementById('prov-ribbon-total-rev');
       const rProvCoverage = document.getElementById('prov-ribbon-coverage');
+      const rCantonVal = document.getElementById('mini-kpi-canton-val');
+      const rLeaderVal = document.getElementById('mini-kpi-leader-val');
 
       if (provList.length > 0) {
-        if (rProvLeader) {
-          const l = provList[0];
-          const lShare = totalProvSales > 0 ? ((l.ventas / totalProvSales) * 100).toFixed(1) + '%' : '0%';
-          const lVal = provMode === 'facturacion' ? formatCurrency(l.facturacion) : (l.ventas.toLocaleString() + ' u.');
-          rProvLeader.innerText = `${l.nombre} (${lVal} - ${lShare})`;
-          const elLeadVal = document.getElementById('mini-kpi-leader-val');
-          const elLeadBadge = document.getElementById('mini-kpi-leader-badge');
-          if (elLeadVal) {
-            elLeadVal.textContent = `${l.nombre} (${lShare})`;
-            if (elLeadBadge) elLeadBadge.textContent = `#1 • ${lVal}`;
-          }
-        }
-                if (rProvGam) {
-          const gamProvincias = ['san josé', 'san jose', 'alajuela', 'heredia', 'cartago'];
-          const gamSales = provList.filter(p => gamProvincias.some(g => (p.nombre || '').toLowerCase().includes(g))).reduce((acc, p) => acc + p.ventas, 0);
-          rProvGam.innerText = totalProvSales > 0 ? `${((gamSales / totalProvSales) * 100).toFixed(1)}%` : '0%';
-        }
-        if (rProvTotalRev) rProvTotalRev.innerText = formatCurrency(totalProvRev);
-        if (rProvCoverage) {
-          rProvCoverage.innerText = `${provList.length} / 7 Provincias`;
-        }
-      }
+        const topP = provList[0];
+        if (rProvLeader) rProvLeader.textContent = `${topP.nombre} (${topP.ventas.toLocaleString()} u. - ${topP.cuota.toFixed(1)}%)`;
+        if (rLeaderVal) rLeaderVal.textContent = `${topP.cuota.toFixed(1)}%`;
+        if (rProvTotalRev) rProvTotalRev.textContent = formatCurrency(totalNacRev);
+        if (rProvCoverage) rProvCoverage.textContent = `7 / 7 Provincias`;
 
-      // Bar Chart initialization (Canvas check defensive)
-      const cvProv = document.getElementById('chart-provincias');
-      if (cvProv) {
-        if (App.charts.provincias) App.charts.provincias.destroy();
-        const ctxProv = cvProv.getContext('2d');
-
-        const provWrapper = document.querySelector('.chart-provincias-wrapper');
-        if (provWrapper) {
-          const isMob = window.innerWidth <= 768;
-          const count = provList.length;
-          const targetH = isMob ? Math.max(380, count * 44) : Math.max(340, count * 40);
-          provWrapper.style.setProperty('height', targetH + 'px', 'important');
-        }
-
-        const gradProvCyan = ctxProv.createLinearGradient(0, 0, 500, 0);
-        gradProvCyan.addColorStop(0, '#0284c7');
-        gradProvCyan.addColorStop(0.5, '#06b6d4');
-        gradProvCyan.addColorStop(1, '#38bdf8');
-
-        const gradProvEmerald = ctxProv.createLinearGradient(0, 0, 500, 0);
-        gradProvEmerald.addColorStop(0, '#059669');
-        gradProvEmerald.addColorStop(0.5, '#10b981');
-        gradProvEmerald.addColorStop(1, '#34d399');
-
-        const gradProvGold = ctxProv.createLinearGradient(0, 0, 500, 0);
-        gradProvGold.addColorStop(0, '#d97706');
-        gradProvGold.addColorStop(0.5, '#f59e0b');
-        gradProvGold.addColorStop(1, '#fbbf24');
-
-        const gradProvIndigo = ctxProv.createLinearGradient(0, 0, 500, 0);
-        gradProvIndigo.addColorStop(0, '#4338ca');
-        gradProvIndigo.addColorStop(0.5, '#6366f1');
-        gradProvIndigo.addColorStop(1, '#a855f7');
-
-        const provBgColors = provList.map((_, idx) => {
-          if (idx === 0) return gradProvGold;
-          if (idx === 1) return gradProvCyan;
-          if (idx === 2) return gradProvEmerald;
-          return gradProvIndigo;
-        });
-
-        const provBorderColors = provList.map((_, idx) => {
-          if (idx === 0) return '#d97706';
-          if (idx === 1) return '#0284c7';
-          if (idx === 2) return '#059669';
-          return '#4338ca';
-        });
-
-        const provDataValues = provMode === 'facturacion'
-          ? provList.map(p => p.facturacion)
-          : (provMode === 'participacion'
-              ? provList.map(p => totalProvSales > 0 ? Number(((p.ventas / totalProvSales) * 100).toFixed(1)) : 0)
-              : provList.map(p => p.ventas));
-
-        App.charts.provincias = new Chart(ctxProv, {
-          type: 'bar',
-          data: {
-            labels: provList.map((p, idx) => {
-              const sharePct = totalProvSales > 0 ? ((p.ventas / totalProvSales) * 100).toFixed(1) : 0;
-              return `${idx + 1}. ${p.nombre} (${sharePct}%)`;
-            }),
-            datasets: [{
-              data: provDataValues,
-              backgroundColor: provBgColors,
-              borderColor: provBorderColors,
-              borderWidth: 1.5,
-              borderRadius: 6,
-              borderSkipped: false,
-              barPercentage: 0.72,
-              categoryPercentage: 0.85
-            }]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                backgroundColor: theme.tooltipBg,
-                titleColor: theme.tooltipTitle,
-                bodyColor: theme.tooltipBody,
-                borderColor: theme.tooltipBorder,
-                borderWidth: 1,
-                padding: 12,
-                cornerRadius: 8,
-                callbacks: {
-                  label: function(ctx) {
-                    const idx = ctx.dataIndex;
-                    const p = provList[idx];
-                    const sharePct = totalProvSales > 0 ? ((p.ventas / totalProvSales) * 100).toFixed(1) : 0;
-                    return `Ventas: ${p.ventas.toLocaleString()} u. (${sharePct}% cuota)${isSupervisor ? '' : ' | Facturación: ' + formatCurrency(p.facturacion)}`;
-                  }
-                }
-              }
-            },
-            scales: {
-              x: {
-                grid: { color: theme.grid },
-                ticks: { color: theme.textSecondary }
-              },
-              y: {
-                grid: { display: false },
-                ticks: { color: theme.textSecondary, font: { weight: '600', size: 11 } }
-              }
-            }
-          }
-        });
+        const gamProvincias = ['San José', 'Alajuela', 'Heredia', 'Cartago'];
+        const gamSales = provList.filter(p => gamProvincias.includes(p.nombre)).reduce((a, b) => a + b.ventas, 0);
+        const gamPct = totalNacVentas > 0 ? ((gamSales / totalNacVentas) * 100).toFixed(1) + '%' : '0%';
+        if (rProvGam) rProvGam.textContent = gamPct;
+        if (rCantonVal) rCantonVal.textContent = Object.keys(cantDataAll).length.toString();
       }
 
       // ======================================================================
-      // --- CANTONES DATA (CALCULATED BEFORE MAP UI & CHART) ---
+      // 2. SINCRONIZACIÓN DE DROPDOWNS CASCADA & BREADCRUMBS
       // ======================================================================
-      const cantDataAll = {};
-      App.filtered.forEach(r => {
-        if (r[10] === 'VENTA' && r[15] && r[15] !== 'Sin Especificar') {
-          const c = r[15];
-          if (!cantDataAll[c]) cantDataAll[c] = { ventas: 0, facturacion: 0, provincia: r[14] || '' };
-          cantDataAll[c].ventas++;
-          cantDataAll[c].facturacion += (r[6] || 0);
-        }
-      });
+      const selProvEl = document.getElementById('sel-geo-provincia');
+      const selCantonEl = document.getElementById('sel-geo-canton');
+      const selPdvEl = document.getElementById('sel-geo-pdv');
 
-      const cantData = {};
-      Object.keys(cantDataAll).forEach(c => {
-        const item = cantDataAll[c];
+      if (selProvEl) {
+        selProvEl.value = App.selectedProvinceFilter || '';
+      }
+
+      // Llenar cantones según provincia seleccionada
+      if (selCantonEl) {
+        const cantOptions = ['<option value="">Todos los Cantones</option>'];
+        const availableCantons = Object.values(cantDataAll).filter(c => {
+          if (!App.selectedProvinceFilter) return true;
+          return window.getProvSlug(c.provincia) === window.getProvSlug(App.selectedProvinceFilter);
+        }).sort((a, b) => b.ventas - a.ventas);
+
+        availableCantons.forEach(c => {
+          const isSel = App.selectedCantonFilter === c.nombre ? 'selected' : '';
+          cantOptions.push(`<option value="${c.nombre}" ${isSel}>${c.nombre} (${c.ventas.toLocaleString()} u.)</option>`);
+        });
+        selCantonEl.innerHTML = cantOptions.join('');
+      }
+
+      // Llenar PDVs según provincia y cantón seleccionados
+      if (selPdvEl) {
+        const pdvOptions = ['<option value="">Todas las Tiendas</option>'];
+        const availablePdvs = Object.values(pdvDataAll).filter(p => {
+          if (App.selectedProvinceFilter && window.getProvSlug(p.provincia) !== window.getProvSlug(App.selectedProvinceFilter)) return false;
+          if (App.selectedCantonFilter && p.canton !== App.selectedCantonFilter) return false;
+          return true;
+        }).sort((a, b) => b.ventas - a.ventas);
+
+        availablePdvs.forEach(p => {
+          const isSel = App.selectedPdvFilter === p.nombre ? 'selected' : '';
+          pdvOptions.push(`<option value="${p.nombre}" ${isSel}>${p.nombre} (${p.ventas.toLocaleString()} u. - ${p.canton})</option>`);
+        });
+        selPdvEl.innerHTML = pdvOptions.join('');
+      }
+
+      // Breadcrumbs
+      const crumbProv = document.getElementById('geo-crumb-prov');
+      const crumbArrowProv = document.getElementById('geo-crumb-arrow-prov');
+      const crumbCanton = document.getElementById('geo-crumb-canton');
+      const crumbArrowCanton = document.getElementById('geo-crumb-arrow-canton');
+      const crumbPdv = document.getElementById('geo-crumb-pdv');
+      const crumbArrowPdv = document.getElementById('geo-crumb-arrow-pdv');
+
+      if (crumbProv && crumbArrowProv) {
         if (App.selectedProvinceFilter) {
-          const selSlug = window.getProvSlug(App.selectedProvinceFilter);
-          const pSlug = window.getProvSlug(item.provincia);
-          if (pSlug !== selSlug) return;
+          crumbProv.style.display = 'inline-flex';
+          crumbArrowProv.style.display = 'inline';
+          crumbProv.innerHTML = `📍 ${App.selectedProvinceFilter}`;
+          crumbProv.classList.toggle('current', !App.selectedCantonFilter && !App.selectedPdvFilter);
+        } else {
+          crumbProv.style.display = 'none';
+          crumbArrowProv.style.display = 'none';
         }
-        cantData[c] = item;
+      }
+
+      if (crumbCanton && crumbArrowCanton) {
+        if (App.selectedCantonFilter) {
+          crumbCanton.style.display = 'inline-flex';
+          crumbArrowCanton.style.display = 'inline';
+          crumbCanton.innerHTML = `🏘️ ${App.selectedCantonFilter}`;
+          crumbCanton.classList.toggle('current', !App.selectedPdvFilter);
+        } else {
+          crumbCanton.style.display = 'none';
+          crumbArrowCanton.style.display = 'none';
+        }
+      }
+
+      if (crumbPdv && crumbArrowPdv) {
+        if (App.selectedPdvFilter) {
+          crumbPdv.style.display = 'inline-flex';
+          crumbArrowPdv.style.display = 'inline';
+          crumbPdv.innerHTML = `🏪 ${App.selectedPdvFilter}`;
+          crumbPdv.classList.add('current');
+        } else {
+          crumbPdv.style.display = 'none';
+          crumbArrowPdv.style.display = 'none';
+        }
+      }
+
+      // ======================================================================
+      // 3. FICHA TERRITORIAL FINTECH PRO (PANEL DERECHO)
+      // ======================================================================
+      const geoCardName = document.getElementById('cr-card-geo-name');
+      const geoCardSub = document.getElementById('cr-card-geo-subtitle');
+      const geoCardPace = document.getElementById('cr-card-geo-pace');
+      const geoCardSales = document.getElementById('cr-card-sales-val');
+      const geoCardSalesPct = document.getElementById('cr-card-sales-pct');
+      const geoCardRev = document.getElementById('cr-card-rev-val');
+      const geoCardRevAvg = document.getElementById('cr-card-rev-avg');
+      const geoCardCoverage = document.getElementById('cr-card-coverage-val');
+      const geoCardCantonCount = document.getElementById('cr-card-canton-count');
+
+      // Calcular datos del scope seleccionado
+      let scopeTitle = '🇨🇷 Costa Rica (Nacional)';
+      let scopeSub = 'Visión Ejecutiva Integral de Ventas';
+      let scopeVentas = totalNacVentas;
+      let scopeRev = totalNacRev;
+      let scopeServicios = { Pospago: 0, Prepago: 0, Portabilidad: 0, Hogar: 0 };
+      let scopePdvs = {};
+      let scopeSubzones = [];
+
+      provList.forEach(p => {
+        scopeServicios.Pospago += p.servicios.Pospago || 0;
+        scopeServicios.Prepago += p.servicios.Prepago || 0;
+        scopeServicios.Portabilidad += p.servicios.Portabilidad || 0;
+        scopeServicios.Hogar += p.servicios.Hogar || 0;
       });
 
-      // --- ACTUALIZACIÓN DEL MAPA DE COSTA RICA & SIDEBAR ---
-      function updateCostaRicaMapUI() {
-        const isSupervisor = (typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor');
-        const vals = provList.map(p => provMode === 'facturacion' ? p.facturacion : p.ventas);
-        const maxV = vals.length > 0 ? Math.max(...vals) : 1;
-        const minV = vals.length > 0 ? Math.min(...vals) : 0;
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (App.selectedPdvFilter) {
+        // Scope PDV
+        const matched = Object.values(pdvDataAll).find(p => p.nombre === App.selectedPdvFilter && (!App.selectedCantonFilter || p.canton === App.selectedCantonFilter));
+        if (matched) {
+          scopeTitle = `🏪 ${matched.nombre}`;
+          scopeSub = `${matched.canton}, ${matched.provincia} • Canal: ${matched.canal}`;
+          scopeVentas = matched.ventas;
+          scopeRev = matched.facturacion;
+          scopeServicios = matched.servicios;
+          scopePdvs[matched.nombre] = matched.ventas;
+          scopeSubzones = [{ label: matched.canton, type: 'canton', prov: matched.provincia }];
+        }
+      } else if (App.selectedCantonFilter) {
+        // Scope Cantón
+        const cObj = cantDataAll[App.selectedCantonFilter];
+        if (cObj) {
+          scopeTitle = `🏘️ Cantón ${cObj.nombre}`;
+          scopeSub = `Provincia de ${cObj.provincia} • ${Object.keys(cObj.pdvs).length} Tiendas`;
+          scopeVentas = cObj.ventas;
+          scopeRev = cObj.facturacion;
+          scopeServicios = cObj.servicios;
+          scopePdvs = cObj.pdvs;
+          scopeSubzones = Object.keys(cObj.pdvs).slice(0, 10).map(store => ({ label: store, type: 'pdv' }));
+        }
+      } else if (App.selectedProvinceFilter) {
+        // Scope Provincia
+        const pObj = provData[App.selectedProvinceFilter];
+        if (pObj) {
+          scopeTitle = `📍 Provincia ${pObj.nombre}`;
+          scopeSub = `${Object.keys(pObj.cantones).length} Cantones • ${Object.keys(pObj.pdvs).length} Tiendas`;
+          scopeVentas = pObj.ventas;
+          scopeRev = pObj.facturacion;
+          scopeServicios = pObj.servicios;
+          scopePdvs = pObj.pdvs;
+          scopeSubzones = Object.keys(pObj.cantones).sort((a,b) => (pObj.cantones[b]||0) - (pObj.cantones[a]||0)).slice(0, 12).map(c => ({ label: c, type: 'canton', prov: pObj.nombre }));
+        }
+      } else {
+        // Scope Nacional
+        scopePdvs = Object.values(pdvDataAll).reduce((acc, p) => {
+          acc[p.nombre] = (acc[p.nombre] || 0) + p.ventas;
+          return acc;
+        }, {});
+        scopeSubzones = provList.map(p => ({ label: p.nombre, type: 'prov' }));
+      }
 
-        function getChoroplethColor(val, minVal, maxVal, dark) {
-          if (!val || val <= 0) {
-            return dark ? '#13233a' : '#f1f5f9';
-          }
-          const ratio = maxVal > minVal ? Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal))) : 0.5;
-          if (dark) {
-            // Paleta tecnológica Twilight-Cyan de 7 niveles con brillo para líder
-            if (ratio > 0.88) return '#00d2ff'; // Líder comercial: Neón Cyan brillante
-            if (ratio > 0.70) return '#00b4d8'; // Turquesa radiante
-            if (ratio > 0.50) return '#0284c7'; // Zafiro cielo
-            if (ratio > 0.35) return '#0369a1'; // Océano profundo
-            if (ratio > 0.20) return '#085f85'; // Azul petróleo
-            if (ratio > 0.10) return '#0c4a6e'; // Azul petróleo oscuro
-            return '#152c48';                  // Noche marina profunda
-          } else {
-            // Paleta ejecutiva Royal Cobalt de 7 niveles (máximo contraste y elegancia)
-            if (ratio > 0.88) return '#1e40af'; // Líder comercial: Cobalto Real profundo
-            if (ratio > 0.70) return '#1d4ed8'; // Azul Real intenso
-            if (ratio > 0.50) return '#0284c7'; // Azul empresarial
-            if (ratio > 0.35) return '#38bdf8'; // Cyan cielo vibrante
-            if (ratio > 0.20) return '#7dd3fc'; // Celeste suave
-            if (ratio > 0.10) return '#93c5fd'; // Hielo azul
-            return '#e0f2fe';                  // Bruma celeste clara
-          }
+      if (geoCardName) geoCardName.textContent = scopeTitle;
+      if (geoCardSub) geoCardSub.textContent = scopeSub;
+      if (geoCardSales) geoCardSales.textContent = scopeVentas.toLocaleString();
+
+      const sharePct = totalNacVentas > 0 ? ((scopeVentas / totalNacVentas) * 100).toFixed(1) : '100.0';
+      if (geoCardSalesPct) geoCardSalesPct.textContent = App.selectedProvinceFilter || App.selectedCantonFilter || App.selectedPdvFilter ? `${sharePct}% de Cuota Nac.` : '100% Cobertura Nacional';
+
+      if (geoCardRev) geoCardRev.textContent = formatCurrency(scopeRev);
+      const avgTicket = scopeVentas > 0 ? formatCurrency(Math.round(scopeRev / scopeVentas)) : '₡0';
+      if (geoCardRevAvg) geoCardRevAvg.textContent = `Ticket Prom: ${avgTicket}`;
+
+      const activeStoreCount = Object.keys(scopePdvs).length;
+      if (geoCardCoverage) geoCardCoverage.textContent = activeStoreCount.toString();
+      if (geoCardCantonCount) geoCardCantonCount.textContent = App.selectedProvinceFilter ? `${Object.keys(provData[App.selectedProvinceFilter]?.cantones || {}).length} Cantones` : '84 Cantones';
+
+      // Mix 4 Servicios en la Ficha
+      const totMix = (scopeServicios.Pospago + scopeServicios.Prepago + scopeServicios.Portabilidad + scopeServicios.Hogar) || 1;
+      const pctPos = Math.round((scopeServicios.Pospago / totMix) * 100);
+      const pctPre = Math.round((scopeServicios.Prepago / totMix) * 100);
+      const pctPor = Math.round((scopeServicios.Portabilidad / totMix) * 100);
+      const pctHog = Math.max(0, 100 - (pctPos + pctPre + pctPor));
+
+      const spPos = document.getElementById('cr-split-pospago');
+      const spPre = document.getElementById('cr-split-prepago');
+      const spPor = document.getElementById('cr-split-porta');
+      const spHog = document.getElementById('cr-split-hogar');
+
+      if (spPos) spPos.style.width = pctPos + '%';
+      if (spPre) spPre.style.width = pctPre + '%';
+      if (spPor) spPor.style.width = pctPor + '%';
+      if (spHog) spHog.style.width = pctHog + '%';
+
+      const lblPos = document.getElementById('lbl-mix-pospago');
+      const lblPre = document.getElementById('lbl-mix-prepago');
+      const lblPor = document.getElementById('lbl-mix-porta');
+      const lblHog = document.getElementById('lbl-mix-hogar');
+
+      if (lblPos) lblPos.textContent = `${scopeServicios.Pospago} (${pctPos}%)`;
+      if (lblPre) lblPre.textContent = `${scopeServicios.Prepago} (${pctPre}%)`;
+      if (lblPor) lblPor.textContent = `${scopeServicios.Portabilidad} (${pctPor}%)`;
+      if (lblHog) lblHog.textContent = `${scopeServicios.Hogar} (${pctHog}%)`;
+
+      // Top 5 Tiendas en la Ficha
+      const topPdvsContainer = document.getElementById('cr-card-top-pdvs-list');
+      if (topPdvsContainer) {
+        const sortedStores = Object.keys(scopePdvs)
+          .map(k => ({ name: k, count: scopePdvs[k] }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+
+        if (sortedStores.length === 0) {
+          topPdvsContainer.innerHTML = '<div style="font-size:0.75rem; color:var(--text-muted); padding:0.4rem;">Sin tiendas registradas en esta selección.</div>';
+        } else {
+          topPdvsContainer.innerHTML = sortedStores.map((st, i) => `
+            <div class="cr-card-store-item" onclick="window.onGeoPdvChange('${st.name.replace(/'/g, "\'")}')" title="Clic para filtrar por esta tienda">
+              <div style="display:flex; align-items:center; gap:0.4rem; overflow:hidden;">
+                <strong style="color:${i === 0 ? '#f59e0b' : (i === 1 ? '#0284c7' : '#94a3b8')}; font-size:0.72rem;">#${i+1}</strong>
+                <span style="font-weight:700; color:var(--text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${st.name}</span>
+              </div>
+              <span style="font-weight:800; color:var(--text-brand, #0284c7); font-family:var(--font-mono, monospace);">${st.count.toLocaleString()} u.</span>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Sub-zonas chips en la Ficha
+      const subzonesContainer = document.getElementById('cr-card-subzones-list');
+      if (subzonesContainer) {
+        if (scopeSubzones.length === 0) {
+          subzonesContainer.innerHTML = '<span style="font-size:0.72rem; color:var(--text-muted);">-</span>';
+        } else {
+          subzonesContainer.innerHTML = scopeSubzones.map(sz => {
+            if (sz.type === 'prov') {
+              return `<span class="cr-geo-breadcrumb-step" onclick="window.drillDownToProvince('${sz.label}')">📍 ${sz.label}</span>`;
+            } else if (sz.type === 'canton') {
+              return `<span class="cr-geo-breadcrumb-step" onclick="window.onGeoCantonChange('${sz.label}')">🏘️ ${sz.label}</span>`;
+            } else {
+              return `<span class="cr-geo-breadcrumb-step" onclick="window.onGeoPdvChange('${sz.label.replace(/'/g, "\'")}')">🏪 ${sz.label}</span>`;
+            }
+          }).join('');
+        }
+      }
+
+      // ======================================================================
+      // 4. MAPA DE COSTA RICA (SVG ZOOM, CHOROPLETH & INTERACTIVIDAD)
+      // ======================================================================
+      const svgEl = document.getElementById('svg-costa-rica-map');
+      const isProvinceLevel = Boolean(App.selectedProvinceFilter);
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.body.classList.contains('dark-theme');
+
+      function getChoroplethColor(val, minV, maxV, dark) {
+        const ratio = maxV > minV ? Math.max(0, Math.min(1, (val - minV) / (maxV - minV))) : 0.5;
+        if (dark) {
+          if (ratio > 0.85) return '#00d2ff';
+          if (ratio > 0.65) return '#00b4d8';
+          if (ratio > 0.45) return '#0284c7';
+          if (ratio > 0.25) return '#0369a1';
+          if (ratio > 0.10) return '#0c4a6e';
+          return '#152c48';
+        } else {
+          if (ratio > 0.85) return '#1e40af';
+          if (ratio > 0.65) return '#1d4ed8';
+          if (ratio > 0.45) return '#0284c7';
+          if (ratio > 0.25) return '#38bdf8';
+          if (ratio > 0.10) return '#7dd3fc';
+          return '#e0f2fe';
+        }
+      }
+
+      if (isProvinceLevel) {
+        const selProv = App.selectedProvinceFilter;
+        const selSlug = window.getProvSlug(selProv);
+
+        if (svgEl && window.CR_CANTON_BOUNDS && (window.CR_CANTON_BOUNDS[selSlug] || window.CR_CANTON_BOUNDS[selProv])) {
+          const b = window.CR_CANTON_BOUNDS[selSlug] || window.CR_CANTON_BOUNDS[selProv];
+          svgEl.setAttribute('viewBox', `${b[0]} ${b[1]} ${b[2]} ${b[3]}`);
         }
 
-        const pMap = {};
-        provList.forEach(p => {
-          pMap[p.nombre] = p;
-          pMap[window.getProvSlug(p.nombre)] = p;
-          if (typeof stripAccents === 'function') pMap[stripAccents(p.nombre)] = p;
+        // Resaltar provincia seleccionada y atenuar otras
+        document.querySelectorAll('.cr-map-prov-path').forEach(el => {
+          const pSlug = el.getAttribute('data-prov-slug') || window.getProvSlug(el.getAttribute('data-province'));
+          if (pSlug === selSlug) {
+            el.style.opacity = '0.35';
+            el.style.stroke = 'rgba(255, 255, 255, 0.9)';
+            el.style.strokeWidth = '2px';
+          } else {
+            el.style.opacity = '0.08';
+            el.style.stroke = 'none';
+          }
         });
 
-        const tooltip = document.getElementById('cr-map-floating-tooltip');
-        const canvasWrapper = document.getElementById('wrapper-prov-map-canvas');
-        const svgEl = document.getElementById('svg-costa-rica-map');
+        // Cantones de esta provincia
+        const thisProvCantons = Object.values(cantDataAll).filter(c => window.getProvSlug(c.provincia) === selSlug);
+        const maxCV = thisProvCantons.length > 0 ? Math.max(...thisProvCantons.map(c => c.ventas)) : 1;
+        const minCV = thisProvCantons.length > 0 ? Math.min(...thisProvCantons.map(c => c.ventas)) : 0;
 
-        // Toggle buttons sync
-        const btnToggleProvs = document.getElementById('btn-toggle-view-provs');
-        const btnToggleCantones = document.getElementById('btn-toggle-view-cantones');
-
-        const isProvinceLevel = Boolean(App.selectedProvinceFilter) && App.currentMapLevel === 'province';
-        const isCantonesAllLevel = App.mapViewMode === 'cantones';
-
-        // -------------------------------------------------------------
-        // CASO A: DRILL-DOWN A NIVEL PROVINCIA (Ver cantones de la provincia)
-        // -------------------------------------------------------------
-        if (isProvinceLevel) {
-          const selProv = App.selectedProvinceFilter;
-          const selSlug = window.getProvSlug(selProv);
-
-          if (btnToggleProvs) {
-            btnToggleProvs.style.background = 'var(--bg-card, #1e293b)';
-            btnToggleProvs.style.color = 'var(--text-primary, #f8fafc)';
-          }
-          if (btnToggleCantones) {
-            btnToggleCantones.style.background = 'transparent';
-            btnToggleCantones.style.color = 'var(--text-muted, #94a3b8)';
-          }
-
-          // Ajustar zoom SVG
-          if (svgEl && window.CR_CANTON_BOUNDS && (window.CR_CANTON_BOUNDS[selSlug] || window.CR_CANTON_BOUNDS[selProv])) {
-            const b = window.CR_CANTON_BOUNDS[selSlug] || window.CR_CANTON_BOUNDS[selProv];
-            svgEl.setAttribute('viewBox', `${b[0]} ${b[1]} ${b[2]} ${b[3]}`);
-          }
-
-          // Actualizar Breadcrumbs
-          const crumbSep = document.getElementById('cr-crumb-sep');
-          const crumbProv = document.getElementById('cr-crumb-prov');
-          const crumbProvName = document.getElementById('cr-crumb-prov-name');
-          const crumbCount = document.getElementById('cr-crumb-count');
-          const btnResetZoom = document.getElementById('btn-reset-map-zoom');
-
-          if (crumbSep) crumbSep.style.display = 'inline';
-          if (crumbProv) crumbProv.style.display = 'inline-flex';
-          if (crumbProvName) crumbProvName.textContent = window.getStandardProvName(selProv);
-          if (btnResetZoom) btnResetZoom.style.display = 'inline-flex';
-
-          const provCantPaths = document.querySelectorAll(`.prov-group-${selSlug}`);
-          if (crumbCount) crumbCount.textContent = `(${provCantPaths.length} Cantones)`;
-
-          // Atenuar provincias no seleccionadas
-          document.querySelectorAll('.cr-map-prov-path').forEach(el => {
-            const pSlug = el.getAttribute('data-prov-slug') || window.getProvSlug(el.getAttribute('data-province'));
-            if (pSlug === selSlug) {
-              el.style.opacity = '0.35';
-              el.style.stroke = 'rgba(255, 255, 255, 0.9)';
-              el.style.strokeWidth = '2px';
-            } else {
-              el.style.opacity = '0.08';
-              el.style.stroke = 'none';
-            }
-          });
-
-          // Ocultar pines provinciales
-          const badgesLayer = document.getElementById('cr-labels-layer') || document.getElementById('cr-badges-layer');
-          if (badgesLayer) {
-            badgesLayer.style.opacity = '0';
-            badgesLayer.style.pointerEvents = 'none';
-          }
-
-          // Colorear cantones de esta provincia con datos reales
-          const cantListThisProv = [];
-          document.querySelectorAll(`.prov-group-${selSlug}`).forEach(el => {
-            const cName = el.getAttribute('data-canton');
-            let cObj = cantDataAll[cName];
-            if (!cObj && typeof stripAccents === 'function') {
-              const matchedKey = Object.keys(cantDataAll).find(k => stripAccents(k) === stripAccents(cName));
-              if (matchedKey) cObj = cantDataAll[matchedKey];
-            }
-            cObj = cObj || { ventas: 0, facturacion: 0 };
-            const cVal = provMode === 'facturacion' ? cObj.facturacion : cObj.ventas;
-            cantListThisProv.push({ name: cName, val: cVal, ventas: cObj.ventas, facturacion: cObj.facturacion });
-            el._val = cVal;
-            el._obj = cObj;
-
-            // Hover tooltip para cantón
-            el.onmouseenter = (e) => {
-              el.style.stroke = '#38bdf8';
-              el.style.strokeWidth = '2.8px';
-              if (tooltip) {
-                const ttTitle = document.getElementById('cr-tt-title');
-                const ttMetric = document.getElementById('cr-tt-metric');
-                const ttShare = document.getElementById('cr-tt-share');
-                const ttServ = document.getElementById('cr-tt-service');
-                const ttSup = document.getElementById('cr-tt-sup');
-                const ttCant = document.getElementById('cr-tt-cantones');
-
-                if (ttTitle) ttTitle.innerHTML = `📍 ${cName} <span style="font-size:0.75rem; color:#94a3b8;">(${selProv})</span>`;
-                if (ttMetric) ttMetric.textContent = provMode === 'facturacion' ? formatCurrency(cObj.facturacion) : (cObj.ventas.toLocaleString() + ' ventas');
-                if (ttShare) ttShare.textContent = totalProvSales > 0 ? ((cObj.ventas / totalProvSales) * 100).toFixed(1) + '% nacional' : '-';
-                if (ttServ) ttServ.textContent = cObj.ventas > 0 ? 'Activo' : 'Sin activaciones';
-                if (ttSup) ttSup.textContent = selProv;
-                if (ttCant) ttCant.textContent = 'Cantón Oficial';
-
-                const rect = canvasWrapper.getBoundingClientRect();
-                tooltip.style.left = (e.clientX - rect.left) + 'px';
-                tooltip.style.top = (e.clientY - rect.top) + 'px';
-                tooltip.style.display = 'block';
-              }
-            };
-            el.onmouseleave = () => {
-              el.style.stroke = '';
-              el.style.strokeWidth = '';
-              if (tooltip) tooltip.style.display = 'none';
-            };
-            el.onclick = () => {
-              window.highlightCanton(cName);
-            };
-          });
-
-          const cVals = cantListThisProv.map(c => c.val);
-          const maxCV = cVals.length > 0 ? Math.max(...cVals) : 1;
-          const minCV = cVals.length > 0 ? Math.min(...cVals) : 0;
-
-          // Hacer visibles e interactivos los cantones de esta provincia
-          document.querySelectorAll('.cr-map-canton-path').forEach(el => {
-            const isThisProv = el.classList.contains(`prov-group-${selSlug}`);
-            if (isThisProv) {
-              el.classList.add('visible');
-              el.style.opacity = '1';
-              el.style.pointerEvents = 'auto';
-              el.style.fill = getChoroplethColor(el._val || 0, minCV, maxCV, isDark);
-            } else {
-              el.classList.remove('visible');
-              el.style.opacity = '0';
-              el.style.pointerEvents = 'none';
-            }
-          });
-
-          // Inyectar Radar Sonar Pins en los 2 mejores cantones
-          cantListThisProv.sort((a, b) => b.val - a.val);
-          const radarPinsLayer = document.getElementById('cr-canton-radar-pins');
-          if (radarPinsLayer) {
-            radarPinsLayer.innerHTML = '';
-            cantListThisProv.slice(0, 2).forEach(topC => {
-              if (topC.val > 0) {
-                const meta = window.CR_CANTON_META ? window.CR_CANTON_META[topC.name] : null;
-                if (meta && meta.centroid) {
-                  const [cx, cy] = meta.centroid;
-                  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-                  g.setAttribute('class', 'canton-radar-pin visible');
-                  g.setAttribute('transform', `translate(${cx}, ${cy})`);
-                  g.style.pointerEvents = 'none';
-                  g.innerHTML = `
-                    <circle cx="0" cy="0" r="5" class="canton-radar-ring"></circle>
-                    <circle cx="0" cy="0" r="3.5" fill="#10b981"></circle>
-                    <rect x="-35" y="-18" width="70" height="15" rx="4" fill="rgba(15,23,42,0.92)" stroke="#10b981" stroke-width="0.8"></rect>
-                    <text x="0" y="-7" font-size="7.5" font-weight="800" text-anchor="middle" fill="#10b981">${topC.name}</text>
-                  `;
-                  radarPinsLayer.appendChild(g);
-                }
-              }
-            });
-          }
-
-          // Actualizar Sidebar con los Cantones de esta Provincia
-          { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = cantListThisProv.length + ' Cantones de ' + selProv; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
-          if (sidebarContainer) {
-            sidebarContainer.innerHTML = cantListThisProv.map((c, idx) => {
-              const barPct = maxCV > 0 ? Math.min(100, Math.round((c.val / maxCV) * 100)) : 10;
-              const primaryVal = provMode === 'facturacion' ? formatCurrency(c.facturacion) : (c.ventas.toLocaleString() + ' ventas');
-              const medal = idx === 0 ? '🥇 #1' : (idx === 1 ? '🥈 #2' : (idx === 2 ? '🥉 #3' : `#${idx+1}`));
-
-              return `
-                <div class="cr-sidebar-prov-item" data-canton="${c.name}" onclick="window.highlightCanton('${c.name}')" style="cursor:pointer;" title="Clic para resaltar ${c.name}">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:0.4rem;">
-                      <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#10b981' : (idx === 1 ? '#06b6d4' : '#94a3b8')};">${medal}</span>
-                      <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${c.name}</strong>
-                    </div>
-                    <span style="font-size:0.75rem; font-weight:800; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 7px; border-radius:12px;">${primaryVal}</span>
-                  </div>
-                  <div style="width:100%; height:5px; background:rgba(0,0,0,0.08); border-radius:3px; overflow:hidden; margin-top:4px;">
-                    <div style="width:${barPct}%; height:100%; background:linear-gradient(90deg, #0e7490 0%, #10b981 100%); border-radius:3px;"></div>
-                  </div>
-                  <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:var(--text-muted, #64748b); margin-top:2px;">
-                    <span>📍 Cantón de ${selProv}</span>
-                    <span>${barPct}% del cantón top</span>
-                  </div>
-                </div>
-              `;
-            }).join('');
-          }
-          return;
-        }
-
-        // -------------------------------------------------------------
-        // CASO B: VISTA NACIONAL DE 84 CANTONES (Todos los cantones activos)
-        // -------------------------------------------------------------
-        if (isCantonesAllLevel) {
-          if (btnToggleCantones) {
-            btnToggleCantones.style.background = 'var(--bg-card, #1e293b)';
-            btnToggleCantones.style.color = 'var(--text-primary, #f8fafc)';
-          }
-          if (btnToggleProvs) {
-            btnToggleProvs.style.background = 'transparent';
-            btnToggleProvs.style.color = 'var(--text-muted, #94a3b8)';
-          }
-
-          if (svgEl) svgEl.setAttribute('viewBox', '30 35 730 610');
-
-          // Breadcrumbs
-          const crumbSep = document.getElementById('cr-crumb-sep');
-          const crumbProv = document.getElementById('cr-crumb-prov');
-          const crumbProvName = document.getElementById('cr-crumb-prov-name');
-          const crumbCount = document.getElementById('cr-crumb-count');
-          const btnResetZoom = document.getElementById('btn-reset-map-zoom');
-
-          if (crumbSep) crumbSep.style.display = 'inline';
-          if (crumbProv) crumbProv.style.display = 'inline-flex';
-          if (crumbProvName) crumbProvName.textContent = '84 Cantones';
-          if (crumbCount) crumbCount.textContent = '(Nacional)';
-          if (btnResetZoom) btnResetZoom.style.display = 'inline-flex';
-
-          // Provincias atenuadas como límites geográficos
-          document.querySelectorAll('.cr-map-prov-path').forEach(el => {
-            el.style.opacity = '0.2';
-            el.style.fill = 'none';
-            el.style.stroke = 'rgba(255,255,255,0.4)';
-            el.style.strokeWidth = '1.2px';
-            el.onclick = null;
-          });
-
-          // Ocultar pines provinciales
-          const badgesLayer = document.getElementById('cr-labels-layer') || document.getElementById('cr-badges-layer');
-          if (badgesLayer) {
-            badgesLayer.style.opacity = '0';
-            badgesLayer.style.pointerEvents = 'none';
-          }
-
-          // Calcular valores nacionales de cantones
-          const allCantVals = Object.values(cantDataAll).map(c => provMode === 'facturacion' ? c.facturacion : c.ventas);
-          const maxAllCV = allCantVals.length > 0 ? Math.max(...allCantVals) : 1;
-          const minAllCV = allCantVals.length > 0 ? Math.min(...allCantVals) : 0;
-
-          document.querySelectorAll('.cr-map-canton-path').forEach(el => {
-            const cName = el.getAttribute('data-canton');
-            let cObj = cantDataAll[cName];
-            if (!cObj && typeof stripAccents === 'function') {
-              const matchedKey = Object.keys(cantDataAll).find(k => stripAccents(k) === stripAccents(cName));
-              if (matchedKey) cObj = cantDataAll[matchedKey];
-            }
-            cObj = cObj || { ventas: 0, facturacion: 0, provincia: el.getAttribute('data-province') || '' };
-            const cVal = provMode === 'facturacion' ? cObj.facturacion : cObj.ventas;
-
+        document.querySelectorAll('.cr-map-canton-path').forEach(el => {
+          const isThisProv = el.classList.contains(`prov-group-${selSlug}`);
+          const cName = el.getAttribute('data-canton');
+          if (isThisProv) {
             el.classList.add('visible');
             el.style.opacity = '1';
             el.style.pointerEvents = 'auto';
-            el.style.fill = getChoroplethColor(cVal, minAllCV, maxAllCV, isDark);
+            const cObj = cantDataAll[cName] || { ventas: 0, facturacion: 0 };
+            el.style.fill = getChoroplethColor(cObj.ventas, minCV, maxCV, isDark);
 
-            el.onmouseenter = (e) => {
-              el.style.stroke = '#38bdf8';
-              el.style.strokeWidth = '2.8px';
-              if (tooltip) {
-                const ttTitle = document.getElementById('cr-tt-title');
-                const ttMetric = document.getElementById('cr-tt-metric');
-                const ttShare = document.getElementById('cr-tt-share');
-                const ttServ = document.getElementById('cr-tt-service');
-                const ttSup = document.getElementById('cr-tt-sup');
-                const ttCant = document.getElementById('cr-tt-cantones');
-
-                const share = totalProvSales > 0 ? ((cObj.ventas / totalProvSales) * 100).toFixed(1) : '0';
-                if (ttTitle) ttTitle.innerHTML = `📍 ${cName} <span style="font-size:0.75rem; color:#94a3b8;">(${cObj.provincia})</span>`;
-                if (ttMetric) ttMetric.textContent = provMode === 'facturacion' ? formatCurrency(cObj.facturacion) : (cObj.ventas.toLocaleString() + ' ventas');
-                if (ttShare) ttShare.textContent = `${share}% del total nacional`;
-                if (ttServ) ttServ.textContent = cObj.ventas > 0 ? 'Activo' : 'Sin activaciones';
-                if (ttSup) ttSup.textContent = cObj.provincia || 'Costa Rica';
-                if (ttCant) ttCant.textContent = 'Clic para hacer zoom';
-
-                const rect = canvasWrapper.getBoundingClientRect();
-                tooltip.style.left = (e.clientX - rect.left) + 'px';
-                tooltip.style.top = (e.clientY - rect.top) + 'px';
-                tooltip.style.display = 'block';
-              }
-            };
-            el.onmouseleave = () => {
-              el.style.stroke = '';
-              el.style.strokeWidth = '';
-              if (tooltip) tooltip.style.display = 'none';
-            };
             el.onclick = () => {
-              if (cObj.provincia) window.drillDownToProvince(cObj.provincia);
-              setTimeout(() => window.highlightCanton(cName), 350);
+              window.onGeoCantonChange(cName);
             };
-          });
+          } else {
+            el.classList.remove('visible');
+            el.style.opacity = '0';
+            el.style.pointerEvents = 'none';
+          }
+        });
+      } else {
+        // Nivel Nacional
+        if (svgEl) {
+          svgEl.setAttribute('viewBox', '30 35 730 610');
+        }
 
-          // Top cantones nacional en sidebar
-          const cantNationalList = Object.keys(cantDataAll).map(name => ({
-            name: name,
-            prov: cantDataAll[name].provincia,
-            ventas: cantDataAll[name].ventas,
-            facturacion: cantDataAll[name].facturacion,
-            val: provMode === 'facturacion' ? cantDataAll[name].facturacion : cantDataAll[name].ventas
-          })).sort((a, b) => b.val - a.val);
+        const maxPV = provList.length > 0 ? Math.max(...provList.map(p => p.ventas)) : 1;
+        const minPV = provList.length > 0 ? Math.min(...provList.map(p => p.ventas)) : 0;
 
-          { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = 'Top ' + Math.min(15, cantNationalList.length) + ' de ' + cantNationalList.length + ' cantones con ventas'; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
-          if (sidebarContainer) {
-            sidebarContainer.innerHTML = cantNationalList.slice(0, 15).map((c, idx) => {
-              const barPct = maxAllCV > 0 ? Math.min(100, Math.round((c.val / maxAllCV) * 100)) : 10;
-              const primaryVal = provMode === 'facturacion' ? formatCurrency(c.facturacion) : (c.ventas.toLocaleString() + ' ventas');
-              const medal = idx === 0 ? '🥇 #1' : (idx === 1 ? '🥈 #2' : (idx === 2 ? '🥉 #3' : `#${idx+1}`));
+        document.querySelectorAll('.cr-map-prov-path').forEach(el => {
+          el.style.opacity = '1';
+          el.style.stroke = isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(15, 23, 42, 0.25)';
+          el.style.strokeWidth = '1.4px';
+          const pName = el.getAttribute('data-province');
+          const stdP = window.getStandardProvName(pName);
+          const pObj = provData[stdP];
+          const v = pObj ? pObj.ventas : 0;
+          el.style.fill = getChoroplethColor(v, minPV, maxPV, isDark);
 
-              return `
-                <div class="cr-sidebar-prov-item" data-canton="${c.name}" onclick="window.drillDownToProvince('${c.prov}'); setTimeout(() => window.highlightCanton('${c.name}'), 400);" style="cursor:pointer;" title="Clic para ver ${c.name} (${c.prov})">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:0.4rem;">
-                      <span style="font-size:0.75rem; font-weight:800; color:${idx === 0 ? '#10b981' : (idx === 1 ? '#06b6d4' : '#94a3b8')};">${medal}</span>
-                      <strong style="font-size:0.86rem; color:var(--text-primary, #0f172a);">${c.name}</strong>
-                      <span style="font-size:0.68rem; color:var(--text-muted, #64748b);">(${c.prov})</span>
-                    </div>
-                    <span style="font-size:0.75rem; font-weight:800; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 7px; border-radius:12px;">${primaryVal}</span>
+          el.onclick = () => {
+            window.drillDownToProvince(pName);
+          };
+        });
+
+        // Ocultar cantones
+        document.querySelectorAll('.cr-map-canton-path').forEach(el => {
+          el.classList.remove('visible');
+          el.style.opacity = '0';
+          el.style.pointerEvents = 'none';
+        });
+      }
+
+      // ======================================================================
+      // 5. PESTAÑAS JERÁRQUICAS (PROVINCIAS | CANTONES | PDVS)
+      // ======================================================================
+      // A. SUB-PANEL 1: 7 PROVINCIAS (GRID FICHAS FINTECH)
+      const provCardsContainer = document.getElementById('cr-provincias-cards-container');
+      if (provCardsContainer) {
+        provCardsContainer.innerHTML = provList.map((p, idx) => {
+          let podioClass = 'rank-other';
+          let medalIcon = '📍';
+          if (idx === 0) { podioClass = 'rank-1'; medalIcon = '🥇'; }
+          else if (idx === 1) { podioClass = 'rank-2'; medalIcon = '🥈'; }
+          else if (idx === 2) { podioClass = 'rank-3'; medalIcon = '🥉'; }
+
+          const totP = (p.servicios.Pospago + p.servicios.Prepago + p.servicios.Portabilidad + p.servicios.Hogar) || 1;
+          const posPct = Math.round((p.servicios.Pospago / totP) * 100);
+          const prePct = Math.round((p.servicios.Prepago / totP) * 100);
+          const porPct = Math.round((p.servicios.Portabilidad / totP) * 100);
+          const hogPct = Math.max(0, 100 - (posPct + prePct + porPct));
+
+          const topCantonInP = Object.keys(p.cantones).sort((a,b) => p.cantones[b] - p.cantones[a])[0] || '-';
+          const isSelected = App.selectedProvinceFilter === p.nombre ? 'border:2px solid #0284c7; box-shadow:0 0 16px rgba(2,132,199,0.3);' : '';
+
+          return `
+            <div class="cr-prov-card ${podioClass}" style="${isSelected}" onclick="window.drillDownToProvince('${p.nombre}')">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                  <div style="display:flex; align-items:center; gap:0.35rem;">
+                    <span style="font-size:1rem;">${medalIcon}</span>
+                    <strong style="font-size:1.05rem; color:var(--text-primary);">${p.nombre}</strong>
                   </div>
-                  <div style="width:100%; height:5px; background:rgba(0,0,0,0.08); border-radius:3px; overflow:hidden; margin-top:4px;">
-                    <div style="width:${barPct}%; height:100%; background:linear-gradient(90deg, #0e7490 0%, #10b981 100%); border-radius:3px;"></div>
+                  <div style="font-size:0.72rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
+                    ${p.cantonesCount} cantones • ${p.pdvsCount} tiendas
                   </div>
                 </div>
-              `;
-            }).join('');
-          }
-          return;
-        }
+                <span class="fintech-pace-badge pace-steady" style="font-size:0.7rem;">#${idx+1} Nacional</span>
+              </div>
 
-        // -------------------------------------------------------------
-        // CASO C: VISTA NACIONAL DE 7 PROVINCIAS (Default Country Level)
-        // -------------------------------------------------------------
-        if (btnToggleProvs) {
-          btnToggleProvs.style.background = 'var(--bg-card, #1e293b)';
-          btnToggleProvs.style.color = 'var(--text-primary, #f8fafc)';
-        }
-        if (btnToggleCantones) {
-          btnToggleCantones.style.background = 'transparent';
-          btnToggleCantones.style.color = 'var(--text-muted, #94a3b8)';
-        }
+              <!-- Main Sales Stat -->
+              <div class="fintech-main-stat">
+                <span class="fintech-big-num">${p.ventas.toLocaleString()}</span>
+                <span class="fintech-sub-num">ventas (${p.cuota.toFixed(1)}% cuota)</span>
+              </div>
 
-        if (svgEl) svgEl.setAttribute('viewBox', '30 35 730 610');
+              <div class="facturacion-stat" style="font-size:0.8rem; font-weight:700; color:#10b981; font-family:var(--font-mono, monospace);">
+                💰 ${formatCurrency(p.facturacion)}
+              </div>
 
-        // Sincronizar barra de leyenda con el tema
-        const legendGrad = document.getElementById('cr-map-legend-grad');
-        if (legendGrad) {
-          legendGrad.style.background = isDark
-            ? 'linear-gradient(90deg, #152c48 0%, #0c4a6e 25%, #0284c7 50%, #00b4d8 75%, #00d2ff 100%)'
-            : 'linear-gradient(90deg, #e0f2fe 0%, #93c5fd 25%, #38bdf8 50%, #0284c7 75%, #1e40af 100%)';
-        }
+              <!-- Segmented Mix Bar -->
+              <div class="fintech-split-bar" style="height:7px; border-radius:4px; margin:0.3rem 0;">
+                <div class="split-pospago" style="width:${posPct}%;" title="Pospago: ${posPct}%"></div>
+                <div class="split-prepago" style="width:${prePct}%;" title="Prepago: ${prePct}%"></div>
+                <div class="split-porta" style="width:${porPct}%;" title="Porta: ${porPct}%"></div>
+                <div class="split-hogar" style="width:${hogPct}%;" title="Hogar: ${hogPct}%"></div>
+              </div>
 
-        // Reset Breadcrumbs
-        const crumbSep = document.getElementById('cr-crumb-sep');
-        const crumbProv = document.getElementById('cr-crumb-prov');
-        const btnResetZoom = document.getElementById('btn-reset-map-zoom');
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:var(--text-muted);">
+                <span>Líder: <strong style="color:var(--text-primary);">${topCantonInP}</strong></span>
+                <span style="color:#0284c7; font-weight:700;">Explorar Cantones ➔</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
 
-        if (crumbSep) crumbSep.style.display = 'none';
-        if (crumbProv) crumbProv.style.display = 'none';
-        if (btnResetZoom) btnResetZoom.style.display = 'none';
+      // B. SUB-PANEL 2: CANTONES (TABLA Y GRÁFICO)
+      const cantTableBody = document.getElementById('cr-cantones-table-body');
+      const cantTableCount = document.getElementById('cr-cantones-table-count');
 
-        // Ocultar capa de cantones y sonar pins
-        document.querySelectorAll('.cr-map-canton-path').forEach(p => {
-          p.classList.remove('visible');
-          p.style.opacity = '0';
-          p.style.pointerEvents = 'none';
-        });
-        const radarPinsLayer = document.getElementById('cr-canton-radar-pins');
-        if (radarPinsLayer) radarPinsLayer.innerHTML = '';
+      let cantList = Object.values(cantDataAll);
+      if (App.selectedProvinceFilter) {
+        cantList = cantList.filter(c => window.getProvSlug(c.provincia) === window.getProvSlug(App.selectedProvinceFilter));
+      }
+      if (App.cantonSearchTerm) {
+        const q = App.cantonSearchTerm.toLowerCase();
+        cantList = cantList.filter(c => c.nombre.toLowerCase().includes(q) || c.provincia.toLowerCase().includes(q));
+      }
 
-        // Restaurar opacidad de pines de provincias
-        const badgesLayer = document.getElementById('cr-labels-layer') || document.getElementById('cr-badges-layer');
-        if (badgesLayer) {
-          badgesLayer.style.opacity = '1';
-          badgesLayer.style.pointerEvents = 'auto';
-        }
+      cantList.sort((a, b) => b.ventas - a.ventas);
 
-        // Configurar Provincias (Fill, Hover, Clic para Drill-Down)
-        document.querySelectorAll('.cr-map-prov-path').forEach(el => {
-          const rawName = el.getAttribute('data-province');
-          const pName = window.getStandardProvName(rawName);
-          const pSlug = window.getProvSlug(rawName);
-          const pObj = pMap[pName] || pMap[pSlug] || { ventas: 0, facturacion: 0, cantonesCount: 0 };
-          const pVal = provMode === 'facturacion' ? pObj.facturacion : pObj.ventas;
+      if (cantTableCount) {
+        cantTableCount.textContent = `${cantList.length} cantones ${App.selectedProvinceFilter ? 'en ' + App.selectedProvinceFilter : 'en Costa Rica'}`;
+      }
 
-          el.style.opacity = '1';
-          el.style.fill = getChoroplethColor(pVal, minV, maxV, isDark);
-          el.style.stroke = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(15, 23, 42, 0.25)';
-          el.style.strokeWidth = '1.4px';
-
-          // Actualizar pin badge
-          const pinBadgeEl = document.getElementById(`cr-pin-${pSlug}`);
-          const pinValEl = document.getElementById(`cr-pin-val-${pSlug}`);
-          const isLeader = (pVal === maxV && maxV > 0);
-          if (pinBadgeEl) {
-            if (isLeader) {
-              pinBadgeEl.classList.add('is-leader');
-            } else {
-              pinBadgeEl.classList.remove('is-leader');
-            }
-          }
-          if (pinValEl) {
-            const share = totalProvSales > 0 ? ((pObj.ventas / totalProvSales) * 100).toFixed(0) : '0';
-            const crown = isLeader ? '👑 ' : '';
-            if (provMode === 'facturacion') {
-              pinValEl.textContent = isSupervisor ? `${crown}${pObj.ventas.toLocaleString()} u. (${share}%)` : `${crown}${formatCurrency(pObj.facturacion)} (${share}%)`;
-            } else {
-              pinValEl.textContent = `${crown}${pObj.ventas.toLocaleString()} vts • ${share}%`;
-            }
-          }
-
-          // Hover
-          el.onmouseenter = (e) => {
-            el.style.stroke = '#38bdf8';
-            el.style.strokeWidth = '2.8px';
-            if (tooltip) {
-              const ttTitle = document.getElementById('cr-tt-title');
-              const ttMetric = document.getElementById('cr-tt-metric');
-              const ttShare = document.getElementById('cr-tt-share');
-              const ttServ = document.getElementById('cr-tt-service');
-              const ttSup = document.getElementById('cr-tt-sup');
-              const ttCant = document.getElementById('cr-tt-cantones');
-
-              const share = totalProvSales > 0 ? ((pObj.ventas / totalProvSales) * 100).toFixed(1) : '0';
-              if (ttTitle) ttTitle.innerHTML = `🏢 ${pName} <span style="font-size:0.75rem; color:#94a3b8;">(Costa Rica)</span>`;
-              if (ttMetric) ttMetric.textContent = provMode === 'facturacion' ? formatCurrency(pObj.facturacion) : (pObj.ventas.toLocaleString() + ' ventas');
-              if (ttShare) ttShare.textContent = `${share}% del total nacional`;
-              if (ttServ) ttServ.textContent = pObj.topServicio || 'Pospago';
-              if (ttSup) ttSup.textContent = pObj.topSupervisor || '-';
-              if (ttCant) ttCant.textContent = `${pObj.cantonesCount || 0} cantones activos (Clic para ver)`;
-
-              const rect = canvasWrapper.getBoundingClientRect();
-              tooltip.style.left = (e.clientX - rect.left) + 'px';
-              tooltip.style.top = (e.clientY - rect.top) + 'px';
-              tooltip.style.display = 'block';
-            }
-          };
-          el.onmouseleave = () => {
-            el.style.stroke = '';
-            el.style.strokeWidth = '';
-            if (tooltip) tooltip.style.display = 'none';
-          };
-
-          // Clic directo para Drill-Down
-          el.onclick = () => {
-            if (tooltip) tooltip.style.display = 'none';
-            window.drillDownToProvince(pName);
-          };
-        });
-
-        // Configurar Clic en Pines Provinciales
-        document.querySelectorAll('.cr-pin-badge').forEach(pin => {
-          const rawName = pin.getAttribute('data-province');
-          const pName = window.getStandardProvName(rawName);
-          pin.style.cursor = 'pointer';
-          pin.onclick = (e) => {
-            e.stopPropagation();
-            if (tooltip) tooltip.style.display = 'none';
-            window.drillDownToProvince(pName);
-          };
-        });
-
-        // Actualizar Sidebar Ejecutivo de 7 Provincias
-        { const _st = document.getElementById('cr-sidebar-subtitle'); if (_st) _st.textContent = '7 Provincias de Costa Rica'; } const sidebarContainer = document.getElementById('cr-sidebar-prov-list');
-        if (sidebarContainer) {
-          const provRegions = {
-            'San José': 'GAM Central & Sur',
-            'Alajuela': 'GAM Norte & Occidente',
-            'Heredia': 'GAM Norte & Flores',
-            'Cartago': 'GAM Este & Guarco',
-            'Puntarenas': 'Litoral Pacífico & Islas',
-            'Guanacaste': 'Pacífico Norte & Chorotega',
-            'Limón': 'Litoral Caribe & Atlántico'
-          };
-
-          const rankBadges = ['🥇 #1', '🥈 #2', '🥉 #3', '#4', '#5', '#6', '#7'];
-
-          sidebarContainer.innerHTML = provList.map((p, idx) => {
-            const sharePct = totalProvSales > 0 ? ((p.ventas / totalProvSales) * 100).toFixed(1) : '0.0';
-            const barPct = maxV > 0 ? Math.min(100, Math.round(((provMode === 'facturacion' ? p.facturacion : p.ventas) / maxV) * 100)) : 10;
-            const regionTag = provRegions[p.nombre] || 'Costa Rica';
-            const primaryVal = provMode === 'facturacion' ? formatCurrency(p.facturacion) : (p.ventas.toLocaleString() + ' ventas');
-            const secondaryVal = isSupervisor ? '' : (provMode === 'facturacion' ? (p.ventas.toLocaleString() + ' ventas') : formatCurrency(p.facturacion));
-            const isLeader = (idx === 0);
+      if (cantTableBody) {
+        if (cantList.length === 0) {
+          cantTableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No se encontraron cantones con los filtros aplicados.</td></tr>';
+        } else {
+          cantTableBody.innerHTML = cantList.map((c, i) => {
+            const share = totalNacVentas > 0 ? ((c.ventas / totalNacVentas) * 100).toFixed(1) : '0';
+            const totC = (c.servicios.Pospago + c.servicios.Prepago + c.servicios.Portabilidad + c.servicios.Hogar) || 1;
+            const pPos = Math.round((c.servicios.Pospago / totC) * 100);
+            const pPre = Math.round((c.servicios.Prepago / totC) * 100);
+            const pPor = Math.round((c.servicios.Portabilidad / totC) * 100);
+            const pHog = Math.max(0, 100 - (pPos + pPre + pPor));
 
             return `
-              <div class="cr-sidebar-prov-item ${isLeader ? 'is-leader' : ''}" data-province="${p.nombre}" onclick="window.drillDownToProvince('${p.nombre}')" style="cursor:pointer;" title="Clic para ver cantones de ${p.nombre}">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <div style="display:flex; align-items:center; gap:0.45rem;">
-                    <span style="font-size:0.75rem; font-weight:800; color:${isLeader ? '#00d2ff' : '#94a3b8'}; width:18px;">${idx + 1}.</span>
-                    <strong style="font-size:0.88rem; color:var(--text-primary, #0f172a);">${p.nombre}</strong>
-                    ${isLeader ? '<span style="font-size:0.62rem; background:rgba(0,210,255,0.2); color:#00d2ff; padding:1px 5px; border-radius:4px; font-weight:800;">👑 TOP 1</span>' : ''}
+              <tr style="cursor:pointer;" onclick="window.onGeoCantonChange('${c.nombre.replace(/'/g, "\'")}')">
+                <td style="font-weight:700; color:${i < 3 ? '#f59e0b' : 'var(--text-muted)'};">#${i+1}</td>
+                <td><strong style="color:var(--text-primary);">${c.nombre}</strong></td>
+                <td><span class="cr-geo-breadcrumb-step" style="font-size:0.72rem;">${c.provincia}</span></td>
+                <td style="text-align:right; font-weight:800; color:#0284c7; font-family:var(--font-mono, monospace);">${c.ventas.toLocaleString()}</td>
+                <td style="text-align:right; font-weight:600;">${share}%</td>
+                <td class="facturacion-stat" style="text-align:right; font-weight:700; color:#10b981; font-family:var(--font-mono, monospace);">${formatCurrency(c.facturacion)}</td>
+                <td>
+                  <div class="fintech-split-bar" style="height:6px; width:90px; margin:0;">
+                    <div class="split-pospago" style="width:${pPos}%;"></div>
+                    <div class="split-prepago" style="width:${pPre}%;"></div>
+                    <div class="split-porta" style="width:${pPor}%;"></div>
+                    <div class="split-hogar" style="width:${pHog}%;"></div>
                   </div>
-                  <span style="font-size:0.86rem; font-weight:800; color:var(--accent-cyan, #00d2ff);">${primaryVal}</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.7rem; color:var(--text-muted, #64748b); margin-top:2px;">
-                  <span>${regionTag} • ${p.topSupervisor || ''}</span>
-                  <span style="color:#00d2ff; font-weight:700;">${sharePct}% cuota</span>
-                </div>
-                <div style="width:100%; height:4px; background:rgba(0,0,0,0.08); border-radius:2px; margin-top:5px; overflow:hidden;">
-                  <div style="width:${sharePct}%; height:100%; background:linear-gradient(90deg, #0284c7, #00d2ff); border-radius:2px;"></div>
-                </div>
-              </div>
+                </td>
+                <td style="text-align:center;">
+                  <button type="button" class="btn-geo-reset-all" style="border-color:#0284c7; color:#0284c7; padding:2px 8px;" onclick="event.stopPropagation(); window.onGeoCantonChange('${c.nombre.replace(/'/g, "\'")}')">
+                    Ver Tiendas
+                  </button>
+                </td>
+              </tr>
             `;
           }).join('');
         }
-
-        // Active Filter Banner
-        const banner = document.getElementById('prov-map-filter-banner');
-        const lblActive = document.getElementById('lbl-active-prov-filter');
-        const btnSideReset = document.getElementById('btn-sidebar-reset-filter');
-        if (banner && lblActive) {
-          if (App.selectedProvinceFilter) {
-            lblActive.textContent = App.selectedProvinceFilter;
-            banner.style.display = 'flex';
-            if (btnSideReset) btnSideReset.style.display = 'block';
-          } else {
-            banner.style.display = 'none';
-            if (btnSideReset) btnSideReset.style.display = 'none';
-          }
-        }
       }
 
-      // Ejecutar actualización de UI del Mapa
-      updateCostaRicaMapUI();
+      // Gráfico de Cantones (chart-cantones)
+      const cvCant = document.getElementById('chart-cantones');
+      if (cvCant) {
+        if (App.charts.cantones) App.charts.cantones.destroy();
+        const ctxCant = cvCant.getContext('2d');
+        const topCantonesList = cantList.slice(0, 15);
 
-      // Clear filter button bindings
-      const btnClearFilt = document.getElementById('btn-clear-prov-filter');
-      if (btnClearFilt) btnClearFilt.onclick = () => window.resetToCountryView();
-      const btnSideReset = document.getElementById('btn-sidebar-reset-filter');
-      if (btnSideReset) btnSideReset.onclick = () => window.resetToCountryView();
-
-      // Switchers Map vs Bar Chart
-      const btnVMap = document.getElementById('btn-view-map');
-      const btnVChart = document.getElementById('btn-view-chart');
-      const wMap = document.getElementById('wrapper-prov-map');
-      const wChart = document.getElementById('wrapper-prov-chart');
-
-      if (btnVMap && btnVChart && wMap && wChart) {
-        btnVMap.onclick = () => {
-          App.provViewMode = 'map';
-          btnVMap.classList.add('active');
-          btnVChart.classList.remove('active');
-          wMap.style.display = 'grid';
-          wChart.style.display = 'none';
-        };
-        btnVChart.onclick = () => {
-          App.provViewMode = 'chart';
-          btnVChart.classList.add('active');
-          btnVMap.classList.remove('active');
-          wChart.style.display = 'block';
-          wMap.style.display = 'none';
-          if (App.charts.provincias) App.charts.provincias.resize();
-        };
-        if (App.provViewMode === 'chart') {
-          btnVChart.classList.add('active');
-          btnVMap.classList.remove('active');
-          wChart.style.display = 'block';
-          wMap.style.display = 'none';
-        } else {
-          btnVMap.classList.add('active');
-          btnVChart.classList.remove('active');
-          wMap.style.display = 'grid';
-          wChart.style.display = 'none';
-        }
-      }
-
-      // Metric Buttons for Provincias (Ventas / Facturacion / Participacion)
-      document.querySelectorAll('.btn-prov-chart-mode').forEach(btn => {
-        btn.onclick = () => {
-          document.querySelectorAll('.btn-prov-chart-mode').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          App.provChartMode = btn.getAttribute('data-mode');
-          renderSupervisorsAndTerritory();
-        };
-      });
-
-      // --- 4. TOP CANTONES DE COSTA RICA ---
-      // (cantData ya calculado y filtrado al inicio de territorio)
-
-      const lblCantSub = document.getElementById('lbl-cant-subtitle');
-      if (lblCantSub) {
-        lblCantSub.textContent = App.selectedProvinceFilter ? `Desglose de Cantones en ${App.selectedProvinceFilter}` : 'Desglose Geográfico por Cantón';
-      }
-
-      const cantMode = App.cantChartMode || 'ventas';
-      const cantList = Object.keys(cantData).map(name => ({
-        nombre: name,
-        ...cantData[name]
-      }));
-
-      const totalAllCantSales = cantList.reduce((acc, c) => acc + c.ventas, 0);
-      const totalAllCantRev = cantList.reduce((acc, c) => acc + c.facturacion, 0);
-
-      if (cantMode === 'facturacion') {
-        cantList.sort((a, b) => b.facturacion - a.facturacion);
-      } else {
-        cantList.sort((a, b) => b.ventas - a.ventas);
-      }
-
-      const topCant = cantList.slice(0, 10);
-
-      // Micro-KPI Summary Ribbon for Cantones
-      const rCantLeader = document.getElementById('cant-ribbon-leader');
-      const rCantTop3 = document.getElementById('cant-ribbon-top3');
-      const rCantRev = document.getElementById('cant-ribbon-rev');
-      const rCantCount = document.getElementById('cant-ribbon-count');
-
-      if (cantList.length > 0) {
-        if (rCantLeader) {
-          const l = topCant[0];
-          const lVal = cantMode === 'facturacion' ? formatCurrency(l.facturacion) : (l.ventas.toLocaleString() + ' vts');
-          rCantLeader.innerText = `${l.nombre} (${lVal})`;
-
-          // Micro-KPI 3: Cantón Run-Rate
-          const elCantonVal = document.getElementById('mini-kpi-canton-val');
-          const elCantonBadge = document.getElementById('mini-kpi-canton-badge');
-          const elCantonSub = document.getElementById('mini-kpi-canton-sub');
-          if (elCantonVal && l) {
-            elCantonVal.textContent = l.nombre;
-            if (elCantonBadge) elCantonBadge.textContent = `${l.ventas.toLocaleString()} u.`;
-            if (elCantonSub) elCantonSub.textContent = `Líder Cantonal (${totalAllCantSales > 0 ? ((l.ventas / totalAllCantSales) * 100).toFixed(1) : 0}% share)`;
-          }
-        }
-        if (rCantTop3) {
-          const top3Sum = topCant.slice(0, 3).reduce((acc, c) => acc + c.ventas, 0);
-          rCantTop3.innerText = totalAllCantSales > 0 ? ((top3Sum / totalAllCantSales) * 100).toFixed(1) + '%' : '-';
-        }
-        if (rCantRev) {
-          const topCantRev = topCant.reduce((acc, c) => acc + c.facturacion, 0);
-          rCantRev.innerText = formatCurrency(topCantRev);
-        }
-        if (rCantCount) {
-          rCantCount.innerText = `${cantList.length} Cantones`;
-        }
-      }
-
-      if (App.charts.cantones) App.charts.cantones.destroy();
-      const ctxCant = document.getElementById('chart-cantones').getContext('2d');
-
-      // Canva Infographic Vibrant Gradients for Cantones
-      const gradCant1 = ctxCant.createLinearGradient(0, 0, 500, 0);
-      gradCant1.addColorStop(0, '#7c3aed');
-      gradCant1.addColorStop(0.5, '#a855f7');
-      gradCant1.addColorStop(1, '#ec4899');   // Canva Electric Magenta
-
-      const gradCant2 = ctxCant.createLinearGradient(0, 0, 500, 0);
-      gradCant2.addColorStop(0, '#0284c7');
-      gradCant2.addColorStop(0.5, '#06b6d4');
-      gradCant2.addColorStop(1, '#38bdf8');   // Canva Luminous Cyan
-
-      const cantBgColors = topCant.map((_, idx) => idx === 0 ? gradCant1 : (idx === 1 ? gradCant2 : (idx % 2 === 0 ? gradCant1 : gradCant2)));
-      const cantBorderColors = topCant.map((_, idx) => idx === 0 ? '#ec4899' : '#38bdf8');
-
-      const cantDataValues = cantMode === 'facturacion' ? topCant.map(c => c.facturacion) : topCant.map(c => c.ventas);
-      const cantValueLabel = cantMode === 'facturacion' ? 'Facturación ₡' : 'Activaciones Realizadas';
-
-      // Value labels plugin for Cantones
-      const cantValuesPlugin = {
-        id: 'cantValuesPlugin',
-        afterDatasetsDraw(chart) {
-          const { ctx: c } = chart;
-          const meta = chart.getDatasetMeta(0);
-          if (!meta || meta.hidden) return;
-          const isDark = App.theme === 'dark';
-
-          meta.data.forEach((bar, index) => {
-            const ct = topCant[index];
-            if (!ct) return;
-            c.save();
-
-            const sharePct = totalAllCantSales > 0 ? ((ct.ventas / totalAllCantSales) * 100).toFixed(1) : '0';
-            let txtMain = '';
-            let txtSub = `(${sharePct}%)`;
-
-            if (cantMode === 'facturacion') {
-              txtMain = '₡' + (ct.facturacion >= 1000000 ? (ct.facturacion / 1000000).toFixed(1) + 'M' : (ct.facturacion >= 1000 ? (ct.facturacion / 1000).toFixed(0) + 'k' : ct.facturacion.toLocaleString()));
-            } else {
-              txtMain = `${ct.ventas.toLocaleString()} vts`;
-            }
-
-            c.font = 'bold 12px "Segoe UI", Inter, sans-serif';
-            const mMain = c.measureText(txtMain);
-            c.font = '700 9.5px "Segoe UI", Inter, sans-serif';
-            const mSub = c.measureText(txtSub);
-            const pillW = mMain.width + mSub.width + 18;
-            const pillH = 22;
-
-            const chartArea = chart.chartArea;
-            const spaceRight = chartArea.right - bar.x;
-            let pillX = bar.x + 8;
-            let drawInside = false;
-
-            if (spaceRight < pillW + 10) {
-              pillX = Math.max(chartArea.left + 5, bar.x - pillW - 8);
-              drawInside = true;
-            }
-
-            const pillY = bar.y - (pillH / 2);
-
-            let valColor = '';
-            let subColor = '';
-
-            if (drawInside) {
-              valColor = '#ffffff';
-              subColor = '#cbd5e1';
-            } else if (isDark) {
-              valColor = index === 0 ? '#c084fc' : '#f8fafc';
-              subColor = '#94a3b8';
-            } else {
-              valColor = index === 0 ? '#6b21a8' : '#0f172a';
-              subColor = '#64748b';
-            }
-
-            c.fillStyle = drawInside
-              ? (isDark ? 'rgba(15, 23, 42, 0.94)' : 'rgba(15, 23, 42, 0.88)')
-              : (isDark ? 'rgba(30, 41, 59, 0.96)' : '#ffffff');
-            c.strokeStyle = index === 0 ? '#7c3aed' : (isDark ? 'rgba(255,255,255,0.18)' : '#cbd5e1');
-            c.lineWidth = 1.3;
-
-            c.beginPath();
-            if (c.roundRect) {
-              c.roundRect(pillX, pillY, pillW, pillH, 6);
-            } else {
-              c.rect(pillX, pillY, pillW, pillH);
-            }
-            c.fill();
-            c.stroke();
-
-            c.textAlign = 'left';
-            c.textBaseline = 'middle';
-
-            c.font = 'bold 12px "Segoe UI", Inter, sans-serif';
-            c.fillStyle = valColor;
-            c.fillText(txtMain, pillX + 8, bar.y);
-
-            c.font = '700 9.5px "Segoe UI", Inter, sans-serif';
-            c.fillStyle = subColor;
-            c.fillText(txtSub, pillX + 8 + mMain.width + 5, bar.y);
-
-            c.restore();
-          });
-        }
-      };
-
-      App.charts.cantones = new Chart(ctxCant, {
-        type: 'bar',
-        data: {
-          labels: topCant.map((c, idx) => {
-            const prefix = idx === 0 ? '🥇 ' : (idx === 1 ? '🥈 ' : (idx === 2 ? '🥉 ' : `#${idx+1} `));
-            const provShort = c.provincia ? ` (${c.provincia.substring(0, 3)})` : '';
-            return prefix + c.nombre + provShort;
-          }),
-          datasets: [{
-            label: cantValueLabel,
-            data: cantDataValues,
-            backgroundColor: cantBgColors,
-            borderColor: cantBorderColors,
-            borderWidth: 1.5,
-            borderRadius: 14, borderSkipped: false,
-            barPercentage: 0.76
-          }]
-        },
-        plugins: [cantValuesPlugin],
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 650, easing: 'easeOutQuart' },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: 'rgba(15, 23, 42, 0.94)',
-              titleColor: '#ffffff',
-              titleFont: { family: 'Segoe UI', size: 12, weight: '700' },
-              bodyColor: '#e2e8f0',
-              bodyFont: { family: 'Segoe UI', size: 11 },
-              borderColor: 'rgba(99, 102, 241, 0.4)',
-              borderWidth: 1.5,
-              padding: 10,
-              cornerRadius: 8,
-              callbacks: {
-                title: (items) => {
-                  const c = topCant[items[0].dataIndex];
-                  return `#${items[0].dataIndex + 1} - Cantón: ${c.nombre} (${c.provincia})`;
-                },
-                afterBody: (items) => {
-                  const c = topCant[items[0].dataIndex];
-                  const sharePct = totalAllCantSales > 0 ? ((c.ventas / totalAllCantSales) * 100).toFixed(1) : 0;
-                  return `\n⚡ Ventas Concretadas: ${c.ventas.toLocaleString()} u.\n📊 Participación: ${sharePct}% del total\n${((typeof App !== 'undefined' && App.userRole === 'supervisor') || document.body.classList.contains('role-supervisor')) ? '' : '\n💰 Facturación: ' + formatCurrency(c.facturacion)}`;
-                }
-              }
-            }
+        App.charts.cantones = new Chart(ctxCant, {
+          type: 'bar',
+          data: {
+            labels: topCantonesList.map(c => c.nombre),
+            datasets: [{
+              label: 'Ventas por Cantón',
+              data: topCantonesList.map(c => c.ventas),
+              backgroundColor: '#0284c7',
+              borderRadius: 6
+            }]
           },
-          scales: {
-            x: {
-              suggestedMax: cantMode === 'facturacion' ? Math.max(...cantDataValues, 1000) * 1.30 : Math.max(...cantDataValues, 1) * 1.30,
-              grid: { color: theme.grid },
-              ticks: {
-                color: theme.text,
-                font: { size: 10 },
-                callback: (v) => cantMode === 'facturacion' ? (v >= 1000000 ? '₡' + (v/1000000).toFixed(1) + 'M' : (v >= 1000 ? '₡' + (v/1000).toFixed(0) + 'k' : '₡' + v)) : v
-              }
-            },
-            y: {
-              grid: { display: false },
-              ticks: { color: theme.text, font: { size: window.innerWidth <= 768 ? 9.5 : 10.5, weight: '600' } }
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: theme.text } },
+              y: { grid: { color: theme.grid }, ticks: { color: theme.text } }
             }
           }
+        });
+      }
+
+      // C. SUB-PANEL 3: PUNTOS DE VENTA (RETAIL / TIENDAS)
+      const pdvTableBody = document.getElementById('cr-pdvs-table-body');
+      const pdvTableCount = document.getElementById('cr-pdvs-table-count');
+
+      let pdvList = Object.values(pdvDataAll);
+      if (App.selectedProvinceFilter) {
+        pdvList = pdvList.filter(p => window.getProvSlug(p.provincia) === window.getProvSlug(App.selectedProvinceFilter));
+      }
+      if (App.selectedCantonFilter) {
+        pdvList = pdvList.filter(p => p.canton === App.selectedCantonFilter);
+      }
+      if (App.pdvCanalFilter && App.pdvCanalFilter !== 'all') {
+        pdvList = pdvList.filter(p => p.canal === App.pdvCanalFilter);
+      }
+      if (App.pdvSearchTerm) {
+        const q = App.pdvSearchTerm.toLowerCase();
+        pdvList = pdvList.filter(p => p.nombre.toLowerCase().includes(q) || p.canton.toLowerCase().includes(q) || p.provincia.toLowerCase().includes(q));
+      }
+
+      pdvList.sort((a, b) => b.ventas - a.ventas);
+
+      if (pdvTableCount) {
+        pdvTableCount.textContent = `${pdvList.length} tiendas activas registradas`;
+      }
+
+      if (pdvTableBody) {
+        if (pdvList.length === 0) {
+          pdvTableBody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No se encontraron tiendas con los filtros aplicados.</td></tr>';
+        } else {
+          pdvTableBody.innerHTML = pdvList.map((p, i) => `
+            <tr>
+              <td style="font-weight:700; color:${i < 3 ? '#f59e0b' : 'var(--text-muted)'};">#${i+1}</td>
+              <td><strong style="color:var(--text-primary);">${p.nombre}</strong></td>
+              <td>${p.canton}</td>
+              <td><span class="cr-geo-breadcrumb-step" style="font-size:0.72rem;">${p.provincia}</span></td>
+              <td><span style="display:inline-block; padding:2px 7px; border-radius:5px; font-size:0.7rem; font-weight:700; background:rgba(2,132,199,0.12); color:#0284c7;">${p.canal}</span></td>
+              <td style="text-align:center; font-weight:700; color:#0284c7;">${p.servicios.Pospago}</td>
+              <td style="text-align:center; font-weight:700; color:#10b981;">${p.servicios.Prepago}</td>
+              <td style="text-align:center; font-weight:700; color:#8b5cf6;">${p.servicios.Portabilidad}</td>
+              <td style="text-align:center; font-weight:700; color:#f59e0b;">${p.servicios.Hogar}</td>
+              <td style="text-align:right; font-weight:800; color:var(--text-primary); font-family:var(--font-mono, monospace);">${p.ventas.toLocaleString()}</td>
+              <td class="facturacion-stat" style="text-align:right; font-weight:700; color:#10b981; font-family:var(--font-mono, monospace);">${formatCurrency(p.facturacion)}</td>
+            </tr>
+          `).join('');
         }
-      });
+      }
     }
 
-    // 5. Data Grid (Transactions Table)
+    // =========================================================================
+    // GLOBAL HANDLERS FOR TERRITORIAL HIERARCHY (TAB 4)
+    // =========================================================================
+    window.onGeoProvinciaChange = function(provName) {
+      if (provName) {
+        window.drillDownToProvince(provName);
+      } else {
+        window.resetTerritoryFilter();
+      }
+    };
+
+    window.onGeoCantonChange = function(cantonName) {
+      App.selectedCantonFilter = cantonName || null;
+      App.selectedPdvFilter = null;
+      if (cantonName) {
+        const meta = window.CR_CANTON_META ? window.CR_CANTON_META[cantonName] : null;
+        if (meta && meta.province) {
+          const stdP = window.getStandardProvName(meta.province);
+          if (App.selectedProvinceFilter !== stdP) {
+            App.selectedProvinceFilter = stdP;
+            App.currentMapLevel = 'province';
+            App.mapViewMode = 'province';
+          }
+        }
+        window.switchGeoSubTab('cantones');
+        window.highlightCanton(cantonName);
+      }
+      renderSupervisorsAndTerritory();
+    };
+
+    window.onGeoPdvChange = function(pdvName) {
+      App.selectedPdvFilter = pdvName || null;
+      if (pdvName) {
+        window.switchGeoSubTab('pdvs');
+      }
+      renderSupervisorsAndTerritory();
+    };
+
+    window.onGeoQuickSearch = function(term) {
+      App.cantonSearchTerm = term;
+      App.pdvSearchTerm = term;
+      renderSupervisorsAndTerritory();
+    };
+
+    window.resetTerritoryFilter = function() {
+      App.selectedProvinceFilter = null;
+      App.selectedCantonFilter = null;
+      App.selectedPdvFilter = null;
+      App.cantonSearchTerm = '';
+      App.pdvSearchTerm = '';
+      App.currentMapLevel = 'country';
+      App.mapViewMode = 'provincias';
+
+      const sSearch = document.getElementById('input-geo-search');
+      if (sSearch) sSearch.value = '';
+
+      const svgEl = document.getElementById('svg-costa-rica-map');
+      if (svgEl) svgEl.setAttribute('viewBox', '30 35 730 610');
+
+      renderSupervisorsAndTerritory();
+    };
+
+    window.switchGeoSubTab = function(tabName) {
+      App.geoActiveSubTab = tabName;
+      const btnProv = document.getElementById('btn-hier-tab-prov');
+      const btnCanton = document.getElementById('btn-hier-tab-canton');
+      const btnPdv = document.getElementById('btn-hier-tab-pdv');
+
+      const panelProv = document.getElementById('cr-subpanel-provincias');
+      const panelCanton = document.getElementById('cr-subpanel-cantones');
+      const panelPdv = document.getElementById('cr-subpanel-pdvs');
+
+      if (btnProv) btnProv.classList.toggle('active', tabName === 'provincias');
+      if (btnCanton) btnCanton.classList.toggle('active', tabName === 'cantones');
+      if (btnPdv) btnPdv.classList.toggle('active', tabName === 'pdvs');
+
+      if (panelProv) panelProv.style.display = tabName === 'provincias' ? 'block' : 'none';
+      if (panelCanton) panelCanton.style.display = tabName === 'cantones' ? 'block' : 'none';
+      if (panelPdv) panelPdv.style.display = tabName === 'pdvs' ? 'block' : 'none';
+    };
+
+    window.filterCantonesTable = function(term) {
+      App.cantonSearchTerm = term;
+      renderSupervisorsAndTerritory();
+    };
+
+    window.filterPdvsTable = function(term) {
+      App.pdvSearchTerm = term;
+      renderSupervisorsAndTerritory();
+    };
+
+    window.filterPdvByCanal = function(canal) {
+      App.pdvCanalFilter = canal;
+      document.querySelectorAll('.btn-pdv-filter-canal').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-canal') === canal);
+      });
+      renderSupervisorsAndTerritory();
+    };
+
+    window.toggleCantonView = function(mode) {
+      App.cantonViewMode = mode;
+      const btnTbl = document.getElementById('btn-cant-view-table');
+      const btnChr = document.getElementById('btn-cant-view-chart');
+      const tblWrap = document.getElementById('cr-cantones-table-wrapper');
+      const chrWrap = document.getElementById('cr-cantones-chart-wrapper');
+
+      if (btnTbl) btnTbl.classList.toggle('active', mode === 'table');
+      if (btnChr) btnChr.classList.toggle('active', mode === 'chart');
+      if (tblWrap) tblWrap.style.display = mode === 'table' ? 'block' : 'none';
+      if (chrWrap) chrWrap.style.display = mode === 'chart' ? 'block' : 'none';
+    };
+
+
     function renderTransactionsTable() {
       let data = [...App.filtered];
 
