@@ -6025,6 +6025,57 @@
     </div>
 
     <!-- TAB 4: TERRITORIO & PROVINCIAS -->
+    <style id="cr-map-explain-css">
+      .cr-map-insight { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:0.55rem; margin:0 0 0.85rem 0; }
+      .cr-insight-chip { display:flex; gap:0.55rem; align-items:flex-start; padding:0.6rem 0.8rem; border-radius:10px; background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); font-size:0.78rem; line-height:1.42; color:var(--text-secondary); box-shadow:0 2px 6px rgba(0,0,0,0.03); }
+      .cr-insight-chip strong { color:var(--text-primary); font-weight:800; }
+      .cr-insight-icon { font-size:1.05rem; line-height:1.2; flex-shrink:0; }
+      .cr-map-back-btn { position:absolute; top:12px; right:12px; z-index:15; display:none; align-items:center; gap:6px; padding:6px 12px; border-radius:20px; background:#0284c7; color:#ffffff; border:1px solid rgba(255,255,255,0.35); font-size:0.74rem; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(2,132,199,0.45); transition:transform 0.15s ease, background 0.15s ease; }
+      .cr-map-back-btn:hover { background:#0369a1; transform:translateY(-1px); }
+      .cr-map-guide-pill { position:absolute; bottom:10px; right:12px; z-index:10; background:rgba(15,23,42,0.78); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.14); border-radius:20px; padding:4px 10px; font-size:0.68rem; font-weight:600; color:#cbd5e1; pointer-events:none; }
+      [data-theme="light"] .cr-map-guide-pill { background:rgba(255,255,255,0.92); color:#475569; border-color:#cbd5e1; }
+      .cr-map-legend-box { position:absolute; bottom:10px; left:12px; z-index:10; background:rgba(15,23,42,0.84); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:7px 10px; font-size:0.68rem; color:#e2e8f0; min-width:155px; max-width:230px; box-shadow:0 4px 14px rgba(0,0,0,0.25); }
+      [data-theme="light"] .cr-map-legend-box { background:rgba(255,255,255,0.95); color:#334155; border-color:#cbd5e1; box-shadow:0 4px 14px rgba(0,0,0,0.08); }
+      .cr-legend-title { font-weight:800; margin-bottom:4px; font-size:0.7rem; color:#38bdf8; }
+      [data-theme="light"] .cr-legend-title { color:#0284c7; }
+      .cr-legend-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:2px 0; font-family:var(--font-mono, monospace); font-size:0.66rem; }
+      .cr-legend-left { display:flex; align-items:center; gap:6px; font-family:var(--font-sans, sans-serif); font-weight:600; }
+      .cr-legend-sw { width:13px; height:9px; border-radius:3px; border:1px solid rgba(148,163,184,0.45); flex:none; }
+      .cr-map-ranking { background:var(--bg-card-elevated, #f8fafc); border:1px solid var(--border-card, #e2e8f0); border-radius:12px; padding:0.75rem 0.9rem; }
+      .cr-rank-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:0.35rem; font-size:0.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.5rem; }
+      .cr-rank-head span:last-child { font-size:0.69rem; font-weight:600; color:var(--text-muted); }
+      .cr-rank-row { display:grid; grid-template-columns:24px minmax(95px, 155px) 1fr 74px 54px; align-items:center; gap:0.5rem; padding:4px 6px; border-radius:7px; cursor:pointer; font-size:0.76rem; transition:background 0.15s, transform 0.12s; }
+      .cr-rank-row:hover, .cr-rank-row.hl { background:rgba(2,132,199,0.13); transform:translateX(2px); }
+      .cr-rank-pos { font-weight:800; color:var(--text-muted); font-size:0.72rem; }
+      .cr-rank-name { font-weight:700; color:var(--text-primary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .cr-rank-track { height:9px; background:rgba(148,163,184,0.20); border-radius:5px; overflow:hidden; }
+      .cr-rank-fill { display:block; height:100%; border-radius:5px; transition:width 0.4s ease; border:1px solid rgba(148,163,184,0.35); box-sizing:border-box; }
+      .cr-rank-val { text-align:right; font-weight:800; font-family:var(--font-mono, monospace); color:var(--text-primary); }
+      .cr-rank-share { text-align:right; color:var(--text-muted); font-weight:700; font-size:0.71rem; }
+      .cr-map-prov-path.cr-hl, .cr-map-canton-path.cr-hl { stroke:#f59e0b !important; stroke-width:3px !important; filter:drop-shadow(0 0 10px rgba(245,158,11,0.85)); }
+      #cr-map-floating-tooltip .cr-tt-title { font-weight:800; font-size:0.92rem; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+      #cr-map-floating-tooltip .cr-tt-rank-pill { font-size:0.68rem; background:rgba(56,189,248,0.18); color:#38bdf8; padding:1px 7px; border-radius:10px; font-weight:800; }
+      #cr-map-floating-tooltip .cr-tt-main { display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:0.78rem; color:#e2e8f0; }
+      #cr-map-floating-tooltip .cr-tt-main strong { color:#34d399; font-size:1rem; font-family:var(--font-mono, monospace); }
+      #cr-map-floating-tooltip .cr-tt-sub, #cr-map-floating-tooltip .cr-tt-mix { font-size:0.71rem; color:#cbd5e1; margin-top:3px; line-height:1.38; }
+      #cr-map-floating-tooltip .cr-tt-extra { font-size:0.71rem; color:#cbd5e1; border-top:1px solid rgba(255,255,255,0.12); margin-top:5px; padding-top:4px; line-height:1.4; }
+      #cr-map-floating-tooltip .cr-tt-hint { font-size:0.67rem; color:#38bdf8; margin-top:5px; font-weight:700; }
+      .cr-tt-bar { display:flex; height:6px; border-radius:3px; overflow:hidden; margin:5px 0 3px; background:rgba(148,163,184,0.25); }
+      .cr-tt-bar span { display:block; height:100%; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-title { color:#0284c7; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-rank-pill { background:rgba(2,132,199,0.12); color:#0284c7; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-main { color:#334155; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-main strong { color:#047857; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-sub, [data-theme="light"] #cr-map-floating-tooltip .cr-tt-mix, [data-theme="light"] #cr-map-floating-tooltip .cr-tt-extra { color:#475569; }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-extra { border-top-color:rgba(0,0,0,0.08); }
+      [data-theme="light"] #cr-map-floating-tooltip .cr-tt-hint { color:#0284c7; }
+      @media (max-width: 640px) {
+        .cr-rank-row { grid-template-columns:20px 1fr 64px 48px; }
+        .cr-rank-track { display:none; }
+        .cr-map-legend-box { max-width:170px; }
+        .cr-map-guide-pill { display:none; }
+      }
+    </style>
     <div id="tab-territorio" class="tab-pane-content">
       <div style="display: flex; flex-direction: column; gap: 1.25rem; width: 100%;">
         <!-- CARD 1: MAPA COMERCIAL & CONTROL TERRITORIAL -->
@@ -6035,47 +6086,25 @@
                 <span>🗺️</span> <span>Mapa Comercial &amp; Inteligencia Territorial</span>
               </div>
               <div id="lbl-prov-subtitle" style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-top:2px;">
-                Jerarquía Comercial: Provincias ➔ Cantones ➔ Puntos de Venta (PDVs) &amp; Mix de Servicios
+                Pasa el cursor sobre cualquier zona para ver su explicación · Haz clic en una provincia para explorar sus cantones
               </div>
             </div>
 
-            <!-- View Switcher & Metric Pills for Provincias -->
-            <div style="display:flex; flex-wrap:wrap; gap:0.4rem; align-items:center;">
-              <!-- Toggle Vista: Mapa vs Barras -->
-              <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
-                <button type="button" class="btn-prov-view-mode active" id="btn-view-map" data-view="map" title="Ver Mapa Interactivo de Costa Rica">
-                  <span>🗺️</span> Mapa
-                </button>
-                <button type="button" class="btn-prov-view-mode" id="btn-view-chart" data-view="chart" title="Ver Gráfico Comparativo de Barras">
-                  <span>📊</span> Barras
-                </button>
-              </div>
-
-              <!-- Metric Pills: Ventas vs Facturación vs % Participación -->
-              <div class="chart-mode-pill-group" style="display:flex; background:rgba(0,0,0,0.05); padding:3px; border-radius:8px; gap:3px;">
-                <button type="button" class="btn-prov-chart-mode active" data-mode="ventas" title="Volumen de Ventas">
-                  <span>⚡</span> Ventas
-                </button>
-                <button type="button" class="btn-prov-chart-mode" data-mode="facturacion" title="Facturación en Colones">
-                  <span>💰</span> Facturación
-                </button>
-                <button type="button" class="btn-prov-chart-mode" data-mode="participacion" title="% de Participación Regional">
-                  <span>📈</span> % Cuota
-                </button>
-              </div>
-            </div>
           </div>
 
-          <!-- NUEVA BARRA DE CONTROL JERÁRQUICO TERRITORIAL (CASCADING TOOLBAR) -->
-                    <!-- MAP METRIC LAYER SELECTOR -->
-          <div class="cr-map-layer-selector" style="margin: 0.5rem 0 0.85rem 0; display:flex; gap:4px; align-items:center; flex-wrap:wrap;">
-            <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-right:4px;">🎨 Métrica del Mapa:</span>
+          <!-- SELECTOR DE MÉTRICA DEL MAPA (controla color, pines, leyenda y ranking) -->
+          <div class="cr-map-layer-selector" style="margin: 0.55rem 0 0.65rem 0; display:flex; gap:5px; align-items:center; flex-wrap:wrap;">
+            <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-right:4px;">🎨 Colorear y explicar el mapa por:</span>
             <button type="button" class="btn-map-layer active" data-metric="ventas" onclick="window.setMapMetricLayer('ventas')">🎯 Ventas Totales</button>
             <button type="button" class="btn-map-layer" data-metric="cuota" onclick="window.setMapMetricLayer('cuota')">📈 % Cuota Regional</button>
             <button type="button" class="btn-map-layer" data-metric="pospago" onclick="window.setMapMetricLayer('pospago')">📱 Pospago</button>
             <button type="button" class="btn-map-layer" data-metric="prepago" onclick="window.setMapMetricLayer('prepago')">💳 Prepago</button>
+            <button type="button" class="btn-map-layer" data-metric="portabilidad" onclick="window.setMapMetricLayer('portabilidad')">🔄 Portabilidad</button>
             <button type="button" class="btn-map-layer" data-metric="hogar" onclick="window.setMapMetricLayer('hogar')">🌐 Hogar</button>
           </div>
+
+          <!-- LECTURA RÁPIDA EXPLICATIVA (3 conclusiones automáticas del mapa) -->
+          <div id="cr-map-insight" class="cr-map-insight"></div>
 
           <div class="cr-geo-toolbar-card">
             <div class="cr-geo-toolbar-top">
@@ -6166,8 +6195,10 @@
 
           <!-- GRAND MAP & EXECUTIVE CARD CONTAINER -->
           <div id="wrapper-prov-map" class="map-grand-layout" style="display:grid; grid-template-columns:1fr 340px; gap:1.15rem; align-items:start;">
+            <div class="cr-map-left-col" style="display:flex; flex-direction:column; gap:0.75rem; min-width:0;">
             <!-- LEFT: SVG CANVAS -->
             <div id="wrapper-prov-map-canvas" style="position:relative; width:100%; min-height:480px; height:480px; background:radial-gradient(ellipse at center, rgba(2,132,199,0.06) 0%, transparent 75%), var(--bg-card-elevated, #f8fafc); border-radius:12px; border:1px solid var(--border-card, #e2e8f0); overflow:hidden; display:flex; align-items:center; justify-content:center;">
+              <button type="button" id="cr-map-back-btn" class="cr-map-back-btn" onclick="window.resetToCountryView()" title="Regresar al mapa completo de Costa Rica">⬅ Volver al Mapa Nacional</button>
               <div class="map-live-tag" style="position:absolute; top:12px; left:12px; display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:20px; background:rgba(2,132,199,0.12); backdrop-filter:blur(6px); border:1px solid rgba(2,132,199,0.3); font-size:0.68rem; font-weight:800; color:#0284c7; z-index:10; letter-spacing:0.8px;">
                 <span style="width:7px; height:7px; border-radius:50%; background:#0284c7; display:inline-block; animation: blinkLiveDot 1.6s infinite ease-in-out;"></span>
                 RADAR TERRITORIAL • COSTA RICA
@@ -6373,12 +6404,13 @@
                 </div>
               </div>
 
-              <!-- Legend -->
-              <div id="cr-map-legend" style="position:absolute; bottom:10px; left:12px; z-index:10; display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.4); backdrop-filter:blur(6px); padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,0.12); font-size:0.68rem;">
-                <span style="color:#94a3b8; font-weight:700;">Menor Venta</span>
-                <div id="cr-map-legend-grad" style="width:90px; height:9px; border-radius:5px; background:linear-gradient(90deg, #152c48 0%, #0c4a6e 25%, #0284c7 50%, #00b4d8 75%, #00d2ff 100%); border:1px solid rgba(255,255,255,0.25);"></div>
-                <span style="color:#06b6d4; font-weight:800;">Líder Comercial</span>
-              </div>
+              <!-- Leyenda dinámica con rangos numéricos reales -->
+              <div id="cr-map-legend" class="cr-map-legend-box"></div>
+              <div id="cr-map-guide-pill" class="cr-map-guide-pill">👆 Clic en una provincia para ver sus cantones</div>
+            </div>
+
+            <!-- Ranking interactivo vinculado al mapa (hover = ilumina en el mapa, clic = filtra) -->
+            <div id="cr-map-ranking" class="cr-map-ranking"></div>
             </div>
 
             <!-- RIGHT: FICHA TERRITORIAL FINTECH PRO -->
@@ -6389,7 +6421,7 @@
                   <div class="cr-card-geo-title" id="cr-card-geo-name">🇨🇷 Costa Rica (Nacional)</div>
                   <div class="cr-card-geo-subtitle" id="cr-card-geo-subtitle">Visión Ejecutiva Integral de Ventas</div>
                 </div>
-                <span class="fintech-pace-badge pace-hot" id="cr-card-geo-pace">🔥 +16.4% vs Ritmo</span>
+                <span class="fintech-pace-badge pace-steady" id="cr-card-geo-pace">🇨🇷 Vista nacional</span>
               </div>
 
               <!-- 3 Fintech Metrics -->
@@ -11217,6 +11249,261 @@
     // ======================================================================
     // SUPER-SVG 4.0: GEO UTILITIES & PROVINCE RESOLVER
     // ======================================================================
+    // ======================================================================
+    // MAPA EXPLICATIVO E INTERACTIVO: UTILIDADES VISUALES
+    // ======================================================================
+    function stripAccents(s) {
+      return String(s == null ? '' : s).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    window.stripAccents = stripAccents;
+    window.crNorm = function(s) { return stripAccents(s).toLowerCase().trim(); };
+
+    // Escala de 5 niveles proporcionales desde 0 hasta el máximo de la vista actual
+    window.CR_SCALE = {
+      dark: ['#1e3a5f', '#0c4a6e', '#0369a1', '#0284c7', '#22d3ee'],
+      light: ['#dbeafe', '#93c5fd', '#3b82f6', '#1d4ed8', '#1e3a8a'],
+      empty: { dark: '#1f2937', light: '#e5e7eb' }
+    };
+    window.crScaleClass = function(val, maxV) {
+      if (!val || val <= 0 || !maxV) return -1;
+      return Math.max(0, Math.min(4, Math.ceil((val / maxV) * 5) - 1));
+    };
+    window.crScaleColor = function(val, maxV, dark) {
+      const c = window.crScaleClass(val, maxV);
+      if (c < 0) return dark ? window.CR_SCALE.empty.dark : window.CR_SCALE.empty.light;
+      return (dark ? window.CR_SCALE.dark : window.CR_SCALE.light)[c];
+    };
+
+    window.crMetricLabel = function(lyr) {
+      const map = {
+        ventas: 'Ventas Totales',
+        cuota: '% Cuota Regional',
+        pospago: 'Ventas Pospago',
+        prepago: 'Ventas Prepago',
+        portabilidad: 'Ventas Portabilidad',
+        hogar: 'Ventas Hogar'
+      };
+      return map[lyr || 'ventas'] || 'Ventas Totales';
+    };
+    window.crGetMetricVal = function(o, lyr) {
+      if (!o) return 0;
+      const l = lyr || (window.App && window.App.mapMetricLayer) || 'ventas';
+      if (l === 'cuota') return o.cuota !== undefined ? o.cuota : (o.ventas || 0);
+      const s = o.servicios || {};
+      if (l === 'pospago') return s.Pospago || 0;
+      if (l === 'prepago') return s.Prepago || 0;
+      if (l === 'portabilidad') return s.Portabilidad || 0;
+      if (l === 'hogar') return s.Hogar || 0;
+      return o.ventas || 0;
+    };
+
+    // Tooltip flotante posicionado dentro del lienzo sin desbordar
+    window.crTooltipMove = function(e) {
+      const tt = document.getElementById('cr-map-floating-tooltip');
+      const box = document.getElementById('wrapper-prov-map-canvas');
+      if (!tt || !box || tt.style.display === 'none' || !e) return;
+      const r = box.getBoundingClientRect();
+      const w = tt.offsetWidth || 235, h = tt.offsetHeight || 155;
+      let x = e.clientX - r.left + 16, y = e.clientY - r.top + 16;
+      if (x + w > r.width - 8) x = e.clientX - r.left - w - 16;
+      if (y + h > r.height - 8) y = e.clientY - r.top - h - 16;
+      tt.style.left = Math.max(8, x) + 'px';
+      tt.style.top = Math.max(8, y) + 'px';
+    };
+    window.crTooltipShow = function(e, htmlStr) {
+      const tt = document.getElementById('cr-map-floating-tooltip');
+      if (!tt) return;
+      tt.innerHTML = htmlStr;
+      tt.style.display = 'block';
+      window.crTooltipMove(e);
+    };
+    window.crTooltipHide = function() {
+      const tt = document.getElementById('cr-map-floating-tooltip');
+      if (tt) tt.style.display = 'none';
+    };
+    window.crBuildTooltip = function(o) {
+      const isPct = o.isPctMetric;
+      const fmtVal = isPct ? `${Number(o.value || 0).toFixed(1)}%` : `${Math.round(o.value || 0).toLocaleString()} u.`;
+      const rankBadge = o.value > 0 && o.rank > 0 ? `<span class="cr-tt-rank-pill">#${o.rank} de ${o.count}</span>` : '';
+      let sub = 'Sin ventas registradas en este filtro';
+      if (o.value > 0) {
+        const diff = o.avg > 0 ? ((o.value / o.avg) - 1) * 100 : 0;
+        const diffTxt = o.avg > 0 ? `${diff >= 0 ? '▲ +' : '▼ -'}${Math.abs(diff).toFixed(0)}% vs. promedio (${isPct ? o.avg.toFixed(1) + '%' : Math.round(o.avg).toLocaleString() + ' u.'})` : '';
+        sub = `Participación: <strong>${o.share.toFixed(1)}%</strong> del total${diffTxt ? '<br>' + diffTxt : ''}`;
+      }
+      const s = o.servicios || {};
+      const tot = (s.Pospago || 0) + (s.Prepago || 0) + (s.Portabilidad || 0) + (s.Hogar || 0);
+      const pc = v => tot > 0 ? Math.round(((v || 0) / tot) * 100) : 0;
+      const mix = tot > 0 ? `<div class="cr-tt-mix"><div class="cr-tt-bar">
+          <span style="width:${pc(s.Pospago)}%; background:#0284c7;"></span>
+          <span style="width:${pc(s.Prepago)}%; background:#10b981;"></span>
+          <span style="width:${pc(s.Portabilidad)}%; background:#8b5cf6;"></span>
+          <span style="width:${pc(s.Hogar)}%; background:#f59e0b;"></span>
+        </div>Pos ${pc(s.Pospago)}% · Pre ${pc(s.Prepago)}% · Porta ${pc(s.Portabilidad)}% · Hogar ${pc(s.Hogar)}%</div>` : '';
+      return `<div class="cr-tt-title"><span>${o.icon} ${escapeHtml(o.name)}</span>${rankBadge}</div>
+        <div class="cr-tt-main"><span>${escapeHtml(o.label)}</span><strong>${fmtVal}</strong></div>
+        <div class="cr-tt-sub">${sub}</div>
+        ${mix}
+        ${o.extra ? `<div class="cr-tt-extra">${o.extra}</div>` : ''}
+        <div class="cr-tt-hint">👆 ${escapeHtml(o.hint || '')}</div>`;
+    };
+
+    // Resaltado sincronizado entre el mapa SVG y la barra de ranking inferior
+    window.crMapHighlight = function(type, key, on) {
+      if (type === 'prov') {
+        const slug = window.getProvSlug(key);
+        document.querySelectorAll('.cr-map-prov-path').forEach(el => {
+          const s = el.getAttribute('data-prov-slug') || window.getProvSlug(el.getAttribute('data-province'));
+          if (s === slug) el.classList.toggle('cr-hl', !!on);
+        });
+        document.querySelectorAll('#cr-map-ranking .cr-rank-row[data-type="prov"]').forEach(row => {
+          if (window.getProvSlug(row.getAttribute('data-key')) === slug) row.classList.toggle('hl', !!on);
+        });
+      } else {
+        const n = window.crNorm(key);
+        document.querySelectorAll('.cr-map-canton-path.visible').forEach(el => {
+          if (window.crNorm(el.getAttribute('data-canton')) === n) el.classList.toggle('cr-hl', !!on);
+        });
+        document.querySelectorAll('#cr-map-ranking .cr-rank-row[data-type="canton"]').forEach(row => {
+          if (window.crNorm(row.getAttribute('data-key')) === n) row.classList.toggle('hl', !!on);
+        });
+      }
+    };
+
+    // Renderizador de Leyenda Numérica + Ranking Interactivo + 3 Tarjetas de Lectura Rápida
+    window.crRenderMapExplainers = function(ctx) {
+      const lyr = App.mapMetricLayer || 'ventas';
+      const isCuota = lyr === 'cuota';
+      const label = window.crMetricLabel(lyr);
+      const selProv = App.selectedProvinceFilter;
+      const fmtNum = n => Math.round(n || 0).toLocaleString();
+      const dark = ctx.isDark;
+
+      const backBtn = document.getElementById('cr-map-back-btn');
+      if (backBtn) backBtn.style.display = selProv ? 'inline-flex' : 'none';
+      const guidePill = document.getElementById('cr-map-guide-pill');
+      if (guidePill) {
+        guidePill.textContent = selProv
+          ? `📍 Viendo cantones de ${selProv} · Clic en un cantón para ver sus tiendas`
+          : '👆 Pasa el cursor para explicar · Clic en una provincia para ver sus cantones';
+      }
+
+      let rawUnits, unitType, scopeName;
+      if (selProv) {
+        const slug = window.getProvSlug(selProv);
+        rawUnits = Object.values(ctx.cantDataAll)
+          .filter(c => window.getProvSlug(c.provincia) === slug)
+          .map(c => ({ key: c.nombre, name: c.nombre, rawVal: isCuota ? (c.ventas || 0) : window.crGetMetricVal(c, lyr), ventas: c.ventas || 0 }));
+        unitType = 'canton';
+        scopeName = selProv;
+      } else {
+        rawUnits = ctx.provList.map(p => ({ key: p.nombre, name: p.nombre, rawVal: isCuota ? (p.ventas || 0) : window.crGetMetricVal(p, lyr), ventas: p.ventas || 0 }));
+        unitType = 'prov';
+        scopeName = 'Costa Rica';
+      }
+
+      const rawTotal = rawUnits.reduce((a, u) => a + u.rawVal, 0);
+      const units = rawUnits.map(u => ({
+        ...u,
+        share: rawTotal > 0 ? (u.rawVal / rawTotal) * 100 : 0,
+        val: isCuota ? (rawTotal > 0 ? (u.rawVal / rawTotal) * 100 : 0) : u.rawVal
+      }));
+      units.sort((a, b) => b.val - a.val);
+
+      const maxV = units.length ? Math.max(isCuota ? 0.1 : 1, units[0].val) : 1;
+      const unitSing = unitType === 'prov' ? 'provincia' : 'cantón';
+      const unitPlural = unitType === 'prov' ? 'provincias' : 'cantones';
+
+      // A. Leyenda numérica de 5 niveles con etiquetas claras
+      const legend = document.getElementById('cr-map-legend');
+      if (legend) {
+        const pal = dark ? window.CR_SCALE.dark : window.CR_SCALE.light;
+        const tierNames = ['Bajo', 'Moderado', 'Medio', 'Alto', 'Líder'];
+        let rows = '';
+        for (let i = 4; i >= 0; i--) {
+          if (isCuota) {
+            const lo = ((maxV * i) / 5).toFixed(1);
+            const hi = ((maxV * (i + 1)) / 5).toFixed(1);
+            rows += `<div class="cr-legend-row"><span class="cr-legend-left"><span class="cr-legend-sw" style="background:${pal[i]};"></span>${tierNames[i]}</span><span>${lo}%–${hi}%</span></div>`;
+          } else {
+            const lo = Math.floor((maxV * i) / 5) + 1;
+            const hi = i === 4 ? Math.round(maxV) : Math.floor((maxV * (i + 1)) / 5);
+            if (lo > hi) continue;
+            rows += `<div class="cr-legend-row"><span class="cr-legend-left"><span class="cr-legend-sw" style="background:${pal[i]};"></span>${tierNames[i]}</span><span>${fmtNum(lo)}–${fmtNum(hi)}</span></div>`;
+          }
+        }
+        if (unitType === 'canton') {
+          rows += `<div class="cr-legend-row"><span class="cr-legend-left"><span class="cr-legend-sw" style="background:${dark ? window.CR_SCALE.empty.dark : window.CR_SCALE.empty.light};"></span>Sin ventas</span><span>0</span></div>`;
+        }
+        legend.innerHTML = `<div class="cr-legend-title">🎨 Escala · ${escapeHtml(label)}</div>${rows}`;
+      }
+
+      // B. Ranking interactivo vinculado al mapa
+      const rank = document.getElementById('cr-map-ranking');
+      if (rank) {
+        const limit = unitType === 'prov' ? 7 : 10;
+        const shown = units.filter(u => u.rawVal > 0).slice(0, limit);
+        const withSales = units.filter(u => u.rawVal > 0).length;
+        const head = `<div class="cr-rank-head"><span>📊 Comparativa visual de ${unitPlural} · ${escapeHtml(label)}${selProv ? ' en ' + escapeHtml(selProv) : ''}</span>` +
+          `<span>Pasa el cursor para ubicar en el mapa · Clic para ${unitType === 'prov' ? 'entrar a sus cantones' : 'ver sus tiendas'}${withSales > shown.length ? ' (Top ' + shown.length + ' de ' + withSales + ')' : ''}</span></div>`;
+        const rowsHtml = shown.map((u, i) => {
+          const w = maxV > 0 ? (u.val / maxV) * 100 : 0;
+          const mainStr = isCuota ? `${u.share.toFixed(1)}%` : fmtNum(u.rawVal);
+          const subStr = isCuota ? `${fmtNum(u.rawVal)} u.` : `${u.share.toFixed(1)}%`;
+          return `<div class="cr-rank-row" data-type="${unitType}" data-key="${escapeHtml(u.key)}" title="${escapeHtml(u.name)}: ${fmtNum(u.rawVal)} ventas (${u.share.toFixed(1)}%)">
+              <span class="cr-rank-pos">#${i + 1}</span>
+              <span class="cr-rank-name">${escapeHtml(u.name)}</span>
+              <span class="cr-rank-track"><span class="cr-rank-fill" style="width:${w.toFixed(1)}%; background:${window.crScaleColor(u.val, maxV, dark)};"></span></span>
+              <span class="cr-rank-val">${mainStr}</span>
+              <span class="cr-rank-share">${subStr}</span>
+            </div>`;
+        }).join('');
+        rank.innerHTML = head + (rowsHtml || '<div style="font-size:0.75rem; color:var(--text-muted); padding:0.4rem;">Sin ventas registradas para los filtros seleccionados.</div>');
+        rank.querySelectorAll('.cr-rank-row').forEach(row => {
+          const key = row.getAttribute('data-key');
+          const type = row.getAttribute('data-type');
+          row.addEventListener('mouseenter', () => window.crMapHighlight(type, key, true));
+          row.addEventListener('mouseleave', () => window.crMapHighlight(type, key, false));
+          row.addEventListener('click', () => {
+            window.crMapHighlight(type, key, false);
+            if (type === 'prov') window.drillDownToProvince(key);
+            else window.onGeoCantonChange(key);
+          });
+        });
+      }
+
+      // C. Lectura rápida en lenguaje sencillo (3 tarjetas)
+      const ins = document.getElementById('cr-map-insight');
+      if (ins) {
+        const chips = [];
+        const withSalesUnits = units.filter(u => u.rawVal > 0);
+        if (!withSalesUnits.length || rawTotal === 0) {
+          chips.push(['ℹ️', `No se registran <strong>${escapeHtml(label.toLowerCase())}</strong> con los filtros actuales en ${escapeHtml(scopeName)}.`]);
+        } else {
+          const top = withSalesUnits[0];
+          const second = withSalesUnits[1];
+          const leadGap = second ? ` (supera por ${fmtNum(top.rawVal - second.rawVal)} u. a ${escapeHtml(second.name)})` : '';
+          chips.push(['🏆', `<strong>Líder comercial:</strong> <strong>${escapeHtml(top.name)}</strong> concentra <strong>${fmtNum(top.rawVal)} u.</strong> (${top.share.toFixed(1)}% de ${escapeHtml(scopeName)})${leadGap}.`]);
+          if (unitType === 'prov') {
+            const gam = ['San José', 'Alajuela', 'Heredia', 'Cartago'];
+            const gamVal = units.filter(u => gam.includes(u.name)).reduce((a, u) => a + u.rawVal, 0);
+            const gamPct = (gamVal / rawTotal) * 100;
+            const coastVal = rawTotal - gamVal;
+            chips.push(['🏙️', `<strong>Centro vs. Regiones:</strong> La <strong>GAM</strong> suma <strong>${fmtNum(gamVal)} u. (${gamPct.toFixed(1)}%)</strong> y las 3 provincias costeras/fronterizas aportan <strong>${fmtNum(coastVal)} u. (${(100 - gamPct).toFixed(1)}%)</strong>.`]);
+          } else {
+            const top3 = withSalesUnits.slice(0, 3).reduce((a, u) => a + u.rawVal, 0);
+            const top3Names = withSalesUnits.slice(0, 3).map(u => escapeHtml(u.name)).join(', ');
+            chips.push(['📍', `<strong>Concentración cantonal:</strong> Los 3 cantones líderes (<strong>${top3Names}</strong>) representan el <strong>${((top3 / rawTotal) * 100).toFixed(1)}%</strong> de ${escapeHtml(selProv)}.`]);
+          }
+          const low = withSalesUnits[withSalesUnits.length - 1];
+          if (low && low !== top) {
+            chips.push(['💡', `<strong>Oportunidad de crecimiento:</strong> <strong>${escapeHtml(low.name)}</strong> registra el menor volumen con <strong>${fmtNum(low.rawVal)} u.</strong> (${low.share.toFixed(1)}%).`]);
+          }
+        }
+        ins.innerHTML = chips.map(c => `<div class="cr-insight-chip"><span class="cr-insight-icon">${c[0]}</span><span>${c[1]}</span></div>`).join('');
+      }
+    };
+
     window.getProvSlug = function(name) {
       if (!name) return '';
       const clean = (typeof stripAccents === 'function' ? stripAccents(name) : name)
@@ -12342,6 +12629,13 @@
       if (geoCardName) geoCardName.textContent = scopeTitle;
       if (geoCardSub) geoCardSub.textContent = scopeSub;
       if (geoCardSales) geoCardSales.textContent = scopeVentas.toLocaleString();
+      if (geoCardPace) {
+        const isScoped = App.selectedProvinceFilter || App.selectedCantonFilter || App.selectedPdvFilter;
+        geoCardPace.className = 'fintech-pace-badge pace-steady';
+        geoCardPace.textContent = isScoped
+          ? `📊 ${totalNacVentas > 0 ? ((scopeVentas / totalNacVentas) * 100).toFixed(1) : '0.0'}% del país`
+          : '🇨🇷 100% Nacional';
+      }
 
       const sharePct = totalNacVentas > 0 ? ((scopeVentas / totalNacVentas) * 100).toFixed(1) : '100.0';
       if (geoCardSalesPct) geoCardSalesPct.textContent = App.selectedProvinceFilter || App.selectedCantonFilter || App.selectedPdvFilter ? `${sharePct}% de Cuota Nac.` : '100% Cobertura Nacional';
@@ -12352,7 +12646,7 @@
 
       const activeStoreCount = Object.keys(scopePdvs).length;
       if (geoCardCoverage) geoCardCoverage.textContent = activeStoreCount.toString();
-      if (geoCardCantonCount) geoCardCantonCount.textContent = App.selectedProvinceFilter ? `${Object.keys(provData[App.selectedProvinceFilter]?.cantones || {}).length} Cantones` : '84 Cantones';
+      if (geoCardCantonCount) geoCardCantonCount.textContent = App.selectedProvinceFilter ? `${Object.keys(provData[App.selectedProvinceFilter]?.cantones || {}).length} cantones activos` : `${Object.keys(cantDataAll).length} cantones activos`;
 
       // Mix 4 Servicios en la Ficha
       const totMix = (scopeServicios.Pospago + scopeServicios.Prepago + scopeServicios.Portabilidad + scopeServicios.Hogar) || 1;
@@ -12430,22 +12724,7 @@
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || document.body.classList.contains('dark-theme');
 
       function getChoroplethColor(val, minV, maxV, dark) {
-        const ratio = maxV > minV ? Math.max(0, Math.min(1, (val - minV) / (maxV - minV))) : 0.5;
-        if (dark) {
-          if (ratio > 0.85) return '#00d2ff';
-          if (ratio > 0.65) return '#00b4d8';
-          if (ratio > 0.45) return '#0284c7';
-          if (ratio > 0.25) return '#0369a1';
-          if (ratio > 0.10) return '#0c4a6e';
-          return '#152c48';
-        } else {
-          if (ratio > 0.85) return '#1e40af';
-          if (ratio > 0.65) return '#1d4ed8';
-          if (ratio > 0.45) return '#0284c7';
-          if (ratio > 0.25) return '#38bdf8';
-          if (ratio > 0.10) return '#7dd3fc';
-          return '#e0f2fe';
-        }
+        return window.crScaleColor(val, maxV, dark);
       }
 
       if (isProvinceLevel) {
@@ -12470,29 +12749,60 @@
           }
         });
 
-        // Cantones de esta provincia (con índice normalizado sin tildes para el SVG)
+        // Cantones de esta provincia (colores según la métrica activa, búsqueda sin tildes)
+        const lyrCant = App.mapMetricLayer || 'ventas';
+        const isCuotaCant = lyrCant === 'cuota';
         const thisProvCantons = Object.values(cantDataAll).filter(c => window.getProvSlug(c.provincia) === selSlug);
-        const maxCV = thisProvCantons.length > 0 ? Math.max(...thisProvCantons.map(c => c.ventas)) : 1;
-        const minCV = thisProvCantons.length > 0 ? Math.min(...thisProvCantons.map(c => c.ventas)) : 0;
-        const cantNormalizedLookup = {};
+        const cantRawVals = thisProvCantons.map(c => isCuotaCant ? (c.ventas || 0) : window.crGetMetricVal(c, lyrCant));
+        const cantRawTotal = cantRawVals.reduce((a, b) => a + b, 0);
         thisProvCantons.forEach(c => {
-          const normKey = (typeof stripAccents === 'function' ? stripAccents(c.nombre) : c.nombre).toLowerCase().replace(/[\u0300-\u036f]/g, '').trim();
-          cantNormalizedLookup[normKey] = c;
+          const rv = isCuotaCant ? (c.ventas || 0) : window.crGetMetricVal(c, lyrCant);
+          c._mapVal = isCuotaCant ? (cantRawTotal > 0 ? (rv / cantRawTotal) * 100 : 0) : rv;
+          c._mapShare = cantRawTotal > 0 ? (rv / cantRawTotal) * 100 : 0;
         });
+        const maxCV = Math.max(isCuotaCant ? 0.1 : 1, ...thisProvCantons.map(c => c._mapVal || 0));
+        const minCV = 0;
+        const cantRanked = [...thisProvCantons].filter(c => (c._mapVal || 0) > 0).sort((a, b) => b._mapVal - a._mapVal);
+        const cantAvg = cantRanked.length ? cantRanked.reduce((a, c) => a + c._mapVal, 0) / cantRanked.length : 0;
+        const cantNormalizedLookup = {};
+        thisProvCantons.forEach(c => { cantNormalizedLookup[window.crNorm(c.nombre)] = c; });
 
         document.querySelectorAll('.cr-map-canton-path').forEach(el => {
           const isThisProv = el.classList.contains(`prov-group-${selSlug}`);
           const cName = el.getAttribute('data-canton') || '';
+          el.classList.remove('cr-hl');
           if (isThisProv) {
             el.classList.add('visible');
             el.style.opacity = '1';
             el.style.pointerEvents = 'auto';
-            const normC = (typeof stripAccents === 'function' ? stripAccents(cName) : cName).toLowerCase().replace(/[\u0300-\u036f]/g, '').trim();
-            const cObj = cantDataAll[cName] || cantNormalizedLookup[normC] || { nombre: cName, ventas: 0, facturacion: 0 };
-            el.style.fill = getChoroplethColor(cObj.ventas, minCV, maxCV, isDark);
+            el.style.cursor = 'pointer';
+            const cObj = cantDataAll[cName] || cantNormalizedLookup[window.crNorm(cName)] || { nombre: cName, ventas: 0, facturacion: 0, servicios: {}, pdvs: {}, _mapVal: 0, _mapShare: 0 };
+            const cLabel = cObj.nombre || cName;
+            const cv = cObj._mapVal || 0;
+            el.style.fill = getChoroplethColor(cv, minCV, maxCV, isDark);
 
+            el.onmouseenter = (e) => {
+              const rankIdx = cantRanked.indexOf(cObj) + 1;
+              const storeKeys = Object.keys(cObj.pdvs || {});
+              const topStore = storeKeys.sort((a, b) => cObj.pdvs[b] - cObj.pdvs[a])[0];
+              window.crTooltipShow(e, window.crBuildTooltip({
+                icon: '🏘️', name: cLabel, label: window.crMetricLabel(lyrCant), value: cv,
+                isPctMetric: isCuotaCant,
+                share: cObj._mapShare || 0,
+                rank: rankIdx, count: cantRanked.length, avg: cantAvg, servicios: cObj.servicios,
+                extra: (cObj.ventas > 0) ? `Ventas totales: <strong>${cObj.ventas.toLocaleString()} u.</strong> · Tiendas: <strong>${storeKeys.length}</strong>${topStore ? '<br>Tienda líder: <strong>' + escapeHtml(topStore) + '</strong>' : ''}` : '',
+                hint: (cObj.ventas > 0) ? 'Clic para ver las tiendas de este cantón' : 'Clic para seleccionar este cantón'
+              }));
+              window.crMapHighlight('canton', cLabel, true);
+            };
+            el.onmousemove = (e) => window.crTooltipMove(e);
+            el.onmouseleave = () => {
+              window.crTooltipHide();
+              window.crMapHighlight('canton', cLabel, false);
+            };
             el.onclick = () => {
-              window.onGeoCantonChange(cObj.nombre || cName);
+              window.crTooltipHide();
+              window.onGeoCantonChange(cLabel);
             };
           } else {
             el.classList.remove('visible');
@@ -12506,75 +12816,67 @@
           svgEl.setAttribute('viewBox', '30 35 730 610');
         }
 
-        // Layer-aware value getter
-        function getProvMetricVal(pObj) {
-          if (!pObj) return 0;
-          const lyr = App.mapMetricLayer || 'ventas';
-          if (lyr === 'cuota') return pObj.cuota || 0;
-          if (lyr === 'pospago') return (pObj.servicios && pObj.servicios.Pospago) || 0;
-          if (lyr === 'prepago') return (pObj.servicios && pObj.servicios.Prepago) || 0;
-          if (lyr === 'hogar') return (pObj.servicios && pObj.servicios.Hogar) || 0;
-          return pObj.ventas || 0;
-        }
-
-        const provVals = provList.map(p => getProvMetricVal(p));
-        const maxPV = provVals.length > 0 ? Math.max(...provVals) : 1;
-        const minPV = provVals.length > 0 ? Math.min(...provVals) : 0;
-        const tooltip = document.getElementById('cr-map-floating-tooltip');
+        // Valores de la métrica activa por provincia
+        const lyrNow = App.mapMetricLayer || 'ventas';
+        const isCuotaNow = lyrNow === 'cuota';
+        const provRawVals = provList.map(p => isCuotaNow ? (p.ventas || 0) : window.crGetMetricVal(p, lyrNow));
+        const provRawTotal = provRawVals.reduce((a, b) => a + b, 0);
+        provList.forEach(p => {
+          const rv = isCuotaNow ? (p.ventas || 0) : window.crGetMetricVal(p, lyrNow);
+          p._mapVal = isCuotaNow ? (provRawTotal > 0 ? (rv / provRawTotal) * 100 : 0) : rv;
+          p._mapShare = provRawTotal > 0 ? (rv / provRawTotal) * 100 : 0;
+        });
+        const maxPV = Math.max(isCuotaNow ? 0.1 : 1, ...provList.map(p => p._mapVal || 0));
+        const minPV = 0;
+        const provRanked = [...provList].filter(p => (p._mapVal || 0) > 0).sort((a, b) => b._mapVal - a._mapVal);
+        const provAvg = provRanked.length ? provRanked.reduce((a, p) => a + p._mapVal, 0) / provRanked.length : 0;
 
         document.querySelectorAll('.cr-map-prov-path').forEach(el => {
           el.style.opacity = '1';
           el.style.stroke = isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(15, 23, 42, 0.25)';
           el.style.strokeWidth = '1.4px';
+          el.style.cursor = 'pointer';
+          el.classList.remove('cr-hl');
           const pName = el.getAttribute('data-province');
           const stdP = window.getStandardProvName(pName);
           const pObj = provData[stdP];
-          const v = getProvMetricVal(pObj);
+          const v = pObj ? (pObj._mapVal || 0) : 0;
           el.style.fill = getChoroplethColor(v, minPV, maxPV, isDark);
 
-          // Update SVG Pin badge value
+          // Valor en el pin del mapa: muestra unidades + % de participación para lectura inmediata
           const pSlug = window.getProvSlug(pName);
           const pinValEl = document.getElementById(`cr-pin-val-${pSlug}`);
           if (pinValEl && pObj) {
-            if (App.mapMetricLayer === 'cuota') pinValEl.textContent = `${pObj.cuota.toFixed(1)}%`;
-            else pinValEl.textContent = v.toLocaleString();
+            if (isCuotaNow) {
+              pinValEl.textContent = `${(pObj._mapShare || 0).toFixed(1)}%`;
+            } else {
+              const rawV = window.crGetMetricVal(pObj, lyrNow);
+              pinValEl.textContent = `${rawV.toLocaleString()} (${Math.round(pObj._mapShare || 0)}%)`;
+            }
           }
 
-          // Tooltip events
           el.onmouseenter = (e) => {
-            if (tooltip && pObj) {
-              const topC = Object.keys(pObj.cantones || {}).sort((a,b) => pObj.cantones[b] - pObj.cantones[a])[0] || '-';
-              const topStore = Object.keys(pObj.pdvs || {}).sort((a,b) => pObj.pdvs[b] - pObj.pdvs[a])[0] || '-';
-              const lyrName = (App.mapMetricLayer || 'Ventas').toUpperCase();
-              tooltip.innerHTML = `
-                <div style="font-weight:800; font-size:0.86rem; color:#38bdf8; margin-bottom:3px; display:flex; align-items:center; gap:4px;">
-                  <span>📍</span> ${escapeHtml(pName)}
-                </div>
-                <div style="font-size:0.76rem; color:#f8fafc; margin-bottom:2px;">
-                  ${lyrName}: <strong style="color:#10b981;">${App.mapMetricLayer === 'cuota' ? v.toFixed(1) + '%' : v.toLocaleString()}</strong>
-                </div>
-                <div style="font-size:0.72rem; color:#cbd5e1;">Total Ventas: ${pObj.ventas.toLocaleString()} (${pObj.cuota.toFixed(1)}%)</div>
-                <div style="font-size:0.69rem; color:#94a3b8; margin-top:3px; border-top:1px solid rgba(255,255,255,0.1); padding-top:3px;">
-                  Top Cantón: <strong style="color:#f8fafc;">${escapeHtml(topC)}</strong><br>
-                  Top Tienda: <strong style="color:#f8fafc;">${escapeHtml(topStore)}</strong>
-                </div>
-              `;
-              tooltip.style.display = 'block';
-            }
+            if (!pObj) return;
+            const topC = Object.keys(pObj.cantones || {}).sort((a, b) => pObj.cantones[b] - pObj.cantones[a])[0] || '-';
+            const topStore = Object.keys(pObj.pdvs || {}).sort((a, b) => pObj.pdvs[b] - pObj.pdvs[a])[0] || '-';
+            const rankIdx = provRanked.findIndex(p => p.nombre === pObj.nombre) + 1;
+            window.crTooltipShow(e, window.crBuildTooltip({
+              icon: '📍', name: pObj.nombre, label: window.crMetricLabel(lyrNow), value: v,
+              isPctMetric: isCuotaNow,
+              share: pObj._mapShare || 0,
+              rank: rankIdx, count: provRanked.length, avg: provAvg, servicios: pObj.servicios,
+              extra: `Cantón líder: <strong>${escapeHtml(topC)}</strong><br>Tienda líder: <strong>${escapeHtml(topStore)}</strong>`,
+              hint: 'Clic para entrar a sus cantones'
+            }));
+            window.crMapHighlight('prov', pObj.nombre, true);
           };
-          el.onmousemove = (e) => {
-            if (tooltip && svgEl) {
-              const rect = svgEl.getBoundingClientRect();
-              tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-              tooltip.style.top = (e.clientY - rect.top + 15) + 'px';
-            }
-          };
+          el.onmousemove = (e) => window.crTooltipMove(e);
           el.onmouseleave = () => {
-            if (tooltip) tooltip.style.display = 'none';
+            window.crTooltipHide();
+            if (pObj) window.crMapHighlight('prov', pObj.nombre, false);
           };
-
           el.onclick = () => {
-            if (tooltip) tooltip.style.display = 'none';
+            window.crTooltipHide();
             window.drillDownToProvince(pName);
           };
         });
@@ -12585,6 +12887,12 @@
           el.style.opacity = '0';
           el.style.pointerEvents = 'none';
         });
+      }
+
+      // Leyenda numérica, ranking interactivo vinculado y lectura rápida del mapa
+      window.crTooltipHide();
+      if (typeof window.crRenderMapExplainers === 'function') {
+        window.crRenderMapExplainers({ provList, provData, cantDataAll, totalNacVentas, isDark });
       }
 
       // ======================================================================
@@ -12764,6 +13072,33 @@
         pdvTableCount.textContent = `${pdvList.length} tiendas activas registradas`;
       }
 
+      // Actualizar Micro-Ribbon del Desglose Jerárquico (Card 2) según sub-pestaña activa
+      const rHierLeader = document.getElementById('cant-ribbon-leader');
+      const rHierTop3 = document.getElementById('cant-ribbon-top3');
+      const rHierRev = document.getElementById('cant-ribbon-rev');
+      const rHierCount = document.getElementById('cant-ribbon-count');
+      const activeSubTab = App.geoActiveSubTab || 'provincias';
+      const tierItems = activeSubTab === 'pdvs' ? pdvList : (activeSubTab === 'cantones' ? cantList : provList.filter(p => p.ventas > 0));
+      const tierTotalV = tierItems.reduce((a, x) => a + (x.ventas || 0), 0);
+      if (tierItems.length > 0 && tierTotalV > 0) {
+        const topItem = tierItems[0];
+        const topPct = ((topItem.ventas / tierTotalV) * 100).toFixed(1);
+        const top3Sum = tierItems.slice(0, 3).reduce((a, x) => a + (x.ventas || 0), 0);
+        const top3Pct = ((top3Sum / tierTotalV) * 100).toFixed(1);
+        if (rHierLeader) rHierLeader.textContent = `${topItem.nombre} (${topItem.ventas.toLocaleString()} u. · ${topPct}%)`;
+        if (rHierTop3) rHierTop3.textContent = `${top3Pct}% (${top3Sum.toLocaleString()} u.)`;
+        if (rHierRev) rHierRev.textContent = `${formatCurrency(topItem.facturacion || 0)} (${topItem.nombre})`;
+        if (rHierCount) {
+          const unitLbl = activeSubTab === 'pdvs' ? 'tiendas con ventas' : (activeSubTab === 'cantones' ? 'cantones con ventas' : 'provincias activas');
+          rHierCount.textContent = `${tierItems.length.toLocaleString()} ${unitLbl}`;
+        }
+      } else {
+        if (rHierLeader) rHierLeader.textContent = 'Sin datos';
+        if (rHierTop3) rHierTop3.textContent = '-';
+        if (rHierRev) rHierRev.textContent = '-';
+        if (rHierCount) rHierCount.textContent = '0';
+      }
+
       if (pdvTableBody) {
         if (pdvList.length === 0) {
           pdvTableBody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No se encontraron tiendas con los filtros aplicados.</td></tr>';
@@ -12811,7 +13146,7 @@
             App.mapViewMode = 'province';
           }
         }
-        window.switchGeoSubTab('cantones');
+        window.switchGeoSubTab('cantones', true);
         window.highlightCanton(cantonName);
       }
       renderSupervisorsAndTerritory();
@@ -12820,7 +13155,7 @@
     window.onGeoPdvChange = function(pdvName) {
       App.selectedPdvFilter = pdvName || null;
       if (pdvName) {
-        window.switchGeoSubTab('pdvs');
+        window.switchGeoSubTab('pdvs', true);
       }
       renderSupervisorsAndTerritory();
     };
@@ -12849,7 +13184,7 @@
       renderSupervisorsAndTerritory();
     };
 
-    window.switchGeoSubTab = function(tabName) {
+    window.switchGeoSubTab = function(tabName, skipRender = false) {
       App.geoActiveSubTab = tabName;
       const btnProv = document.getElementById('btn-hier-tab-prov');
       const btnCanton = document.getElementById('btn-hier-tab-canton');
@@ -12866,6 +13201,7 @@
       if (panelProv) panelProv.style.display = tabName === 'provincias' ? 'block' : 'none';
       if (panelCanton) panelCanton.style.display = tabName === 'cantones' ? 'block' : 'none';
       if (panelPdv) panelPdv.style.display = tabName === 'pdvs' ? 'block' : 'none';
+      if (!skipRender && typeof renderSupervisorsAndTerritory === 'function') renderSupervisorsAndTerritory();
     };
 
     window.filterCantonesTable = function(term) {
