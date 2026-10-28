@@ -9453,10 +9453,10 @@
         if (hasMeta) {
           const numProy = parseFloat(proyPct);
           const barWidth = Math.min(100, Math.max(0, numProy));
-          const barColor = numProy >= 100 ? '#10b981' : (numProy >= 80 ? '#0284c7' : (numProy >= 50 ? '#d97706' : '#e11d48'));
-          let badgeStyle = numProy >= 100 
+          const barColor = numProy >= 60 ? '#10b981' : (numProy >= 40 ? '#d97706' : '#e11d48');
+          let badgeStyle = numProy >= 60 
             ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);' 
-            : (numProy >= 70
+            : (numProy >= 40
                ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
                : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
           proyBadge = `
@@ -9538,9 +9538,9 @@
             let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
             if (sub.meta !== null && sub.meta > 0) {
               const sProyNum = parseFloat(sProyPct);
-              const sProyBadgeStyle = sProyNum >= 100
+              const sProyBadgeStyle = sProyNum >= 60
                 ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
-                : (sProyNum >= 70
+                : (sProyNum >= 40
                    ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
                    : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
               sProyHtml = `<span class="tag-diff" style="${sProyBadgeStyle} font-weight:700; font-size:0.75rem; padding:2px 6px; border-radius:10px;">${sProyPct}%</span>`;
@@ -9628,9 +9628,9 @@
             let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
             if (sub.meta !== null && sub.meta > 0) {
               const sProyNum = parseFloat(sProyPct);
-              const sProyBadgeStyle = sProyNum >= 100
+              const sProyBadgeStyle = sProyNum >= 60
                 ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
-                : (sProyNum >= 70
+                : (sProyNum >= 40
                    ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
                    : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
               sProyHtml = `<span class="tag-diff" style="${sProyBadgeStyle} font-weight:700; font-size:0.75rem; padding:2px 6px; border-radius:10px;">${sProyPct}%</span>`;
@@ -9712,9 +9712,9 @@
              : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
 
         const footProyNum = parseFloat(totalProyPct);
-        let footProyBadgeStyle = footProyNum >= 100
+        let footProyBadgeStyle = footProyNum >= 60
           ? 'background:#ecfdf5; color:#16a34a; border:1px solid rgba(22, 163, 74, 0.25);'
-          : (footProyNum >= 70
+          : (footProyNum >= 40
              ? 'background:#fffbeb; color:#d97706; border:1px solid rgba(217, 119, 6, 0.25);'
              : 'background:#fff1f2; color:#e11d48; border:1px solid rgba(225, 29, 72, 0.2);');
 
@@ -9767,7 +9767,7 @@
       if (tblRibbonProyPct) {
         tblRibbonProyPct.innerText = totalProyPct + '%';
         const numP = parseFloat(totalProyPct);
-        tblRibbonProyPct.style.color = numP >= 100 ? '#10b981' : (numP >= 70 ? '#d97706' : '#e11d48');
+        tblRibbonProyPct.style.color = numP >= 60 ? '#10b981' : (numP >= 40 ? '#d97706' : '#e11d48');
       }
       if (tblRibbonRev) tblRibbonRev.innerText = formatCurrency(sumRev);
       const tblBottomProy = document.getElementById('tbl-bottom-proy');
