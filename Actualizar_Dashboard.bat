@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 title Actualizar Dashboard Salesland desde Excels (P1 y P2)
-cd /d "C:\Users\Lenovo\Documents\Mi dashboard"
+cd /d "%~dp0"
 cls
 echo ======================================================================
 echo     SALESLAND ^| Retail - Actualizador Automatico Multi-Proyecto

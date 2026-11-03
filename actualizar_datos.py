@@ -3,17 +3,28 @@ from collections import Counter, defaultdict
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# File paths
-retail_path = r'C:\Users\Lenovo\Documents\Mi dashboard\Dashboard HTML RETAIL .xlsx'
-prepago_path = r'C:\Users\Lenovo\Documents\Mi dashboard\Dashboard HTML PREPAGO.xlsx'
-p2_path = r'C:\Users\Lenovo\Documents\Mi dashboard\RETAIL P2.xlsx'
+# File paths (100% portables para cualquier computadora o usuario de Windows)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(BASE_DIR)
 
-index_path = r'C:\Users\Lenovo\Documents\Mi dashboard\index.html'
-dash_path = r'C:\Users\Lenovo\Documents\Mi dashboard\dashboard.html'
-json_path = r'C:\Users\Lenovo\Documents\Mi dashboard\data_retail.json'
-json_p2_path = r'C:\Users\Lenovo\Documents\Mi dashboard\data_retail_p2.json'
-web_repo_path = r'C:\Users\Lenovo\Documents\salesland-dashboard-web\index.html'
-web_repo_dir = r'C:\Users\Lenovo\Documents\salesland-dashboard-web'
+retail_path = os.path.join(BASE_DIR, 'Dashboard HTML RETAIL .xlsx')
+prepago_path = os.path.join(BASE_DIR, 'Dashboard HTML PREPAGO.xlsx')
+p2_path = os.path.join(BASE_DIR, 'RETAIL P2.xlsx')
+
+index_path = os.path.join(BASE_DIR, 'index.html')
+dash_path = os.path.join(BASE_DIR, 'dashboard.html')
+json_path = os.path.join(BASE_DIR, 'data_retail.json')
+json_p2_path = os.path.join(BASE_DIR, 'data_retail_p2.json')
+
+# Detectar carpeta de repositorio Git (hermana 'salesland-dashboard-web' o el propio BASE_DIR)
+candidate_repo = os.path.join(PARENT_DIR, 'salesland-dashboard-web')
+if os.path.exists(os.path.join(candidate_repo, '.git')):
+    web_repo_dir = candidate_repo
+elif os.path.exists(os.path.join(BASE_DIR, '.git')):
+    web_repo_dir = BASE_DIR
+else:
+    web_repo_dir = candidate_repo
+web_repo_path = os.path.join(web_repo_dir, 'index.html')
 
 def strip_accents(text):
     text = unicodedata.normalize('NFD', str(text or ''))
@@ -641,9 +652,10 @@ def update_dataset_in_html(file_path):
 ok1 = update_dataset_in_html(index_path)
 if ok1:
     import shutil
-    shutil.copy2(index_path, dash_path)
-    print(f"[OK] Sincronizado idéntico (MD5) en {dash_path}")
-    if os.path.exists(web_repo_dir):
+    if os.path.abspath(index_path) != os.path.abspath(dash_path):
+        shutil.copy2(index_path, dash_path)
+        print(f"[OK] Sincronizado idéntico (MD5) en {dash_path}")
+    if os.path.exists(web_repo_dir) and os.path.abspath(index_path) != os.path.abspath(web_repo_path):
         shutil.copy2(index_path, web_repo_path)
         print(f"[OK] Sincronizado idéntico (MD5) en {web_repo_path}")
 
