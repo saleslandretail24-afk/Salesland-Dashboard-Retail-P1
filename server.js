@@ -31,7 +31,7 @@ function getActiveTunnelUrl() {
       }
     } catch (e) {}
   }
-  return 'https://preventing-ought-trading-yard.trycloudflare.com';
+  return 'https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1';
 }
 
 // ======================================================================
@@ -178,7 +178,7 @@ const MIME_TYPES = {
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, HEAD, OPTIONS');
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
   if (req.method === 'OPTIONS') {
@@ -186,7 +186,13 @@ const server = http.createServer((req, res) => {
     return res.end();
   }
 
-  let reqPath = decodeURI(req.url.split('?')[0]);
+  let reqPath = '/';
+  try {
+    reqPath = decodeURIComponent(req.url.split('?')[0]);
+  } catch (e) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('Solicitud inválida');
+  }
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
   }
@@ -210,7 +216,12 @@ const server = http.createServer((req, res) => {
     }));
   }
 
-  const filePath = path.join(DOCS_DIR, reqPath);
+  const safeSuffix = path.normalize(reqPath).replace(/^(\.\.(\/|\\|$))+/, '');
+  const filePath = path.resolve(DOCS_DIR, '.' + safeSuffix);
+  if (!filePath.startsWith(DOCS_DIR)) {
+    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('Acceso denegado');
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
