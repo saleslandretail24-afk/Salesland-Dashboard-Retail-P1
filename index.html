@@ -9,13 +9,15 @@
   <script>
     // Auto cache-buster and mobile role sanitizer
     (function() {
-      const LATEST_RELEASE = "20261015_r3";
+      const LATEST_RELEASE = "20261103_r4";
       const currentVer = localStorage.getItem("salesland_release");
       if (currentVer !== LATEST_RELEASE) {
         localStorage.setItem("salesland_release", LATEST_RELEASE);
-        if (localStorage.getItem("salesland_user_role") === "admin" && !localStorage.getItem("salesland_auth_remember_token")) {
-          localStorage.removeItem("salesland_user_role");
-        }
+      }
+      if (localStorage.getItem("salesland_user_role") === "admin" &&
+          !localStorage.getItem("salesland_auth_remember_token") &&
+          sessionStorage.getItem("salesland_auth_session_active") !== "valid") {
+        localStorage.removeItem("salesland_user_role");
       }
     })();
   </script>
@@ -4758,7 +4760,9 @@
       DEFAULT_HASH: "c5dd39153a76b4d55df7e5fb5fb9bc0fb7cc91d4a30ccf3d354bdcfdb3ec9dde", // Clave: Salesland2026*
       STORAGE_KEY_SESSION: "salesland_auth_session_active",
       STORAGE_KEY_REMEMBER: "salesland_auth_remember_token",
+      STORAGE_KEY_SUP_TOKEN: "salesland_supervisor_token",
       STORAGE_KEY_CUSTOM_HASH: "salesland_custom_auth_hash",
+      TOKEN_TTL_MS: 30 * 24 * 60 * 60 * 1000, // 30 days
 
       async sha256(str) {
         const full = this.SALT + str;
@@ -4772,33 +4776,114 @@
         return localStorage.getItem(this.STORAGE_KEY_CUSTOM_HASH) || this.DEFAULT_HASH;
       },
 
-      checkExistingSession() {
-        // 1. Check Session Storage (active browser tab)
+      hasValidAdminToken() {
         if (sessionStorage.getItem(this.STORAGE_KEY_SESSION) === 'valid') {
           return true;
         }
-        // 2. Check Remember Token in Local Storage (up to 30 days)
         const rem = localStorage.getItem(this.STORAGE_KEY_REMEMBER);
-        if (rem) {
-          try {
-            const data = JSON.parse(rem);
-            const now = Date.now();
-            if (data && data.hash === this.getActiveHash() && data.expires > now) {
-              sessionStorage.setItem(this.STORAGE_KEY_SESSION, 'valid');
-              return true;
-            }
-          } catch(e) {}
+        if (!rem) return false;
+        if (rem === 'active') {
+          sessionStorage.setItem(this.STORAGE_KEY_SESSION, 'valid');
+          return true;
+        }
+        try {
+          const data = JSON.parse(rem);
+          if (data && data.hash === this.getActiveHash() && data.expires > Date.now()) {
+            sessionStorage.setItem(this.STORAGE_KEY_SESSION, 'valid');
+            return true;
+          }
+          localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
+        } catch (e) {
+          localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
+        }
+        return false;
+      },
+
+      hasValidSupervisorToken() {
+        if (sessionStorage.getItem(this.STORAGE_KEY_SUP_TOKEN) === 'valid') {
+          return true;
+        }
+        const supRem = localStorage.getItem(this.STORAGE_KEY_SUP_TOKEN);
+        if (!supRem) return false;
+        if (supRem === 'valid') {
+          sessionStorage.setItem(this.STORAGE_KEY_SUP_TOKEN, 'valid');
+          return true;
+        }
+        try {
+          const data = JSON.parse(supRem);
+          if (data && (!data.expires || data.expires > Date.now())) {
+            sessionStorage.setItem(this.STORAGE_KEY_SUP_TOKEN, 'valid');
+            return true;
+          }
+          localStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
+        } catch (e) {
+          localStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
         }
         return false;
       },
 
       checkExistingSession() {
         if (new URLSearchParams(window.location.search).get('auth') === 'bypass') return true;
-        if (sessionStorage.getItem(this.STORAGE_KEY_SESSION) === 'valid') return true;
-        if (localStorage.getItem(this.STORAGE_KEY_REMEMBER) === 'active') return true;
-        if (localStorage.getItem('salesland_supervisor_token') === 'valid') return true;
-        if (sessionStorage.getItem('salesland_supervisor_token') === 'valid') return true;
+        if (this.hasValidAdminToken()) {
+          if (!localStorage.getItem('salesland_user_role') && !sessionStorage.getItem('salesland_user_role')) {
+            sessionStorage.setItem('salesland_user_role', 'admin');
+          }
+          return true;
+        }
+        if (this.hasValidSupervisorToken()) {
+          if (!localStorage.getItem('salesland_user_role') && !sessionStorage.getItem('salesland_user_role')) {
+            sessionStorage.setItem('salesland_user_role', 'supervisor');
+          }
+          return true;
+        }
         return false;
+      },
+
+      getValidatedRole() {
+        const urlRole = new URLSearchParams(window.location.search).get('role');
+        if (urlRole === 'supervisor') return 'supervisor';
+        const storedRole = sessionStorage.getItem('salesland_user_role') || localStorage.getItem('salesland_user_role');
+        if (storedRole === 'admin' && this.hasValidAdminToken()) {
+          return 'admin';
+        }
+        return 'supervisor';
+      },
+
+      setAdminSession(remember = true) {
+        const expectedHash = this.getActiveHash();
+        sessionStorage.setItem(this.STORAGE_KEY_SESSION, 'valid');
+        sessionStorage.setItem('salesland_user_role', 'admin');
+        localStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
+        sessionStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
+        if (remember) {
+          const remData = {
+            hash: expectedHash,
+            expires: Date.now() + this.TOKEN_TTL_MS
+          };
+          localStorage.setItem(this.STORAGE_KEY_REMEMBER, JSON.stringify(remData));
+          localStorage.setItem('salesland_user_role', 'admin');
+        } else {
+          localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
+          localStorage.removeItem('salesland_user_role');
+        }
+      },
+
+      setSupervisorSession(remember = true) {
+        sessionStorage.setItem(this.STORAGE_KEY_SUP_TOKEN, 'valid');
+        sessionStorage.setItem('salesland_user_role', 'supervisor');
+        sessionStorage.removeItem(this.STORAGE_KEY_SESSION);
+        localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
+        if (remember) {
+          const supData = {
+            role: 'supervisor',
+            expires: Date.now() + this.TOKEN_TTL_MS
+          };
+          localStorage.setItem(this.STORAGE_KEY_SUP_TOKEN, JSON.stringify(supData));
+          localStorage.setItem('salesland_user_role', 'supervisor');
+        } else {
+          localStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
+          localStorage.removeItem('salesland_user_role');
+        }
       },
 
       unlockDashboard() {
@@ -4814,12 +4899,23 @@
       lockDashboard() {
         sessionStorage.removeItem(this.STORAGE_KEY_SESSION);
         localStorage.removeItem(this.STORAGE_KEY_REMEMBER);
-        localStorage.removeItem('salesland_supervisor_token');
-        sessionStorage.removeItem('salesland_supervisor_token');
+        localStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
+        sessionStorage.removeItem(this.STORAGE_KEY_SUP_TOKEN);
         localStorage.removeItem('salesland_user_role');
+        sessionStorage.removeItem('salesland_user_role');
+
+        if (window.App) {
+          window.App.userRole = 'supervisor';
+          window.App.supervisorName = '';
+        }
+        if (typeof window.applyRolePermissions === 'function') {
+          window.applyRolePermissions();
+        }
+
         const overlay = document.getElementById('auth-gateway-overlay');
         const wrapper = document.querySelector('.dashboard-wrapper');
         const input = document.getElementById('auth-password-input');
+        const supInput = document.getElementById('auth-supervisor-pin-input');
         const errBanner = document.getElementById('auth-error-banner');
         
         if (overlay) {
@@ -4827,6 +4923,7 @@
           overlay.style.display = 'flex';
         }
         if (wrapper) wrapper.classList.add('auth-locked');
+        if (supInput) supInput.value = '';
         if (input) {
           input.value = '';
           setTimeout(() => input.focus(), 300);
@@ -4838,8 +4935,9 @@
     window.submitDashboardAuth = async function() {
       const input = document.getElementById('auth-password-input');
       const errBanner = document.getElementById('auth-error-banner');
+      const errMsg = document.getElementById('auth-error-msg');
       const card = document.getElementById('auth-main-card');
-      const remember = document.getElementById('auth-remember-checkbox')?.checked;
+      const remember = !!document.getElementById('auth-remember-checkbox')?.checked;
 
       if (!input) return;
       const pwd = input.value;
@@ -4850,25 +4948,18 @@
 
       if (calcHash === expectedHash) {
         // Auth Success
-        sessionStorage.setItem(window.SaleslandSecurity.STORAGE_KEY_SESSION, 'valid');
-        if (remember) {
-          const remData = {
-            hash: expectedHash,
-            expires: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days
-          };
-          localStorage.setItem(window.SaleslandSecurity.STORAGE_KEY_REMEMBER, JSON.stringify(remData));
-        }
+        window.SaleslandSecurity.setAdminSession(remember);
 
         if (window.App) {
           window.App.userRole = 'admin';
           window.App.supervisorName = '';
         }
-        localStorage.setItem('salesland_user_role', 'admin');
         window.SaleslandSecurity.unlockDashboard();
         if (typeof window.applyRolePermissions === 'function') window.applyRolePermissions();
         if (errBanner) errBanner.style.display = 'none';
       } else {
         // Auth Failure
+        if (errMsg) errMsg.textContent = 'Contraseña incorrecta. Acceso denegado.';
         if (errBanner) errBanner.style.display = 'flex';
         if (card) {
           card.classList.remove('auth-shake');
@@ -4990,31 +5081,31 @@
       const errBanner = document.getElementById('auth-error-banner');
       const errMsg = document.getElementById('auth-error-msg');
       const card = document.getElementById('auth-main-card');
-      const remember = document.getElementById('auth-supervisor-remember-checkbox')?.checked;
+      const remember = !!document.getElementById('auth-supervisor-remember-checkbox')?.checked;
 
       const pin = pinInput ? pinInput.value.trim() : '';
 
       let expectedPin = '1234';
       try {
-        const raw = localStorage.getItem('salesland_rbac_v3_dual');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          const sup = parsed.find(u => u.role === 'supervisor');
+        if (window.SaleslandRBAC && typeof window.SaleslandRBAC.getUsers === 'function') {
+          const users = window.SaleslandRBAC.getUsers();
+          const sup = users.find(u => u.role === 'supervisor');
           if (sup && sup.pin) expectedPin = sup.pin;
+        } else {
+          const raw = localStorage.getItem('salesland_rbac_v3_dual');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            const sup = parsed.find(u => u.role === 'supervisor');
+            if (sup && sup.pin) expectedPin = sup.pin;
+          }
         }
       } catch (e) {}
 
       if (pin && (pin === expectedPin || pin === '1234')) {
+        window.SaleslandSecurity.setSupervisorSession(remember);
         if (window.App) {
           window.App.userRole = 'supervisor';
           window.App.supervisorName = '';
-        }
-        if (remember) {
-          localStorage.setItem('salesland_user_role', 'supervisor');
-          localStorage.setItem('salesland_supervisor_token', 'valid');
-        } else {
-          sessionStorage.setItem('salesland_user_role', 'supervisor');
-          sessionStorage.setItem('salesland_supervisor_token', 'valid');
         }
 
         window.SaleslandSecurity.unlockDashboard();
@@ -5024,7 +5115,7 @@
           window.SaleslandRBAC.showToast('¡Bienvenido! Sesión iniciada como Supervisores.', 'success');
         }
       } else {
-        if (errMsg) errMsg.textContent = 'PIN de Supervisores incorrecto.';
+        if (errMsg) errMsg.textContent = 'PIN de Supervisores incorrecto. Inténtalo nuevamente.';
         if (errBanner) errBanner.style.display = 'flex';
         if (card) {
           card.classList.remove('auth-shake');
@@ -5040,11 +5131,19 @@
 
     // Auto-check on DOM ready / Startup
     (function initAuthSecurity() {
-      const wrapper = document.querySelector('.dashboard-wrapper');
       if (window.SaleslandSecurity.checkExistingSession()) {
         window.SaleslandSecurity.unlockDashboard();
       } else {
-        if (wrapper) wrapper.classList.add('auth-locked');
+        const applyLock = () => {
+          const wrapper = document.querySelector('.dashboard-wrapper');
+          if (wrapper && !window.SaleslandSecurity.checkExistingSession()) {
+            wrapper.classList.add('auth-locked');
+          }
+        };
+        applyLock();
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', applyLock, { once: true });
+        }
       }
     })();
 
@@ -7209,6 +7308,12 @@
           </div>
           <span id="sync-status-prepago" style="color:var(--text-muted); font-size:0.75rem; font-weight:600;">Verificando...</span>
         </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.83rem; border-top:1px dashed var(--border-card, #e2e8f0); padding-top:0.6rem;">
+          <div style="display:flex; align-items:center; gap:0.45rem;">
+            <span>🔶</span> <strong>RETAIL P2.xlsx</strong>
+          </div>
+          <span id="sync-status-p2" style="color:var(--text-muted); font-size:0.75rem; font-weight:600;">Verificando...</span>
+        </div>
       </div>
 
       <!-- Live Progress & Feedback Box -->
@@ -7300,10 +7405,18 @@
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.15rem; background:var(--bg-card-elevated, #f8fafc); padding:0.5rem 0.75rem; border-radius:8px; border:1px solid var(--border-card, #e2e8f0);">
         <span style="font-size:0.83rem; color:var(--text-secondary); font-weight:700;">Mes a configurar:</span>
         <select id="target-modal-month-select" style="font-size:0.83rem; font-weight:700; padding:0.25rem 0.6rem; border-radius:6px; border:1px solid var(--border-card); background:var(--bg-card); color:var(--text-primary); cursor:pointer;">
+          <option value="Diciembre">Diciembre</option>
+          <option value="Noviembre">Noviembre</option>
           <option value="Octubre">Octubre</option>
           <option value="Septiembre">Septiembre</option>
           <option value="Agosto">Agosto</option>
           <option value="Julio">Julio</option>
+          <option value="Junio">Junio</option>
+          <option value="Mayo">Mayo</option>
+          <option value="Abril">Abril</option>
+          <option value="Marzo">Marzo</option>
+          <option value="Febrero">Febrero</option>
+          <option value="Enero">Enero</option>
         </select>
       </div>
 
@@ -7409,6 +7522,22 @@
 
                                                                                                                                                                                                                                                                                                                 // Service Targets System by Month & Project (Official Quotas)
     const DEFAULT_TARGETS_P1 = {
+      'Diciembre': {
+        'Prepago': 5450,
+        'Portabilidad Prepago': 1000,
+        'Pospago': 1296,
+        'Gpon': 36,
+        'DTH': 12,
+        'IFI': 12
+      },
+      'Noviembre': {
+        'Prepago': 5450,
+        'Portabilidad Prepago': 1000,
+        'Pospago': 1296,
+        'Gpon': 36,
+        'DTH': 12,
+        'IFI': 12
+      },
       'Octubre': {
         'Prepago': 5450,
         'Portabilidad Prepago': 1000,
@@ -7428,6 +7557,22 @@
     };
 
     const DEFAULT_TARGETS_P2 = {
+      'Diciembre': {
+        'Prepago': 4551,
+        'Portabilidad Prepago': 1000,
+        'Pospago': 1303,
+        'Gpon': 36,
+        'DTH': 12,
+        'IFI': 12
+      },
+      'Noviembre': {
+        'Prepago': 4551,
+        'Portabilidad Prepago': 1000,
+        'Pospago': 1303,
+        'Gpon': 36,
+        'DTH': 12,
+        'IFI': 12
+      },
       'Octubre': {
         'Prepago': 4551,
         'Portabilidad Prepago': 1000,
@@ -7812,7 +7957,9 @@
       localStorage.setItem('salesland_user_role', 'supervisor');
       sessionStorage.setItem('salesland_user_role', 'supervisor');
     }
-    App.userRole = localStorage.getItem('salesland_user_role') || sessionStorage.getItem('salesland_user_role') || 'supervisor';
+    App.userRole = (window.SaleslandSecurity && typeof window.SaleslandSecurity.getValidatedRole === 'function')
+      ? window.SaleslandSecurity.getValidatedRole()
+      : (localStorage.getItem('salesland_user_role') || sessionStorage.getItem('salesland_user_role') || 'supervisor');
     App.supervisorName = localStorage.getItem('salesland_supervisor_name') || '';
 
     
@@ -8645,7 +8792,15 @@
 
       App.userRole = user.role;
       App.supervisorName = '';
-      localStorage.setItem('salesland_user_role', user.role);
+      if (window.SaleslandSecurity) {
+        if (user.role === 'admin') {
+          window.SaleslandSecurity.setAdminSession(true);
+        } else {
+          window.SaleslandSecurity.setSupervisorSession(true);
+        }
+      } else {
+        localStorage.setItem('salesland_user_role', user.role);
+      }
 
       closeUserMgmtModal();
       applyRolePermissions();
@@ -8716,78 +8871,6 @@
       }
     };
   })();
-
-  // Mode tab switcher for login gateway
-  window.setAuthMode = function(mode) {
-    const tabMaster = document.getElementById('auth-tab-master');
-    const tabUser = document.getElementById('auth-tab-user');
-    const formMaster = document.getElementById('auth-form-master');
-    const formUser = document.getElementById('auth-form-user');
-    const errBanner = document.getElementById('auth-error-banner');
-    if (errBanner) errBanner.style.display = 'none';
-
-    if (mode === 'master') {
-      if (tabMaster) { tabMaster.style.background = '#0284c7'; tabMaster.style.color = '#fff'; }
-      if (tabUser) { tabUser.style.background = 'transparent'; tabUser.style.color = '#94a3b8'; }
-      if (formMaster) formMaster.style.display = 'block';
-      if (formUser) formUser.style.display = 'none';
-      const input = document.getElementById('auth-password-input');
-      if (input) setTimeout(() => input.focus(), 50);
-    } else {
-      if (tabMaster) { tabMaster.style.background = 'transparent'; tabMaster.style.color = '#94a3b8'; }
-      if (tabUser) { tabUser.style.background = '#0284c7'; tabUser.style.color = '#fff'; }
-      if (formMaster) formMaster.style.display = 'none';
-      if (formUser) formUser.style.display = 'block';
-      const pinInput = document.getElementById('auth-supervisor-pin-input');
-      if (pinInput) setTimeout(() => pinInput.focus(), 50);
-    }
-  };
-
-  window.toggleSupervisorPinVisibility = function() {
-    const input = document.getElementById('auth-supervisor-pin-input');
-    if (!input) return;
-    input.type = (input.type === 'password') ? 'text' : 'password';
-  };
-
-  // Submit Supervisor shared PIN auth from login gateway
-  window.submitSupervisorAuth = function() {
-    const pinInput = document.getElementById('auth-supervisor-pin-input');
-    const errBanner = document.getElementById('auth-error-banner');
-    const errMsg = document.getElementById('auth-error-msg');
-    const card = document.getElementById('auth-main-card');
-    const remember = document.getElementById('auth-supervisor-remember-checkbox')?.checked;
-
-    const pin = pinInput ? pinInput.value.trim() : '';
-    const users = window.SaleslandRBAC.getUsers();
-    const supUser = users.find(u => u.role === 'supervisor') || { pin: '1234' };
-
-    if (pin && (pin === supUser.pin || pin === '1234')) {
-      App.userRole = 'supervisor';
-      App.supervisorName = '';
-      if (remember) {
-        localStorage.setItem('salesland_user_role', 'supervisor');
-      } else {
-        sessionStorage.setItem('salesland_user_role', 'supervisor');
-      }
-
-      window.SaleslandSecurity.unlockDashboard();
-      applyRolePermissions();
-      if (errBanner) errBanner.style.display = 'none';
-      window.SaleslandRBAC.showToast('¡Bienvenido! Sesión iniciada como Supervisores.', 'success');
-    } else {
-      if (errMsg) errMsg.textContent = 'PIN de Supervisores incorrecto. Inténtalo nuevamente.';
-      if (errBanner) errBanner.style.display = 'flex';
-      if (card) {
-        card.classList.remove('auth-shake');
-        void card.offsetWidth;
-        card.classList.add('auth-shake');
-      }
-      if (pinInput) {
-        pinInput.value = '';
-        pinInput.focus();
-      }
-    }
-  };
 
   function setupRoleEvents() {
     if (window.SaleslandRBAC) window.SaleslandRBAC.init();
@@ -8867,15 +8950,24 @@
     }
 
     if (btnSubmitAdmin) {
-      btnSubmitAdmin.addEventListener('click', () => {
+      btnSubmitAdmin.addEventListener('click', async () => {
         const pin = inputPin ? inputPin.value.trim() : '';
         const users = window.SaleslandRBAC.getUsers();
         const adminUser = users.find(u => u.role === 'admin') || { pin: 'admin123' };
+        let isHashMatch = false;
+        if (pin && window.SaleslandSecurity) {
+          const calcHash = await window.SaleslandSecurity.sha256(pin);
+          isHashMatch = (calcHash === window.SaleslandSecurity.getActiveHash());
+        }
 
-        if (pin && (pin === adminUser.pin || pin === 'admin123' || pin === 'Salesland2026*')) {
+        if (pin && (isHashMatch || pin === adminUser.pin || pin === 'admin123' || pin === 'Salesland2026*')) {
           App.userRole = 'admin';
           App.supervisorName = '';
-          localStorage.setItem('salesland_user_role', 'admin');
+          if (window.SaleslandSecurity) {
+            window.SaleslandSecurity.setAdminSession(true);
+          } else {
+            localStorage.setItem('salesland_user_role', 'admin');
+          }
           applyRolePermissions();
           closeRoleModal();
           window.SaleslandRBAC.showToast('Sesión de Administrador activada', 'success');
@@ -8900,7 +8992,11 @@
         if (pin && (pin === supUser.pin || pin === '1234')) {
           App.userRole = 'supervisor';
           App.supervisorName = '';
-          localStorage.setItem('salesland_user_role', 'supervisor');
+          if (window.SaleslandSecurity) {
+            window.SaleslandSecurity.setSupervisorSession(true);
+          } else {
+            localStorage.setItem('salesland_user_role', 'supervisor');
+          }
           applyRolePermissions();
           closeRoleModal();
           window.SaleslandRBAC.showToast('Sesión de Supervisores activada', 'success');
@@ -9166,9 +9262,12 @@
       if (f.dia && f.dia !== 'all') {
         elapsedDays = parseInt(f.dia, 10);
       } else {
+        const curYearNum = f.anio !== 'all' ? parseInt(f.anio, 10) : 2026;
         const distinctDays = new Set();
-        filtered.forEach(r => {
-          if (r[10] === 'VENTA' && r[0] && r[0].length >= 10) distinctDays.add(r[0].slice(8, 10));
+        App.data.forEach(r => {
+          if (r[10] === 'VENTA' && r[1] === curYearNum && r[2].toLowerCase() === curMonth.toLowerCase()) {
+            if (r[0] && r[0].length >= 10) distinctDays.add(r[0].slice(8, 10));
+          }
         });
         elapsedDays = distinctDays.size > 0 ? distinctDays.size : totalDays;
       }
@@ -9240,8 +9339,14 @@
           yoySubDelta.style.color = yoyDiff >= 0 ? '#059669' : '#f43f5e';
         }
       } else if (yoyBadge && yoyPctEl) {
-        yoyBadge.className = 'sl-variation-badge neutral';
+        yoyBadge.className = 'hud-pill-var neutral';
         yoyPctEl.innerText = 'Sin ref. anterior';
+        updateEqualizer('kpi-yoy-equalizer', 0, '');
+        const yoySubDelta = document.getElementById('kpi-yoy-sub-delta');
+        if (yoySubDelta) {
+          yoySubDelta.innerText = '0%';
+          yoySubDelta.style.color = '';
+        }
       }
 
       // Calculate MoM (Previous Month)
@@ -9293,8 +9398,14 @@
           momSubDelta.style.color = momDiff >= 0 ? '#059669' : '#f43f5e';
         }
       } else if (momBadge && momPctEl) {
-        momBadge.className = 'sl-variation-badge neutral';
+        momBadge.className = 'hud-pill-var neutral';
         momPctEl.innerText = 'Sin ref. M-1';
+        updateEqualizer('kpi-mom-equalizer', 0, '');
+        const momSubDelta = document.getElementById('kpi-mom-sub-delta');
+        if (momSubDelta) {
+          momSubDelta.innerText = '0%';
+          momSubDelta.style.color = '';
+        }
       }
     }
 
@@ -9460,7 +9571,7 @@
         const curCount = currentServices[serv] || 0;
         const prevCount = previousServices[serv] || 0;
         const diff = curCount - prevCount;
-        const pct = prevCount > 0 ? ((diff / prevCount) * 100).toFixed(1) : (curCount > 0 ? '+100%' : '0%');
+        const pct = prevCount > 0 ? ((diff / prevCount) * 100).toFixed(1) : (curCount > 0 ? '100.0' : '0.0');
         const rev = currentRevenue[serv] || 0;
 
         const sMeta = getTargetForService(serv, curMonth);
@@ -9579,16 +9690,15 @@
         // If Pospago Consolidado, append detailed subrows
         if (isPospagoConsol) {
           const isSupView = (typeof window !== 'undefined' && window.App && window.App.filters && window.App.filters.supervisor && window.App.filters.supervisor !== 'all');
-          const supT = isSupView ? getSupervisorTargets(curMonth) : null;
           const subItems = [
-            { name: 'Pospago (Línea Nueva)', cur: pospagoSubCur['Pospago'], prev: pospagoSubPrev['Pospago'], rev: pospagoSubRev['Pospago'], meta: isSupView ? supT['Pospago'] : null },
-            { name: 'Portabilidad Postpago', cur: pospagoSubCur['Portabilidad Postpago'], prev: pospagoSubPrev['Portabilidad Postpago'], rev: pospagoSubRev['Portabilidad Postpago'], meta: isSupView ? supT['Portabilidad Postpago'] : null },
+            { name: 'Pospago (Línea Nueva)', cur: pospagoSubCur['Pospago'], prev: pospagoSubPrev['Pospago'], rev: pospagoSubRev['Pospago'], meta: isSupView ? getTargetForService('Pospago (Línea Nueva)', curMonth) : null },
+            { name: 'Portabilidad Postpago', cur: pospagoSubCur['Portabilidad Postpago'], prev: pospagoSubPrev['Portabilidad Postpago'], rev: pospagoSubRev['Portabilidad Postpago'], meta: isSupView ? getTargetForService('Portabilidad Postpago', curMonth) : null },
             { name: 'Migración Pospago', cur: pospagoSubCur['Migración Pospago'], prev: pospagoSubPrev['Migración Pospago'], rev: pospagoSubRev['Migración Pospago'], meta: null }
           ];
 
           subItems.forEach(sub => {
             const sDiff = sub.cur - sub.prev;
-            const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '+100%' : '0%');
+            const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '100.0' : '0.0');
             const sProy = elapsedDays < totalDaysInMonth ? Math.round((sub.cur / Math.max(1, elapsedDays)) * totalDaysInMonth) : sub.cur;
             const sProyPct = (sub.meta !== null && sub.meta > 0) ? ((sProy / sub.meta) * 100).toFixed(1) : null;
             let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
@@ -9645,10 +9755,6 @@
 
         // If Hogar (Gpon, DTH, IFI) Consolidado, append detailed subrows
         if (isHogarConsol) {
-          const isSupView = (typeof window !== 'undefined' && window.App && window.App.filters && window.App.filters.supervisor && window.App.filters.supervisor !== 'all');
-          const supT = isSupView ? getSupervisorTargets(curMonth) : null;
-          const globalT = getServiceTargets(curMonth);
-
           const hogarSubItems = [
             { 
               name: 'Gpon', 
@@ -9656,7 +9762,7 @@
               cur: hogarSubCur['Gpon'] || 0, 
               prev: hogarSubPrev['Gpon'] || 0, 
               rev: hogarSubRev['Gpon'] || 0, 
-              meta: isSupView ? (supT ? parseInt(supT['Gpon']) || 0 : null) : (globalT ? parseInt(globalT['Gpon']) || 0 : null) 
+              meta: getTargetForService('Gpon', curMonth)
             },
             { 
               name: 'DTH', 
@@ -9664,7 +9770,7 @@
               cur: hogarSubCur['DTH'] || 0, 
               prev: hogarSubPrev['DTH'] || 0, 
               rev: hogarSubRev['DTH'] || 0, 
-              meta: isSupView ? (supT ? parseInt(supT['DTH']) || 0 : null) : (globalT ? parseInt(globalT['DTH']) || 0 : null) 
+              meta: getTargetForService('DTH', curMonth)
             },
             { 
               name: 'IFI', 
@@ -9672,13 +9778,13 @@
               cur: hogarSubCur['IFI'] || 0, 
               prev: hogarSubPrev['IFI'] || 0, 
               rev: hogarSubRev['IFI'] || 0, 
-              meta: isSupView ? (supT ? parseInt(supT['IFI']) || 0 : null) : (globalT ? parseInt(globalT['IFI']) || 0 : null) 
+              meta: getTargetForService('IFI', curMonth)
             }
           ];
 
           hogarSubItems.forEach(sub => {
             const sDiff = sub.cur - sub.prev;
-            const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '+100%' : '0%');
+            const sPct = sub.prev > 0 ? ((sDiff / sub.prev) * 100).toFixed(1) : (sub.cur > 0 ? '100.0' : '0.0');
             const sProy = elapsedDays < totalDaysInMonth ? Math.round((sub.cur / Math.max(1, elapsedDays)) * totalDaysInMonth) : sub.cur;
             const sProyPct = (sub.meta !== null && sub.meta > 0) ? ((sProy / sub.meta) * 100).toFixed(1) : null;
             let sProyHtml = '<span style="color:var(--text-muted); font-size:0.75rem;">Consol.</span>';
@@ -9741,7 +9847,7 @@
 
       // Summary Totals in Footer
       const totalDiff = sumCur - sumPrev;
-      const totalPctMoM = sumPrev > 0 ? ((totalDiff / sumPrev) * 100).toFixed(1) : (sumCur > 0 ? '+100%' : '0%');
+      const totalPctMoM = sumPrev > 0 ? ((totalDiff / sumPrev) * 100).toFixed(1) : (sumCur > 0 ? '100.0' : '0.0');
       const totalTargetNum = f.servicio === 'all' ? getTotalTargetQuota(curMonth) : (sumMeta > 0 ? sumMeta : getTotalTargetQuota(curMonth));
       const totalCumpPct = totalTargetNum > 0 ? ((sumCur / totalTargetNum) * 100).toFixed(1) : '0';
       const totalProyPct = totalTargetNum > 0 ? ((sumProy / totalTargetNum) * 100).toFixed(1) : '0';
@@ -10676,27 +10782,33 @@
         return;
       }
 
-      const rows = recordsToExport.map(r => ({
-        'Fecha': r[0],
-        'Año': r[1],
-        'Mes': r[2],
-        'Contrato': r[16] || '',
-        'ID': r[17] || '',
-        'Teléfono': r[18] || '',
-        'Cliente': r[3],
-        'Cédula': r[4],
-        'Plan': r[5],
-        'Precio (₡)': r[6],
-        'Proyecto': r[7],
-        'Punto de Venta': r[8],
-        'Servicio Vendido': r[9],
-        'Estado': r[10],
-        'Asesor': r[11],
-        'Supervisor': r[12],
-        'Operador Donante': r[13],
-        'Provincia': r[14],
-        'Cantón': r[15]
-      }));
+      const isSupervisor = (App.userRole === 'supervisor');
+      const rows = recordsToExport.map(r => {
+        const row = {
+          'Fecha': r[0],
+          'Año': r[1],
+          'Mes': r[2],
+          'Contrato': r[16] || '',
+          'ID': r[17] || '',
+          'Teléfono': r[18] || '',
+          'Cliente': r[3],
+          'Cédula': r[4],
+          'Plan': r[5]
+        };
+        if (!isSupervisor) row['Precio (₡)'] = r[6];
+        Object.assign(row, {
+          'Proyecto': r[7],
+          'Punto de Venta': r[8],
+          'Servicio Vendido': r[9],
+          'Estado': r[10],
+          'Asesor': r[11],
+          'Supervisor': r[12],
+          'Operador Donante': r[13],
+          'Provincia': r[14],
+          'Cantón': r[15]
+        });
+        return row;
+      });
 
       const ws = XLSX.utils.json_to_sheet(rows);
       const wb = XLSX.utils.book_new();
@@ -13444,24 +13556,30 @@
       const data = getFilteredTransactionsData();
       if (data.length === 0) return alert('No hay registros visibles para exportar con los filtros seleccionados.');
       
-      const rows = data.map(r => ({
-        'Fecha': r[0],
-        'Contrato': r[16] || '',
-        'ID Trámite': r[17] || '',
-        'Teléfono': r[18] || '',
-        'Cliente': r[3],
-        'Cédula': r[4],
-        'Plan': r[5],
-        'Precio (₡)': r[6],
-        'Servicio Vendido': r[9],
-        'Proyecto/Canal': r[7],
-        'Punto de Venta': r[8],
-        'Supervisor': r[12],
-        'Vendedor': r[11],
-        'Provincia': r[14],
-        'Cantón': r[15] || '',
-        'Estado': r[10]
-      }));
+      const isSupervisor = (App.userRole === 'supervisor');
+      const rows = data.map(r => {
+        const row = {
+          'Fecha': r[0],
+          'Contrato': r[16] || '',
+          'ID Trámite': r[17] || '',
+          'Teléfono': r[18] || '',
+          'Cliente': r[3],
+          'Cédula': r[4],
+          'Plan': r[5]
+        };
+        if (!isSupervisor) row['Precio (₡)'] = r[6];
+        Object.assign(row, {
+          'Servicio Vendido': r[9],
+          'Proyecto/Canal': r[7],
+          'Punto de Venta': r[8],
+          'Supervisor': r[12],
+          'Vendedor': r[11],
+          'Provincia': r[14],
+          'Cantón': r[15] || '',
+          'Estado': r[10]
+        });
+        return row;
+      });
 
       const ws = XLSX.utils.json_to_sheet(rows);
       const wb = XLSX.utils.book_new();
@@ -13476,7 +13594,10 @@
       const data = getFilteredTransactionsData();
       if (data.length === 0) return alert('No hay registros visibles para exportar.');
       
-      const headers = ['Fecha', 'Contrato', 'ID', 'Telefono', 'Cliente', 'Cedula', 'Plan', 'Precio', 'Servicio', 'Canal', 'PDV', 'Supervisor', 'Vendedor', 'Provincia', 'Estado'];
+      const isSupervisor = (App.userRole === 'supervisor');
+      const headers = isSupervisor
+        ? ['Fecha', 'Contrato', 'ID', 'Telefono', 'Cliente', 'Cedula', 'Plan', 'Servicio', 'Canal', 'PDV', 'Supervisor', 'Vendedor', 'Provincia', 'Estado']
+        : ['Fecha', 'Contrato', 'ID', 'Telefono', 'Cliente', 'Cedula', 'Plan', 'Precio', 'Servicio', 'Canal', 'PDV', 'Supervisor', 'Vendedor', 'Provincia', 'Estado'];
       const csvRows = [headers.join(',')];
 
       data.forEach(r => {
@@ -13487,8 +13608,10 @@
           `"${(r[18] || '').replace(/"/g, '""')}"`,
           `"${(r[3] || '').replace(/"/g, '""')}"`,
           `"${(r[4] || '').replace(/"/g, '""')}"`,
-          `"${(r[5] || '').replace(/"/g, '""')}"`,
-          r[6] || 0,
+          `"${(r[5] || '').replace(/"/g, '""')}"`
+        ];
+        if (!isSupervisor) row.push(r[6] || 0);
+        row.push(
           `"${(r[9] || '').replace(/"/g, '""')}"`,
           `"${(r[7] || '').replace(/"/g, '""')}"`,
           `"${(r[8] || '').replace(/"/g, '""')}"`,
@@ -13496,7 +13619,7 @@
           `"${(r[11] || '').replace(/"/g, '""')}"`,
           `"${(r[14] || '').replace(/"/g, '""')}"`,
           `"${(r[10] || '').replace(/"/g, '""')}"`
-        ];
+        );
         csvRows.push(row.join(','));
       });
 
@@ -14222,13 +14345,20 @@
       // Export Excel
       document.getElementById('btn-export-excel').addEventListener('click', () => {
         if (App.filtered.length === 0) return alert('No hay datos para exportar.');
-        const rows = App.filtered.map(r => ({
-          'Fecha': r[0], 'Año': r[1], 'Mes': r[2],
-          'Contrato': r[16] || '', 'ID': r[17] || '', 'Teléfono': r[18] || '',
-          'Cliente': r[3], 'Cédula': r[4], 'Plan': r[5], 'Precio (₡)': r[6],
-          'Proyecto': r[7], 'Punto Venta': r[8], 'Servicio': r[9], 'Estado': r[10],
-          'Vendedor': r[11], 'Supervisor': r[12], 'Provincia': r[14], 'Cantón': r[15]
-        }));
+        const isSupervisor = (App.userRole === 'supervisor');
+        const rows = App.filtered.map(r => {
+          const row = {
+            'Fecha': r[0], 'Año': r[1], 'Mes': r[2],
+            'Contrato': r[16] || '', 'ID': r[17] || '', 'Teléfono': r[18] || '',
+            'Cliente': r[3], 'Cédula': r[4], 'Plan': r[5]
+          };
+          if (!isSupervisor) row['Precio (₡)'] = r[6];
+          Object.assign(row, {
+            'Proyecto': r[7], 'Punto Venta': r[8], 'Servicio': r[9], 'Estado': r[10],
+            'Vendedor': r[11], 'Supervisor': r[12], 'Provincia': r[14], 'Cantón': r[15]
+          });
+          return row;
+        });
         const ws = XLSX.utils.json_to_sheet(rows);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Reporte_Salesland");
@@ -14307,6 +14437,7 @@
       const syncSub = document.getElementById('sync-feedback-sub');
       const statusRetail = document.getElementById('sync-status-retail');
       const statusPrepago = document.getElementById('sync-status-prepago');
+      const statusP2 = document.getElementById('sync-status-p2');
 
       async function checkExcelStatus() {
         try {
@@ -14321,10 +14452,15 @@
               const dt = new Date(data.prepago.mtime);
               statusPrepago.innerHTML = `<span style="color:#10b981;">●</span> Modif: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
             }
+            if (data.p2 && statusP2) {
+              const dt = new Date(data.p2.mtime);
+              statusP2.innerHTML = `<span style="color:#10b981;">●</span> Modif: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+            }
           }
         } catch(e) {
           if (statusRetail) statusRetail.innerText = 'Listo para procesar';
           if (statusPrepago) statusPrepago.innerText = 'Listo para procesar';
+          if (statusP2) statusP2.innerText = 'Listo para procesar';
         }
       }
 
@@ -14366,8 +14502,20 @@
 
           try {
             const resp = await fetch('/api/actualizar-datos', { method: 'POST', cache: 'no-store' });
-            if (resp.ok) {
-              const resData = await resp.json();
+            if (resp.ok || resp.status === 429) {
+              // Poll /api/excel-status until background ETL finishes
+              let polls = 0;
+              while (polls < 60) {
+                await new Promise(r => setTimeout(r, 1500));
+                polls++;
+                try {
+                  const stResp = await fetch('/api/excel-status', { cache: 'no-store' });
+                  if (stResp.ok) {
+                    const stData = await stResp.json();
+                    if (!stData.isUpdating) break;
+                  }
+                } catch (e) {}
+              }
               if (syncSpinner) syncSpinner.style.display = 'none';
               if (syncFeedback) {
                 syncFeedback.style.background = 'rgba(16, 185, 129, 0.1)';
@@ -14377,12 +14525,11 @@
                 syncMsg.style.color = '#10b981';
                 syncMsg.innerText = '✅ ¡Dashboard Actualizado con Éxito!';
               }
-              const recCount = resData.records ? `${resData.records.toLocaleString()} transacciones` : 'Todas las transacciones';
-              if (syncSub) syncSub.innerText = `${recCount} procesadas. Recargando visuales en 2 segundos...`;
+              if (syncSub) syncSub.innerText = 'Transacciones procesadas. Recargando visuales en 1.5 segundos...';
 
               setTimeout(() => {
                 window.location.reload();
-              }, 2000);
+              }, 1500);
             } else {
               throw new Error('Error al procesar los archivos Excel.');
             }
