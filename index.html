@@ -3058,6 +3058,7 @@
     body.role-supervisor .tab-item-btn[data-tab="tab-supervisores"],
     body.role-supervisor .chip-rev,
     body.role-supervisor .seller-card-facturacion,
+    body.role-supervisor #seller-sort-select option[value="facturacion"],
     body.role-supervisor #modal-seller-facturacion-box,
     body.role-supervisor [id*="modal-seller-facturacion"],
     body.role-supervisor .seller-kpi-pill-box:has(#modal-seller-facturacion) {
@@ -7595,6 +7596,24 @@
     // Portabilidad Postpago: 10 | Pospago Línea Nueva: 25 | Prepago: 120 | Portabilidad Prepago: 15 | Gpon: 1 | DTH: 1 | IFI: 1
     // Total Meta Asignada por Vendedor: 173 instalaciones
     const DEFAULT_SELLER_TARGETS = {
+      'Diciembre': {
+        'Prepago': 120,
+        'Portabilidad Prepago': 15,
+        'Pospago': 25,
+        'Portabilidad Postpago': 10,
+        'Gpon': 1,
+        'DTH': 1,
+        'IFI': 1
+      },
+      'Noviembre': {
+        'Prepago': 120,
+        'Portabilidad Prepago': 15,
+        'Pospago': 25,
+        'Portabilidad Postpago': 10,
+        'Gpon': 1,
+        'DTH': 1,
+        'IFI': 1
+      },
       'Octubre': {
         'Prepago': 120,
         'Portabilidad Prepago': 15,
@@ -8171,11 +8190,35 @@
       window.applyRolePermissions = applyRolePermissions;
       const isSupervisor = (App.userRole === 'supervisor');
       document.body.classList.toggle('role-supervisor', isSupervisor);
+      const factOption = document.querySelector('#seller-sort-select option[value="facturacion"]');
+      if (factOption) {
+        factOption.hidden = isSupervisor;
+        factOption.disabled = isSupervisor;
+      }
       if (isSupervisor) {
-        if (App.sellerRankingMetric === 'facturacion') App.sellerRankingMetric = 'ventas';
+        if (App.sellerRankingMetric === 'facturacion') {
+          App.sellerRankingMetric = 'ventas';
+          document.querySelectorAll('.btn-seller-chart-mode').forEach(b => b.classList.toggle('active', b.getAttribute('data-mode') === 'ventas'));
+        }
+        if (App.sellerSort === 'facturacion') {
+          App.sellerSort = 'ventas';
+          const sSortEl = document.getElementById('seller-sort-select');
+          if (sSortEl) sSortEl.value = 'ventas';
+        }
+        if (App.supChartMode === 'facturacion') {
+          App.supChartMode = 'ventas';
+          document.querySelectorAll('.btn-sup-chart-mode').forEach(b => b.classList.toggle('active', b.getAttribute('data-mode') === 'ventas'));
+        }
+        if (App.pdvChartMode === 'facturacion') {
+          App.pdvChartMode = 'ventas';
+          document.querySelectorAll('.btn-pdv-chart-mode').forEach(b => b.classList.toggle('active', b.getAttribute('data-mode') === 'ventas'));
+        }
+        if (App.provChartMode === 'facturacion') App.provChartMode = 'ventas';
+        if (App.cantChartMode === 'facturacion') App.cantChartMode = 'ventas';
         if (App.provViewMetric === 'facturacion') App.provViewMetric = 'ventas';
         if (App.pdvMetric === 'facturacion') App.pdvMetric = 'ventas';
         if (App.cantMetric === 'facturacion') App.cantMetric = 'ventas';
+        if (App.txSortCol === 'precio') App.txSortCol = 'fecha';
       }
       const isAdmin = (App.userRole === 'admin' || !isSupervisor);
 
@@ -11198,6 +11241,28 @@
       let cardsHtml = '';
       const maxSales = sellerList.length > 0 ? Math.max(...sellerList.map(s => s.ventas), 1) : 1;
 
+      // Calculate dynamic Pace (Ritmo comercial) & Run-rate period days once per render
+      const selMes = (App.filters && App.filters.mes && App.filters.mes !== 'all') ? App.filters.mes.toLowerCase() : 'octubre';
+      const selAnio = (App.filters && App.filters.anio && App.filters.anio !== 'all') ? String(App.filters.anio) : 'all';
+      const daysInMonthMap = {
+        'enero': 31, 'febrero': 28, 'marzo': 31, 'abril': 30, 'mayo': 31, 'junio': 30,
+        'julio': 31, 'agosto': 31, 'septiembre': 30, 'octubre': 31, 'noviembre': 30, 'diciembre': 31
+      };
+      const daysInMonth = daysInMonthMap[selMes] || 30;
+      let currentDay = daysInMonth;
+      if (App.filters && App.filters.dia && App.filters.dia !== 'all') {
+        currentDay = Math.max(1, Math.min(parseInt(App.filters.dia, 10) || 1, daysInMonth));
+      } else {
+        const activeDaysSet = new Set();
+        App.data.forEach(r => {
+          if (r[10] !== 'VENTA') return;
+          if (selAnio !== 'all' && String(r[1]) !== selAnio) return;
+          if (String(r[2] || '').toLowerCase() !== selMes) return;
+          if (r[0] && r[0].length >= 10) activeDaysSet.add(r[0].slice(8, 10));
+        });
+        currentDay = activeDaysSet.size > 0 ? Math.min(activeDaysSet.size, daysInMonth) : daysInMonth;
+      }
+
       sellerList.forEach((s, idx) => {
         const initials = s.nombre.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
         
@@ -11224,24 +11289,6 @@
         // Gap to meta
         const gapMeta = targetMeta - s.ventas;
         const gapText = gapMeta > 0 ? `Faltan ${gapMeta} u.` : `+${Math.abs(gapMeta)} sobre meta`;
-
-        // Calculate dynamic Pace (Ritmo comercial) & Run-rate synchronized with active period
-        const selMes = (App.filters && App.filters.mes && App.filters.mes !== 'all') ? App.filters.mes.toLowerCase() : 'octubre';
-        const daysInMonthMap = {
-          'enero': 31, 'febrero': 28, 'marzo': 31, 'abril': 30, 'mayo': 31, 'junio': 30,
-          'julio': 31, 'agosto': 31, 'septiembre': 30, 'octubre': 31, 'noviembre': 30, 'diciembre': 31
-        };
-        const daysInMonth = daysInMonthMap[selMes] || 30;
-        let currentDay = daysInMonth;
-        if (App.filters && App.filters.dia && App.filters.dia !== 'all') {
-          currentDay = Math.max(1, Math.min(parseInt(App.filters.dia, 10) || 1, daysInMonth));
-        } else {
-          const activeDaysSet = new Set();
-          App.filtered.forEach(r => {
-            if (r[10] === 'VENTA' && r[0] && r[0].length >= 10) activeDaysSet.add(r[0].slice(8, 10));
-          });
-          currentDay = activeDaysSet.size > 0 ? Math.min(activeDaysSet.size, daysInMonth) : daysInMonth;
-        }
         const expectedPaceUnits = (targetMeta / daysInMonth) * currentDay;
         const paceDiff = Math.round(((s.ventas / Math.max(1, expectedPaceUnits)) - 1) * 100);
         
@@ -11816,9 +11863,10 @@
         }
       });
 
+      const perSellerMeta = (typeof getSellerTotalTarget === 'function' ? getSellerTotalTarget(App.filters.mes) : 173) || 173;
       const allSupsList = Object.keys(supStats).map(name => {
         const supSellersCount = supStats[name].vendedores.size > 0 ? supStats[name].vendedores.size : 1;
-        const curMeta = supSellersCount * 173;
+        const curMeta = supSellersCount * perSellerMeta;
         const cumplimiento = curMeta > 0 ? ((supStats[name].ventas / curMeta) * 100) : 0;
         return {
           nombre: name,
@@ -13365,18 +13413,22 @@
     window.exportCantonesExcel = function() {
       const cantTable = document.getElementById('cr-cantones-table-body');
       if (!cantTable) return;
+      const isSupervisor = (App.userRole === 'supervisor');
       const rows = [];
       cantTable.querySelectorAll('tr').forEach(tr => {
         const tds = tr.querySelectorAll('td');
         if (tds.length >= 6) {
-          rows.push({
+          const row = {
             'Ranking': tds[0].textContent.trim(),
             'Cantón': tds[1].textContent.trim(),
             'Provincia': tds[2].textContent.trim(),
             'Total Ventas': parseInt(tds[3].textContent.replace(/,/g, '').trim(), 10) || 0,
-            '% Cuota': tds[4].textContent.trim(),
-            'Facturación Estimada': tds[5].textContent.trim()
-          });
+            '% Cuota': tds[4].textContent.trim()
+          };
+          if (!isSupervisor) {
+            row['Facturación Estimada'] = tds[5].textContent.trim();
+          }
+          rows.push(row);
         }
       });
       if (rows.length === 0) return alert('No hay cantones visibles para exportar.');
@@ -13391,11 +13443,12 @@
     window.exportPdvsExcel = function() {
       const pdvTable = document.getElementById('cr-pdvs-table-body');
       if (!pdvTable) return;
+      const isSupervisor = (App.userRole === 'supervisor');
       const rows = [];
       pdvTable.querySelectorAll('tr').forEach(tr => {
         const tds = tr.querySelectorAll('td');
         if (tds.length >= 10) {
-          rows.push({
+          const row = {
             'Ranking': tds[0].textContent.trim(),
             'Tienda / PDV': tds[1].textContent.trim(),
             'Cantón': tds[2].textContent.trim(),
@@ -13405,9 +13458,12 @@
             'Prepago': parseInt(tds[6].textContent.replace(/,/g, '').trim(), 10) || 0,
             'Porta': parseInt(tds[7].textContent.replace(/,/g, '').trim(), 10) || 0,
             'Hogar': parseInt(tds[8].textContent.replace(/,/g, '').trim(), 10) || 0,
-            'Total Ventas': parseInt(tds[9].textContent.replace(/,/g, '').trim(), 10) || 0,
-            'Facturación': tds[10].textContent.trim()
-          });
+            'Total Ventas': parseInt(tds[9].textContent.replace(/,/g, '').trim(), 10) || 0
+          };
+          if (!isSupervisor && tds[10]) {
+            row['Facturación'] = tds[10].textContent.trim();
+          }
+          rows.push(row);
         }
       });
       if (rows.length === 0) return alert('No hay tiendas visibles para exportar.');
@@ -13681,7 +13737,11 @@
       // Calculate executive metrics from approved sales only (r[10] === 'VENTA')
       const ventasRows = App.filtered.filter(r => r[10] === 'VENTA');
       const totalVentas = ventasRows.length;
-      const targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota(activeMonth) : (App.targetQuota || 7806);
+      let targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota(activeMonth) : (App.targetQuota || 7806);
+      if (App.filters.servicio && App.filters.servicio !== 'all' && typeof getTargetForService === 'function') {
+        const servQuota = getTargetForService(App.filters.servicio, activeMonth);
+        if (servQuota !== null && servQuota > 0) targetQuota = servQuota;
+      }
       const cumpPct = targetQuota > 0 ? ((totalVentas / targetQuota) * 100).toFixed(1) : '0.0';
 
       // Daily run-rate projection synchronized with period
@@ -13692,13 +13752,16 @@
       const totalDays = daysInMonthMap[activeMonth.toLowerCase()] || 30;
       let elapsedDays = totalDays;
       if (App.filters.dia && App.filters.dia !== 'all') {
-        elapsedDays = Math.max(1, parseInt(App.filters.dia, 10) || 1);
+        elapsedDays = Math.max(1, Math.min(parseInt(App.filters.dia, 10) || 1, totalDays));
       } else {
         const distinctDays = new Set();
-        ventasRows.forEach(r => {
+        App.data.forEach(r => {
+          if (r[10] !== 'VENTA') return;
+          if (App.filters.anio && App.filters.anio !== 'all' && String(r[1]) !== String(App.filters.anio)) return;
+          if (String(r[2] || '').toLowerCase() !== activeMonth.toLowerCase()) return;
           if (r[0] && r[0].length >= 10) distinctDays.add(r[0].slice(8, 10));
         });
-        elapsedDays = distinctDays.size > 0 ? distinctDays.size : totalDays;
+        elapsedDays = distinctDays.size > 0 ? Math.min(distinctDays.size, totalDays) : totalDays;
       }
       const projected = elapsedDays < totalDays ? Math.round((totalVentas / Math.max(1, elapsedDays)) * totalDays) : totalVentas;
 
@@ -13757,7 +13820,7 @@
           </div>
           <div class="report-kpi-tile">
             <div class="kpi-lbl">🏢 Canales Activos</div>
-            <div class="kpi-num" style="color:#0f172a;">${(cMap['Cadenas'] + cMap['Multimarca']).toLocaleString()}</div>
+            <div class="kpi-num" style="color:var(--text-primary);">${(cMap['Cadenas'] + cMap['Multimarca']).toLocaleString()}</div>
           </div>
         </div>
 
@@ -13879,7 +13942,11 @@
       const activeMonth = App.filters.mes && App.filters.mes !== 'all' ? App.filters.mes : 'Octubre';
       const activeYear = App.filters.anio && App.filters.anio !== 'all' ? App.filters.anio : '2026';
       const activeProject = App.currentProject === 'P2' ? 'Retail P2' : 'Retail P1';
-      const targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota(activeMonth) : (App.targetQuota || 7806);
+      let targetQuota = typeof getTotalTargetQuota === 'function' ? getTotalTargetQuota(activeMonth) : (App.targetQuota || 7806);
+      if (App.filters.servicio && App.filters.servicio !== 'all' && typeof getTargetForService === 'function') {
+        const servQuota = getTargetForService(App.filters.servicio, activeMonth);
+        if (servQuota !== null && servQuota > 0) targetQuota = servQuota;
+      }
       const ventasRows = App.filtered.filter(r => r[10] === 'VENTA');
       const totalVentas = ventasRows.length;
       const cumpPct = targetQuota > 0 ? ((totalVentas / targetQuota) * 100).toFixed(1) : '0.0';
@@ -13918,7 +13985,7 @@
       const data = getFilteredTransactionsData();
 
       // Sort
-      const col = App.txSortCol;
+      const col = (App.userRole === 'supervisor' && App.txSortCol === 'precio') ? 'fecha' : App.txSortCol;
       const asc = App.txSortAsc;
       data.sort((a, b) => {
         let va, vb;
