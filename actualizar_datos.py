@@ -603,6 +603,19 @@ json_dataset_str_p1 = json.dumps(combined_records_p1, ensure_ascii=False, separa
 json_dataset_str_p2 = json.dumps(combined_records_p2, ensure_ascii=False, separators=(',', ':')) if combined_records_p2 else "[]"
 timestamp_str = datetime.datetime.now().strftime("%d/%m/%Y %I:%M %p")
 
+DATA_FILES = ('data_p1.js', 'data_p2.js')
+
+def write_dataset_files(target_dir):
+    """Escribe los datasets como archivos JS externos (cargados con <script src> desde index.html).
+    Mantener los datos fuera del HTML evita archivos gigantes (~50 MB)."""
+    with open(os.path.join(target_dir, 'data_p1.js'), 'w', encoding='utf-8', newline='\n') as f:
+        f.write('// Retail P1 dataset - generado por actualizar_datos.py (no editar a mano)\n')
+        f.write(f'window.RAW_DATASET = {json_dataset_str_p1};\n')
+    with open(os.path.join(target_dir, 'data_p2.js'), 'w', encoding='utf-8', newline='\n') as f:
+        f.write('// Retail P2 dataset - generado por actualizar_datos.py (no editar a mano)\n')
+        f.write(f'window.RAW_DATASET_P2 = {json_dataset_str_p2};\n')
+    print(f"[OK] Datasets escritos en {target_dir} ({', '.join(DATA_FILES)})")
+
 def update_dataset_in_html(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         html = f.read()
@@ -615,22 +628,16 @@ def update_dataset_in_html(file_path):
         html
     )
 
-    # 2. Replace window.RAW_DATASET
-    raw_dataset_regex = re.compile(r'window\.RAW_DATASET\s*=\s*\[\[[\s\S]*?\]\];', re.MULTILINE)
-    if raw_dataset_regex.search(html):
-        html = raw_dataset_regex.sub(lambda _: f'window.RAW_DATASET = {json_dataset_str_p1};', html)
-    else:
-        print(f"ERROR: Could not find window.RAW_DATASET in {file_path}")
-        return False
+    # 2. Los datos viven en data_p1.js / data_p2.js. Si quedara algún dataset incrustado (versión antigua), se elimina.
+    html = re.sub(r'^[ \t]*window\.RAW_DATASET\s*=\s*\[\[[\s\S]*?\]\];[ \t]*\r?\n', '', html, count=1, flags=re.M)
+    html = re.sub(r'^[ \t]*window\.RAW_DATASET_P2\s*=\s*\[[\s\S]*?\];[ \t]*\r?\n', '', html, count=1, flags=re.M)
 
-    # 3. Replace or insert window.RAW_DATASET_P2
-    if 'window.RAW_DATASET_P2' in html:
-        raw_p2_regex = re.compile(r'window\.RAW_DATASET_P2\s*=\s*\[[\s\S]*?\];', re.MULTILINE)
-        html = raw_p2_regex.sub(lambda _: f'window.RAW_DATASET_P2 = {json_dataset_str_p2};', html)
-    else:
-        target_marker = f'window.RAW_DATASET = {json_dataset_str_p1};'
-        insert_code = f'\n    window.RAW_DATASET_P2 = {json_dataset_str_p2};'
-        html = html.replace(target_marker, target_marker + insert_code, 1)
+    # 3. Actualizar versión (?v=) de los <script src> para que los navegadores/GitHub Pages no usen caché viejo
+    version = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    if 'data_p1.js' not in html:
+        print(f"ERROR: index.html no contiene el <script src=\"data_p1.js\">: {file_path}")
+        return False
+    html = re.sub(r'(data_p[12]\.js)(\?v=[0-9]*)?"', lambda m: f'{m.group(1)}?v={version}"', html)
 
     # 3.5 Update Last Data Update Timestamp in HTML and JS
     html = re.sub(
@@ -641,14 +648,34 @@ def update_dataset_in_html(file_path):
     if 'window.LAST_DATA_UPDATE' in html:
         html = re.sub(r'window\.LAST_DATA_UPDATE\s*=\s*"[^"]*";', f'window.LAST_DATA_UPDATE = "{timestamp_str}";', html)
     else:
-        marker = f'window.RAW_DATASET = {json_dataset_str_p1};'
-        html = html.replace(marker, f'window.LAST_DATA_UPDATE = "{timestamp_str}";\n    ' + marker, 1)
+        html = html.replace('  <!-- CLIENT SCRIPT -->\n  <script>', f'  <!-- CLIENT SCRIPT -->\n  <script>\n    window.LAST_DATA_UPDATE = "{timestamp_str}";', 1)
+
+    # 3.6 Preserve & Inject Persistent Monthly Targets (metas_config.json -> window.CUSTOM_TARGETS_CONFIG)
+    metas_cfg_path = os.path.join(BASE_DIR, 'metas_config.json')
+    if os.path.exists(metas_cfg_path):
+        try:
+            with open(metas_cfg_path, 'r', encoding='utf-8') as mf:
+                metas_obj = json.load(mf)
+            metas_json_str = json.dumps(metas_obj, ensure_ascii=False, separators=(',', ':'))
+            custom_targets_line = f'window.CUSTOM_TARGETS_CONFIG = {metas_json_str};'
+            if re.search(r'window\.CUSTOM_TARGETS_CONFIG\s*=\s*\{.*?\};', html):
+                html = re.sub(r'window\.CUSTOM_TARGETS_CONFIG\s*=\s*\{.*?\};', lambda _: custom_targets_line, html)
+            else:
+                html = re.sub(
+                    r'(window\.LAST_DATA_UPDATE\s*=\s*"[^"]*";)',
+                    lambda m: m.group(1) + f'\n    {custom_targets_line}',
+                    html,
+                    count=1
+                )
+        except Exception as e:
+            print(f"Aviso leyendo metas_config.json: {e}")
 
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print(f"[OK] Dataset y marca de tiempo actualizados en {file_path}")
     return True
 
+write_dataset_files(BASE_DIR)
 ok1 = update_dataset_in_html(index_path)
 if ok1:
     import shutil
@@ -657,7 +684,9 @@ if ok1:
         print(f"[OK] Sincronizado idéntico (MD5) en {dash_path}")
     if os.path.exists(web_repo_dir) and os.path.abspath(index_path) != os.path.abspath(web_repo_path):
         shutil.copy2(index_path, web_repo_path)
-        print(f"[OK] Sincronizado idéntico (MD5) en {web_repo_path}")
+        for data_file in DATA_FILES:
+            shutil.copy2(os.path.join(BASE_DIR, data_file), os.path.join(web_repo_dir, data_file))
+        print(f"[OK] Sincronizado idéntico (MD5) en {web_repo_path} (+ {', '.join(DATA_FILES)})")
 
 # ==========================================
 # 4. GITHUB PAGES DEPLOYMENT
@@ -669,7 +698,7 @@ if '--no-push' not in sys.argv and os.path.exists(os.path.join(web_repo_dir, '.g
         ahora = datetime.datetime.now().strftime('%d/%m/%Y %H:%M')
         p2_txt = f", P2: {len(combined_records_p2):,} reg" if combined_records_p2 else ""
         msg = f"Actualización de datos (P1: {len(combined_records_p1):,} reg{p2_txt}) - {ahora}"
-        subprocess.run(['git', 'add', 'index.html'], cwd=web_repo_dir, check=False)
+        subprocess.run(['git', 'add', 'index.html', *DATA_FILES], cwd=web_repo_dir, check=False)
         subprocess.run(['git', 'commit', '-m', msg], cwd=web_repo_dir, check=False)
         subprocess.run(['git', '-c', 'credential.helper=', '-c', 'credential.helper=manager', 'push', 'origin', 'main'], cwd=web_repo_dir, check=False)
         print("[OK] Publicacion en GitHub Pages completada con éxito.")
