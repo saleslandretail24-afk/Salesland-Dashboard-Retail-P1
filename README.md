@@ -1,20 +1,14 @@
 # SALESLAND | Retail - Panel Gerencial de Rendimiento
 
-Dashboard web interactivo para análisis gerencial de ventas retail (Pospago y Prepago) multi-proyecto (Retail P1 y Retail P2).
+Dashboard web interactivo para análisis gerencial de ventas retail (Pospago y Prepago), multi-proyecto (Retail P1 y Retail P2).
 
-🚀 **Enlace Oficial en Vivo (Producción):**  
-👉 **[Abrir Dashboard Salesland Retail P1](https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html)**
+👉 **[Abrir Dashboard](https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html)**
 
----
+## Archivos
+| Archivo | Contenido |
+|---|---|
+| `index.html` | Dashboard (HTML/CSS/JS, sin datos incrustados) |
+| `data_p1.js` | Dataset Retail P1 (`window.RAW_DATASET`) |
+| `data_p2.js` | Dataset Retail P2 (`window.RAW_DATASET_P2`) |
 
-## 📌 Acceso Rápido
-* **URL Pública Oficial:** [https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html](https://saleslandretail24-afk.github.io/Salesland-Dashboard-Retail-P1/index.html)
-* **Servidor Local:** `http://localhost:8080/index.html`
-* **Proyectos Integrados:**
-  * 🔷 **Retail P1:** 105,350 registros consolidados
-  * 🔶 **Retail P2:** 72,684 registros consolidados
-* **Total Global Auditado:** 178,034 transacciones comerciales
-
----
-
-Alojado 24/7 en GitHub Pages con actualización continua.
+Los tres archivos deben estar siempre en la misma carpeta. Los datos se generan y publican automáticamente desde la PC de administración.
