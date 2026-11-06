@@ -5345,8 +5345,8 @@
               <option value="Julio">Julio</option>
               <option value="Agosto">Agosto</option>
               <option value="Septiembre">Septiembre</option>
-              <option value="Octubre" selected>Octubre</option>
-              <option value="Noviembre">Noviembre</option>
+              <option value="Octubre">Octubre</option>
+              <option value="Noviembre" selected>Noviembre</option>
               <option value="Diciembre">Diciembre</option>
               <option value="all">Selección múltiple (Todos)</option>
             </select>
@@ -7589,8 +7589,8 @@
   </div>
 
   <!-- DATASETS EXTERNOS (generados por actualizar_datos.py) -->
-  <script src="data_p1.js?v=20261106113159" id="data-p1-script"></script>
-  <script src="data_p2.js?v=20261106113159" id="data-p2-script"></script>
+  <script src="data_p1.js?v=20261106114208" id="data-p1-script"></script>
+  <script src="data_p2.js?v=20261106114208" id="data-p2-script"></script>
   <script>
     if (!window.RAW_DATASET) {
       console.error("No se pudo cargar data_p1.js: verifica que este junto a index.html");
@@ -7626,13 +7626,28 @@
     });
     const DEFAULT_SUPERVISOR_TARGETS = DEFAULT_SELLER_TARGETS;
 
+    function detectLatestDataMonth() {
+      const ds = (window.RAW_DATASET && window.RAW_DATASET.length) ? window.RAW_DATASET : [];
+      let maxY = 0, maxMIdx = -1;
+      for (let i = 0; i < ds.length; i++) {
+        const y = parseInt(ds[i][1]) || 0;
+        const mIdx = MONTHS.indexOf(ds[i][2]);
+        if (mIdx >= 0 && (y > maxY || (y === maxY && mIdx > maxMIdx))) {
+          maxY = y;
+          maxMIdx = mIdx;
+        }
+      }
+      return maxMIdx >= 0 ? MONTHS[maxMIdx] : 'Noviembre';
+    }
+    const DEFAULT_ACTIVE_MONTH = detectLatestDataMonth();
+
     function getNormalizedTargetMonth(m) {
       if (!m || m === 'all') {
         if (window.App && window.App.filters && window.App.filters.mes && window.App.filters.mes !== 'all') {
           m = window.App.filters.mes;
         } else {
           const savedM = localStorage.getItem('salesland_selected_mes');
-          m = (savedM && savedM !== 'all') ? savedM : 'Octubre';
+          m = (savedM && savedM !== 'all') ? savedM : DEFAULT_ACTIVE_MONTH;
         }
       }
       const clean = String(m).trim();
@@ -7909,7 +7924,7 @@
 
     // Application State (Persisting selected Mes & Año so they never jump or reset)
     const _savedAnio = localStorage.getItem('salesland_selected_anio') || '2026';
-    const _savedMes = localStorage.getItem('salesland_selected_mes') || 'Octubre';
+    const _savedMes = localStorage.getItem('salesland_selected_mes') || DEFAULT_ACTIVE_MONTH;
 
     const App = {
       data: window.RAW_DATASET || [],
@@ -14984,11 +14999,18 @@
         }
       }
 
-      // Restore Mes from URL -> localStorage -> default ('Octubre') and lock select UI
+      // Restore Mes from URL -> latest month in dataset (auto-advances when a new month starts) -> localStorage
       const mesSelect = document.getElementById('filter-mes');
-      const desiredMes = urlParams.get('mes') || localStorage.getItem('salesland_selected_mes') || 'Octubre';
+      const lastAutoMonth = localStorage.getItem('salesland_auto_detected_mes');
+      if (lastAutoMonth !== DEFAULT_ACTIVE_MONTH) {
+        try {
+          localStorage.setItem('salesland_auto_detected_mes', DEFAULT_ACTIVE_MONTH);
+          localStorage.setItem('salesland_selected_mes', DEFAULT_ACTIVE_MONTH);
+        } catch(e) {}
+      }
+      const desiredMes = urlParams.get('mes') || localStorage.getItem('salesland_selected_mes') || DEFAULT_ACTIVE_MONTH;
       if (mesSelect) {
-        const validMes = Array.from(mesSelect.options).some(o => o.value === desiredMes) ? desiredMes : 'Octubre';
+        const validMes = Array.from(mesSelect.options).some(o => o.value === desiredMes) ? desiredMes : DEFAULT_ACTIVE_MONTH;
         App.filters.mes = validMes;
         mesSelect.value = validMes;
         try { localStorage.setItem('salesland_selected_mes', validMes); } catch(e) {}
