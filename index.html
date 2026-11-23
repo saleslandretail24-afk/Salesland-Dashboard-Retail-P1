@@ -5271,7 +5271,7 @@
         <button type="button" onclick="window.saveNewPassword()" class="auth-btn-submit" style="flex:1;">
           Guardar Clave
         </button>
-        <button type="button" onclick="window.resetPasswordToDefault()" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:10px; padding:0.8rem; font-size:0.8rem; font-weight:700; cursor:pointer;" title="Volver a la clave de fábrica (Salesland2026*)">
+        <button type="button" onclick="window.resetPasswordToDefault()" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:10px; padding:0.8rem; font-size:0.8rem; font-weight:700; cursor:pointer;" title="Volver a la clave predeterminada">
           Restablecer
         </button>
       </div>
@@ -9103,7 +9103,7 @@
           isHashMatch = (calcHash === window.SaleslandSecurity.getActiveHash());
         }
 
-        if (pin && (isHashMatch || pin === adminUser.pin || pin === 'admin123' || pin === 'Salesland2026*')) {
+        if (pin && (isHashMatch || (adminUser && adminUser.pin && pin === adminUser.pin))) {
           App.userRole = 'admin';
           App.supervisorName = '';
           if (window.SaleslandSecurity) {
